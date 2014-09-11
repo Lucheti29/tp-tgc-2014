@@ -58,6 +58,9 @@ namespace AlumnoEjemplos.MiGrupo
             //User var
             GuiController.Instance.UserVars.addVar("velocidadAcumulada");
             GuiController.Instance.UserVars.setValue("velocidadAcumulada", 0f);
+
+            GuiController.Instance.UserVars.addVar("tendenciaMovimiento");
+            GuiController.Instance.UserVars.setValue("tendenciaMovimiento", new Vector3(0,0,1));
         }
 
         public override void render(float elapsedTime)
@@ -65,14 +68,12 @@ namespace AlumnoEjemplos.MiGrupo
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
 
             TgcD3dInput input = GuiController.Instance.D3dInput;
-
-            //Vector movimiento que se inicializa en cada loop
-            Vector3 movement = new Vector3(0, 0, 0);
             
             //Get velocidad
             float velocidad = (float)GuiController.Instance.UserVars.getValue("velocidadAcumulada");
 
-            movement.Z = 1;
+            //Get movimiento
+            Vector3 movement = (Vector3)GuiController.Instance.UserVars.getValue("tendenciaMovimiento");
 
             if (input.keyDown(Key.Left) || input.keyDown(Key.A))
             {
