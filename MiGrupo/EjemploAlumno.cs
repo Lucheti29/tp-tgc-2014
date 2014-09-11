@@ -9,14 +9,15 @@ using Microsoft.DirectX;
 using TgcViewer.Utils.Modifiers;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.Input;
+using TgcViewer.Utils.TgcSceneLoader;
+using Microsoft.DirectX.DirectInput;
 
 namespace AlumnoEjemplos.MiGrupo
 {
     public class EjemploAlumno : TgcExample
     {
+        //Objeto que va a hacer a modo de auto
         TgcBox box;
-
-        const float MOVEMENT_SPEED = 10f;
 
         public override string getCategory()
         {
@@ -36,163 +37,56 @@ namespace AlumnoEjemplos.MiGrupo
             return "CrazyTaxi - Un taxi que debe llevar pasajeros de un punto de la ciudad a otro en un tiempo establecido al menos 5 veces.";
         }
 
-        /// <summary>
-        /// Método que se llama una sola vez,  al principio cuando se ejecuta el ejemplo.
-        /// Escribir aquí todo el código de inicialización: cargar modelos, texturas, modifiers, uservars, etc.
-        /// </summary>
         public override void init()
         {
-            //GuiController.Instance: acceso principal a todas las herramientas del Framework
+            //Textura para la caja
+            TgcTexture textura = TgcTexture.createTexture(GuiController.Instance.ExamplesMediaDir + "Texturas\\baldosaFacultad.jpg");
 
-            //Device de DirectX para crear primitivas
-            Device d3dDevice = GuiController.Instance.D3dDevice;
-
-            //Carpeta de archivos Media del alumno
-            string alumnoMediaFolder = GuiController.Instance.AlumnoEjemplosMediaDir;
-
-            Vector3 size = new Vector3(5, 10, 10);
+            //Vectores posición inicial y tamaño
             Vector3 center = new Vector3(0, 0, 0);
+            Vector3 size = new Vector3(5, 10, 5);
 
-            Color color = Color.Gray;
+            //Seteo de la caja
+            box = TgcBox.fromSize(center, size, textura);
 
-            box = TgcBox.fromSize(center, size);
-
-
-            ///////////////USER VARS//////////////////
-
-            //Crear una UserVar
-            GuiController.Instance.UserVars.addVar("variablePrueba");
-
-            //Cargar valor en UserVar
-            GuiController.Instance.UserVars.setValue("variablePrueba", 5451);
-
-
-
-            ///////////////MODIFIERS//////////////////
-
-            //Crear un modifier para un valor FLOAT
-            GuiController.Instance.Modifiers.addFloat("valorFloat", -50f, 200f, 0f);
-
-            //Crear un modifier para un ComboBox con opciones
-            string[] opciones = new string[]{"opcion1", "opcion2", "opcion3"};
-            GuiController.Instance.Modifiers.addInterval("valorIntervalo", opciones, 0);
-
-            //Crear un modifier para modificar un vértice
-            GuiController.Instance.Modifiers.addVertex3f("valorVertice", new Vector3(-100, -100, -100), new Vector3(50, 50, 50), new Vector3(0, 0, 0));
-
-
-
-            ///////////////CONFIGURAR CAMARA ROTACIONAL//////////////////
-            //Es la camara que viene por default, asi que no hace falta hacerlo siempre
-            GuiController.Instance.RotCamera.Enable = true;
-            //Configurar centro al que se mira y distancia desde la que se mira
-            GuiController.Instance.RotCamera.setCamera(new Vector3(0, 0, 0), 100);
-
-
-            /*
-            ///////////////CONFIGURAR CAMARA PRIMERA PERSONA//////////////////
-            //Camara en primera persona, tipo videojuego FPS
-            //Solo puede haber una camara habilitada a la vez. Al habilitar la camara FPS se deshabilita la camara rotacional
-            //Por default la camara FPS viene desactivada
-            GuiController.Instance.FpsCamera.Enable = true;
-            //Configurar posicion y hacia donde se mira
-            GuiController.Instance.FpsCamera.setCamera(new Vector3(0, 0, -20), new Vector3(0, 0, 0));
-            */
-
-
-
-            ///////////////LISTAS EN C#//////////////////
-            //crear
-            List<string> lista = new List<string>();
-
-            //agregar elementos
-            lista.Add("elemento1");
-            lista.Add("elemento2");
-
-            //obtener elementos
-            string elemento1 = lista[0];
-
-            //bucle foreach
-            foreach (string elemento in lista)
-            {
-                //Loggear por consola del Framework
-                GuiController.Instance.Logger.log(elemento);
-            }
-
-            //bucle for
-            for (int i = 0; i < lista.Count; i++)
-            {
-                string element = lista[i];
-            }
-
-
+            //Seteo de cámara
+            GuiController.Instance.RotCamera.targetObject(box.BoundingBox);
         }
 
-
-        /// <summary>
-        /// Método que se llama cada vez que hay que refrescar la pantalla.
-        /// Escribir aquí todo el código referido al renderizado.
-        /// Borrar todo lo que no haga falta
-        /// </summary>
-        /// <param name="elapsedTime">Tiempo en segundos transcurridos desde el último frame</param>
         public override void render(float elapsedTime)
         {
-            //Device de DirectX para renderizar
-            Device d3dDevice = GuiController.Instance.D3dDevice;
+            Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
 
-            //Se instancia el objeto para acceder a los input del teclado
             TgcD3dInput input = GuiController.Instance.D3dInput;
 
-            //Vector movimiento
+            //Vector movimiento que se inicializa en cada loop
             Vector3 movement = new Vector3(0, 0, 0);
 
-            //Obtener valor de UserVar (hay que castear)
-            /*
-            int valor = (int)GuiController.Instance.UserVars.getValue("variablePrueba");
-
-
-            //Obtener valores de Modifiers
-            float valorFloat = (float)GuiController.Instance.Modifiers["valorFloat"];
-            string opcionElegida = (string)GuiController.Instance.Modifiers["valorIntervalo"];
-            Vector3 valorVertice = (Vector3)GuiController.Instance.Modifiers["valorVertice"];
-             * */
-
-            box.render();
-
-
-            ///////////////INPUT//////////////////
-            //conviene deshabilitar ambas camaras para que no haya interferencia
-
-            //Capturar Input teclado 
-            if (input.keyDown(Microsoft.DirectX.DirectInput.Key.A))
+            if (input.keyDown(Key.Left) || input.keyDown(Key.A))
             {
-                box.rotateY(-1.0f * elapsedTime);
+                //TODO: Doblar a la izquierda
             }
-            if (input.keyDown(Microsoft.DirectX.DirectInput.Key.D))
+            if (input.keyDown(Key.Right) || input.keyDown(Key.D))
             {
-                box.rotateY(1.0f * elapsedTime);
+                //TODO: Doblar a la derecha
             }
-            if (input.keyDown(Microsoft.DirectX.DirectInput.Key.W))
+            if (input.keyDown(Key.Up) || input.keyDown(Key.W))
             {
-                movement.Z = -1;
+                //TODO: Acelerar
             }
-            if (input.keyDown(Microsoft.DirectX.DirectInput.Key.S))
+            if (input.keyDown(Key.Down) || input.keyDown(Key.S))
             {
-                movement.Z = 1;
+                //TODO: Frenar
             }
 
-            //Aplicar al vector movimiento la velocidad y el elapsedTime
-            movement *= MOVEMENT_SPEED * elapsedTime;
+            //Loggear por consola del Framework
+            GuiController.Instance.Logger.log("Ejemplo de log");
 
-            //Aplicar movimiento
+            //Aplicar movimiento precalculado
             box.move(movement);
 
-            //Capturar Input Mouse
-            //if (GuiController.Instance.D3dInput.buttonPressed(TgcViewer.Utils.Input.TgcD3dInput.MouseButtons.BUTTON_LEFT))
-            //{
-                //Boton derecho de mouse
-            //}
-
+            //Dibujar caja
+            box.render();
         }
 
         public override void close()
