@@ -19,6 +19,9 @@ namespace AlumnoEjemplos.MiGrupo
         //Objeto que va a hacer a modo de auto
         TgcBox box;
 
+        const float MAX_SPEED = 50f;
+        const float MIN_SPEED = -20f;
+
         public override string getCategory()
         {
             return "AlumnoEjemplos";
@@ -51,6 +54,10 @@ namespace AlumnoEjemplos.MiGrupo
 
             //Seteo de cámara
             GuiController.Instance.RotCamera.targetObject(box.BoundingBox);
+
+            //User var
+            GuiController.Instance.UserVars.addVar("velocidadAcumulada");
+            GuiController.Instance.UserVars.setValue("velocidadAcumulada", 0f);
         }
 
         public override void render(float elapsedTime)
@@ -61,6 +68,11 @@ namespace AlumnoEjemplos.MiGrupo
 
             //Vector movimiento que se inicializa en cada loop
             Vector3 movement = new Vector3(0, 0, 0);
+            
+            //Get velocidad
+            float velocidad = (float)GuiController.Instance.UserVars.getValue("velocidadAcumulada");
+
+            movement.Z = 1;
 
             if (input.keyDown(Key.Left) || input.keyDown(Key.A))
             {
@@ -72,15 +84,60 @@ namespace AlumnoEjemplos.MiGrupo
             }
             if (input.keyDown(Key.Up) || input.keyDown(Key.W))
             {
-                //TODO: Acelerar
+                //Acelerar
+                //TODO: deshardcodear aceleracion
+
+                velocidad += 0.2f;
             }
             if (input.keyDown(Key.Down) || input.keyDown(Key.S))
             {
-                //TODO: Frenar
+                //Frenar
+                //TODO: deshardcodear aceleracion
+
+                //Está frenando
+                //Es más violento
+                if (velocidad > 0)
+                {
+                    velocidad -= 0.5f;
+                }
+                //Esta yendo marcha atrás
+                //Es más suave
+                else if (velocidad <= 0)
+                {
+                    velocidad -= 0.1f;
+                }
+            }
+            else
+            {
+                //Desaceleración por fricción con el piso
+                if (velocidad > 0)
+                {
+                    velocidad -= 0.05f;
+                }
+                else if (velocidad < 0)
+                {
+                    velocidad += 0.05f;
+                }
             }
 
-            //Loggear por consola del Framework
-            GuiController.Instance.Logger.log("Ejemplo de log");
+            //Chequeo de que la velocidad este entre los límites permitidos
+            if (velocidad > MAX_SPEED)
+            {
+                velocidad = MAX_SPEED;
+            }
+            else if (velocidad < MIN_SPEED)
+            {
+                velocidad = MIN_SPEED;
+            }
+
+            //Aplicar velocidad al vector movimiento
+            movement *= velocidad * elapsedTime;
+
+            //Guardar velocidad
+            GuiController.Instance.UserVars.setValue("velocidadAcumulada", velocidad);
+
+            //Loguear velocidad para debug
+            GuiController.Instance.Logger.log("La velocidad acumulada es " + velocidad.ToString());
 
             //Aplicar movimiento precalculado
             box.move(movement);
