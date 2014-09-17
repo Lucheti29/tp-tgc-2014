@@ -19,6 +19,8 @@ namespace AlumnoEjemplos.MiGrupo
         //Objeto que va a hacer a modo de auto
         TgcBox box;
 
+        TgcBox suelo;
+
         const float MAX_SPEED = 50f;
         const float MIN_SPEED = -20f;
 
@@ -42,18 +44,25 @@ namespace AlumnoEjemplos.MiGrupo
 
         public override void init()
         {
+            Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
+
             //Textura para la caja
             TgcTexture textura = TgcTexture.createTexture(GuiController.Instance.ExamplesMediaDir + "Texturas\\baldosaFacultad.jpg");
 
             //Vectores posición inicial y tamaño
-            Vector3 center = new Vector3(0, 0, 0);
+            Vector3 center = new Vector3(0, 1, 0);
             Vector3 size = new Vector3(5, 10, 5);
 
             //Seteo de la caja
             box = TgcBox.fromSize(center, size, textura);
 
-            //Seteo de cámara
-            GuiController.Instance.RotCamera.targetObject(box.BoundingBox);
+            //Cámara en 3era persona que sigue al auto
+            GuiController.Instance.ThirdPersonCamera.Enable = true;
+            GuiController.Instance.ThirdPersonCamera.setCamera(box.Position, 70, 150);
+
+            //Crear suelo
+            TgcTexture pisoTexture = TgcTexture.createTexture(d3dDevice, GuiController.Instance.ExamplesMediaDir + "Texturas\\pasto.jpg");
+            suelo = TgcBox.fromSize(new Vector3(500, -10, 500), new Vector3(2000, -10, 2000), pisoTexture);
 
             //User var
             GuiController.Instance.UserVars.addVar("velocidadAcumulada");
@@ -66,6 +75,9 @@ namespace AlumnoEjemplos.MiGrupo
         public override void render(float elapsedTime)
         {
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
+
+            //Render del suelo
+            suelo.render();
 
             TgcD3dInput input = GuiController.Instance.D3dInput;
             
@@ -137,8 +149,10 @@ namespace AlumnoEjemplos.MiGrupo
             //Guardar velocidad
             GuiController.Instance.UserVars.setValue("velocidadAcumulada", velocidad);
 
-            //Loguear velocidad para debug
-            GuiController.Instance.Logger.log("La velocidad acumulada es " + velocidad.ToString());
+            //Actualización de la posición de cámara
+            GuiController.Instance.ThirdPersonCamera.Target = box.Position;
+
+            GuiController.Instance.Logger.log("Pos " + box.Position.X + " " + box.Position.Y + " " + box.Position.Z);
 
             //Aplicar movimiento precalculado
             box.move(movement);
