@@ -11,6 +11,7 @@ using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.Input;
 using TgcViewer.Utils.TgcSceneLoader;
 using Microsoft.DirectX.DirectInput;
+using AlumnoEjemplos.MiGrupo.Entities;
 
 namespace AlumnoEjemplos.MiGrupo
 {
@@ -18,11 +19,7 @@ namespace AlumnoEjemplos.MiGrupo
     {
         //Objeto que va a hacer a modo de auto
         TgcBox box;
-
         TgcBox suelo;
-
-        const float MAX_SPEED = 50f;
-        const float MIN_SPEED = -20f;
 
         public override string getCategory()
         {
@@ -58,7 +55,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             //Cámara en 3era persona que sigue al auto
             GuiController.Instance.ThirdPersonCamera.Enable = true;
-            GuiController.Instance.ThirdPersonCamera.setCamera(box.Position, 70, 150);
+            GuiController.Instance.ThirdPersonCamera.setCamera(-box.Position, 70, 150);
 
             //Crear suelo
             TgcTexture pisoTexture = TgcTexture.createTexture(d3dDevice, GuiController.Instance.ExamplesMediaDir + "Texturas\\pasto.jpg");
@@ -66,7 +63,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             //User var
             GuiController.Instance.UserVars.addVar("velocidadAcumulada");
-            GuiController.Instance.UserVars.setValue("velocidadAcumulada", 0f);
+            GuiController.Instance.UserVars.setValue("velocidadAcumulada", new Velocity());
 
             GuiController.Instance.UserVars.addVar("tendenciaMovimiento");
             GuiController.Instance.UserVars.setValue("tendenciaMovimiento", new Vector3(0,0,1));
@@ -81,70 +78,60 @@ namespace AlumnoEjemplos.MiGrupo
 
             TgcD3dInput input = GuiController.Instance.D3dInput;
             
-            //Get velocidad
-            float velocidad = (float)GuiController.Instance.UserVars.getValue("velocidadAcumulada");
-
-            //Get movimiento
+            //Getters
+            Velocity velocidad = (Velocity)GuiController.Instance.UserVars.getValue("velocidadAcumulada");
             Vector3 movement = (Vector3)GuiController.Instance.UserVars.getValue("tendenciaMovimiento");
+
+            bool doblaADer = false;
+            bool doblaAIzq = false;
 
             if (input.keyDown(Key.Left) || input.keyDown(Key.A))
             {
                 //TODO: Doblar a la izquierda
+                doblaAIzq = true;
             }
             if (input.keyDown(Key.Right) || input.keyDown(Key.D))
             {
                 //TODO: Doblar a la derecha
+                doblaADer = true;
             }
             if (input.keyDown(Key.Up) || input.keyDown(Key.W))
             {
-                //Acelerar
-                //TODO: deshardcodear aceleracion
-
-                velocidad += 0.2f;
+                velocidad.acelerar();
             }
             if (input.keyDown(Key.Down) || input.keyDown(Key.S))
             {
-                //Frenar
-                //TODO: deshardcodear aceleracion
-
-                //Está frenando
-                //Es más violento
-                if (velocidad > 0)
-                {
-                    velocidad -= 0.5f;
-                }
-                //Esta yendo marcha atrás
-                //Es más suave
-                else if (velocidad <= 0)
-                {
-                    velocidad -= 0.1f;
-                }
+                velocidad.desacelerar();
             }
             else
             {
-                //Desaceleración por fricción con el piso
-                if (velocidad > 0)
-                {
-                    velocidad -= 0.05f;
-                }
-                else if (velocidad < 0)
-                {
-                    velocidad += 0.05f;
-                }
+                velocidad.friccion();
             }
 
-            //Chequeo de que la velocidad este entre los límites permitidos
-            if (velocidad > MAX_SPEED)
+            if (doblaAIzq || doblaADer)
             {
-                velocidad = MAX_SPEED;
-            }
-            else if (velocidad < MIN_SPEED)
-            {
-                velocidad = MIN_SPEED;
-            }
+                float componenteX;
+                float componenteZ;
 
-            //Aplicar velocidad al vector movimiento
-            movement *= velocidad * elapsedTime;
+                if (doblaAIzq)
+                {
+                    float rotacionY = FastMath.PI_HALF;
+                    componenteX = FastMath.Sin(rotacionY);
+                    componenteZ = FastMath.Cos(rotacionY);
+                }
+                else
+                {
+                    float rotacionY = -FastMath.PI_HALF;
+                    componenteX = FastMath.Sin(rotacionY);
+                    componenteZ = FastMath.Cos(rotacionY);
+                }
+
+                movement = new Vector3(componenteX * velocidad.getAmount(), 0, componenteZ * velocidad.getAmount());
+            }
+            else
+            {
+                movement *= velocidad.getAmount() * elapsedTime;
+            }       
 
             //Guardar velocidad
             GuiController.Instance.UserVars.setValue("velocidadAcumulada", velocidad);
