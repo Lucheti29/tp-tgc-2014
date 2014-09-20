@@ -73,27 +73,21 @@ namespace AlumnoEjemplos.MiGrupo
         {
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
 
-            //Render del suelo
-            suelo.render();
-
             TgcD3dInput input = GuiController.Instance.D3dInput;
             
             //Getters
             Velocity velocidad = (Velocity)GuiController.Instance.UserVars.getValue("velocidadAcumulada");
             Vector3 movement = (Vector3)GuiController.Instance.UserVars.getValue("tendenciaMovimiento");
 
-            bool doblaADer = false;
-            bool doblaAIzq = false;
-
             if (input.keyDown(Key.Left) || input.keyDown(Key.A))
             {
-                //TODO: Doblar a la izquierda
-                doblaAIzq = true;
+                movement = Movement.leftMove(movement);
+                velocidad.acelerar();
             }
             if (input.keyDown(Key.Right) || input.keyDown(Key.D))
             {
-                //TODO: Doblar a la derecha
-                doblaADer = true;
+                movement = Movement.rightMove(movement);
+                velocidad.acelerar();
             }
             if (input.keyDown(Key.Up) || input.keyDown(Key.W))
             {
@@ -108,44 +102,25 @@ namespace AlumnoEjemplos.MiGrupo
                 velocidad.friccion();
             }
 
-            if (doblaAIzq || doblaADer)
-            {
-                float componenteX;
-                float componenteZ;
-
-                if (doblaAIzq)
-                {
-                    float rotacionY = FastMath.PI_HALF;
-                    componenteX = FastMath.Sin(rotacionY);
-                    componenteZ = FastMath.Cos(rotacionY);
-                }
-                else
-                {
-                    float rotacionY = -FastMath.PI_HALF;
-                    componenteX = FastMath.Sin(rotacionY);
-                    componenteZ = FastMath.Cos(rotacionY);
-                }
-
-                movement = new Vector3(componenteX * velocidad.getAmount(), 0, componenteZ * velocidad.getAmount());
-            }
-            else
-            {
-                movement *= velocidad.getAmount() * elapsedTime;
-            }       
-
-            //Guardar velocidad
+            movement = Vector3.Normalize(movement);
+            
+            //Guardar variables
             GuiController.Instance.UserVars.setValue("velocidadAcumulada", velocidad);
+            GuiController.Instance.UserVars.setValue("tendenciaMovimiento", movement);
 
             //Actualización de la posición de cámara
             GuiController.Instance.ThirdPersonCamera.Target = box.Position;
 
-            GuiController.Instance.Logger.log("Pos " + box.Position.X + " " + box.Position.Y + " " + box.Position.Z);
+            //GuiController.Instance.Logger.log("Mov " + movement.X + " " + movement.Y + " " + movement.Z);
+            //GuiController.Instance.Logger.log("Pos " + box.Position.X + " " + box.Position.Y + " " + box.Position.Z);
 
             //Aplicar movimiento precalculado
-            box.move(movement);
+            box.move(movement * velocidad.getAmount() * elapsedTime);
 
             //Dibujar caja
             box.render();
+            //Render del suelo
+            suelo.render();
         }
 
         public override void close()
