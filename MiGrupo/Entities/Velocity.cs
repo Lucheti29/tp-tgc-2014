@@ -38,11 +38,11 @@ namespace AlumnoEjemplos.MiGrupo.Entities
             //Desaceleración por fricción con el piso
             if (amount > 0)
             {
-                amount -= 0.05f;
+                amount -= 0.025f;
             }
             else if (amount < 0)
             {
-                amount += 0.05f;
+                amount += 0.025f;
             }
         }
 
