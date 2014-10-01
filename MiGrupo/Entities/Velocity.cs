@@ -7,57 +7,73 @@ namespace AlumnoEjemplos.MiGrupo.Entities
 {
     public class Velocity
     {
-        const float MAX_SPEED = 50f;
-        const float MIN_SPEED = -20f;
+        const float MAX_SPEED = 250f;
+        const float MIN_SPEED = -100f;
+        const float ACCELERATION = 1f;
 
-        float amount = 0;
+        float _amount = 0;
 
         public void acelerar()
         {
-            amount += 0.2f;
+            _amount += ACCELERATION;
         }
 
         public void desacelerar()
         {
             //Está frenando
             //Es más violento
-            if (amount > 0)
+            if (_amount > 0)
             {
-                amount -= 0.5f;
+                _amount -= 0.5f;
             }
             //Esta yendo marcha atrás
             //Es más suave
-            else if (amount <= 0)
+            else if (_amount <= 0)
             {
-                amount -= 0.1f;
+                _amount -= 0.1f;
+            }
+        }
+
+        public void frenar()
+        {
+            //Está frenando
+            //Es más violento
+            if (_amount > 0)
+            {
+                _amount -= 0.2f;
             }
         }
 
         public void friccion()
         {
             //Desaceleración por fricción con el piso
-            if (amount > 0)
+            if (_amount > 0)
             {
-                amount -= 0.025f;
+                _amount -= 0.025f;
             }
-            else if (amount < 0)
+            else if (_amount < 0)
             {
-                amount += 0.025f;
+                _amount += 0.025f;
             }
         }
 
         public float getAmount()
         {
-            if (amount > MAX_SPEED)
+            if (_amount > MAX_SPEED)
             {
-                amount = MAX_SPEED;
+                _amount = MAX_SPEED;
             }
-            else if (amount < MIN_SPEED)
+            else if (_amount < MIN_SPEED)
             {
-                amount = MIN_SPEED;
+                _amount = MIN_SPEED;
             }
 
-            return amount;
+            return _amount;
+        }
+
+        public void setAmount(float amount)
+        {
+            _amount = amount;
         }
     }
 }

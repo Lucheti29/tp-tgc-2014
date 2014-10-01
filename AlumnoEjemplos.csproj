@@ -87,6 +87,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MiGrupo\Auto.cs" />
+    <Compile Include="MiGrupo\Camara.cs" />
+    <Compile Include="MiGrupo\Teclado.cs" />
     <Compile Include="MiGrupo\Movement.cs" />
     <Compile Include="MiGrupo\EjemploAlumno.cs" />
     <Compile Include="MiGrupo\Entities\Velocity.cs" />

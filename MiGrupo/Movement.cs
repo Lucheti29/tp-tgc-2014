@@ -8,34 +8,35 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class Movement
     {
-        const float sensibilidad = 0.0015f;
+        const float _sensibilidad = 0.0015f;
 
         public static Vector3 rightMove(Vector3 movement)
         {
+
             if (movement.Z > 0 && movement.X < 0)
             {
-                movement.Z = movement.Z + sensibilidad;
-                movement.X = movement.X + sensibilidad;
+                movement.Z = movement.Z + _sensibilidad;
+                movement.X = movement.X + _sensibilidad;
             }
             else if (movement.Z < 0 && movement.X < 0)
             {
-                movement.Z = movement.Z + sensibilidad;
-                movement.X = movement.X - sensibilidad;
+                movement.Z = movement.Z + _sensibilidad;
+                movement.X = movement.X - _sensibilidad;
             }
             else if (movement.Z < 0 && movement.X > 0)
             {
-                movement.Z = movement.Z - sensibilidad;
-                movement.X = movement.X - sensibilidad;
+                movement.Z = movement.Z - _sensibilidad;
+                movement.X = movement.X - _sensibilidad;
             }
             else if (movement.Z > 0 && movement.X > 0)
             {
-                movement.Z = movement.Z - sensibilidad;
-                movement.X = movement.X + sensibilidad;
+                movement.Z = movement.Z - _sensibilidad;
+                movement.X = movement.X + _sensibilidad;
             }
             else
             {
-                movement.Z = movement.Z + sensibilidad;
-                movement.X = movement.X - sensibilidad;
+                movement.Z = movement.Z + _sensibilidad;
+                movement.X = movement.X - _sensibilidad;
             }
 
             return movement;
@@ -45,28 +46,28 @@ namespace AlumnoEjemplos.MiGrupo
         {
             if (movement.Z > 0 && movement.X < 0)
             {
-                movement.Z = movement.Z - sensibilidad;
-                movement.X = movement.X - sensibilidad;
+                movement.Z = movement.Z - _sensibilidad;
+                movement.X = movement.X - _sensibilidad;
             }
             else if (movement.Z < 0 && movement.X < 0)
             {
-                movement.Z = movement.Z - sensibilidad;
-                movement.X = movement.X + sensibilidad;
+                movement.Z = movement.Z - _sensibilidad;
+                movement.X = movement.X + _sensibilidad;
             }
             else if (movement.Z < 0 && movement.X > 0)
             {
-                movement.Z = movement.Z + sensibilidad;
-                movement.X = movement.X + sensibilidad;
+                movement.Z = movement.Z + _sensibilidad;
+                movement.X = movement.X + _sensibilidad;
             }
             else if (movement.Z > 0 && movement.X > 0)
             {
-                movement.Z = movement.Z + sensibilidad;
-                movement.X = movement.X - sensibilidad;
+                movement.Z = movement.Z + _sensibilidad;
+                movement.X = movement.X - _sensibilidad;
             }
             else
             {
-                movement.Z = movement.Z - sensibilidad;
-                movement.X = movement.X - sensibilidad;
+                movement.Z = movement.Z - _sensibilidad;
+                movement.X = movement.X - _sensibilidad;
             }
 
             return movement;
