@@ -19,6 +19,7 @@ namespace AlumnoEjemplos.MiGrupo
     {
         //Objeto que va a hacer a modo de auto
         TgcBox suelo;
+        TgcScene ciudadScene;
         TgcScene taxiScene;
 
         public override string getCategory()
@@ -49,6 +50,9 @@ namespace AlumnoEjemplos.MiGrupo
             //primero cargamos una escena 3D entera.
             TgcSceneLoader loader = new TgcSceneLoader();
 
+            //Cargamos la ciudad
+            ciudadScene = loader.loadSceneFromFile(alumnoMediaFolder + "LOS_BARTO\\ciudad\\ciudad-TgcScene.xml");
+
             //Luego cargamos otro modelo aparte que va a hacer el taxi
             taxiScene = loader.loadSceneFromFile(alumnoMediaFolder + "LOS_BARTO\\taxi\\taxi-TgcScene.xml");
 
@@ -56,21 +60,18 @@ namespace AlumnoEjemplos.MiGrupo
             Auto.getInstance().inicializar(taxiScene.Meshes[0]);
 
             Camara.inicializar(Auto.getInstance().getPosicion());
-
-            //Crear suelo
-            TgcTexture pisoTexture = TgcTexture.createTexture(d3dDevice, GuiController.Instance.ExamplesMediaDir + "Texturas\\pasto.jpg");
-            suelo = TgcBox.fromSize(new Vector3(500, -10, 500), new Vector3(2000, -10, 2000), pisoTexture);
         }
 
         public override void render(float elapsedTime)
         {
             Auto.getInstance().render(elapsedTime);
-            suelo.render();
+            ciudadScene.renderAll();
         }
 
         public override void close()
         {
             Auto.getInstance().getMesh().dispose();
+            ciudadScene.disposeAll();
         }
 
     }
