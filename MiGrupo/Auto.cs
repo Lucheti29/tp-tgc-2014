@@ -19,6 +19,9 @@ namespace AlumnoEjemplos.MiGrupo
         private Vector3 _direccion;
         //private Vector3 _direccionDerrape;
         private Velocity _velocidad;
+        private float _currentElapsedTime;
+        private bool _girando = false;
+        private int _cuentaRegresiva = 20;
 
         // --------------- Fin variables de instancia ---------------
 
@@ -45,29 +48,6 @@ namespace AlumnoEjemplos.MiGrupo
             return _velocidad.getAmount();
         }
 
-        private void acelerar()
-        {
-            _velocidad.acelerar();
-        }
-
-        private void desacelerar()
-        {
-            _velocidad.desacelerar();
-        }
-
-        private void frenar()
-        {
-            _velocidad.frenar();
-        }
-
-        private void doblar(Boolean right, Boolean left)
-        {
-            if (right)
-                _direccion = Movement.rightMove(_direccion);
-            else if (left)
-                _direccion = Movement.leftMove(_direccion);
-        }
-
         private void derrapar(Boolean right, Boolean left)
         {
             //TODO: hacer
@@ -86,41 +66,57 @@ namespace AlumnoEjemplos.MiGrupo
                     else if (left)
                         derrapar(false, true);
                     else
-                        frenar();
+                        _velocidad.frenar();
                 }
                 else if (left || right)
                 {
-                    int signAngle = 1;
-
-                    if (left)
+                    if (!_girando)
                     {
-                        signAngle *= -1;
-                        doblar(false, true);
+                        int yaw = 1;
+                        int sign = 1;
+
+                        if (left)
+                        {
+                            yaw = -1;
+                            sign = -1;
+                        }
+
+                        _direccion = Movement.doblar(_direccion, _currentElapsedTime, yaw);
+                        _direccion = Vector3.Normalize(_direccion);
+
+                        //Calcular ángulo entre movimiento anterior y el nuevo
+                        float angle = FastMath.Acos(Vector3.Dot(_direccion, direccionAuxiliar)) * sign;
+
+                        //Rotar auto y camara en Y
+                        _mesh.rotateY(angle);
+                        Camara.rotar(angle);
+                        _girando = true;
                     }
-                    else if (right)
+                    //TODO: deshardcodear esto por el amor a Alah
+                    else
                     {
-                        doblar(true, false);
+                        if (_cuentaRegresiva <= 0)
+                        {
+                            _girando = false;
+                            _cuentaRegresiva = 20;
+                        }
+                        else
+                        {
+                            _cuentaRegresiva = _cuentaRegresiva - 1;
+                        }
                     }
-
-                    _direccion = Vector3.Normalize(_direccion);
-
-                    //Calcular ángulo entre movement original y el nuevo
-                    float angle = FastMath.Acos(Vector3.Dot(_direccion, direccionAuxiliar));
-
-                    //Rotar auto y camara en Y
-                    _mesh.rotateY(signAngle * angle);
-                    Camara.rotar(signAngle * angle);
                 }
             }
 
             if (up)
-                acelerar();
+                _velocidad.acelerar();
             else if (down)
-                desacelerar();
+                _velocidad.desacelerar();
         }
 
         public void render(float elapsedTime)
         {
+            _currentElapsedTime = elapsedTime;
             Teclado.handlear();
             _velocidad.friccion();
             Camara.setearPosicion(getPosicion());

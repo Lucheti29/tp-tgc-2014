@@ -12,7 +12,7 @@ namespace AlumnoEjemplos.MiGrupo
         public static void inicializar(Vector3 posicion)
         {
             GuiController.Instance.ThirdPersonCamera.Enable = true;
-            GuiController.Instance.ThirdPersonCamera.setCamera(posicion, 200, 300);
+            GuiController.Instance.ThirdPersonCamera.setCamera(posicion, 130, 300);
         }
 
         public static void rotar(float angle)

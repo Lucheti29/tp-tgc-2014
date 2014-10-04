@@ -7,9 +7,9 @@ namespace AlumnoEjemplos.MiGrupo.Entities
 {
     public class Velocity
     {
-        const float MAX_SPEED = 250f;
-        const float MIN_SPEED = -100f;
-        const float ACCELERATION = 1f;
+        const float MAX_SPEED = 500f;
+        const float MIN_SPEED = -200f;
+        const float ACCELERATION = 0.5f;
 
         float _amount = 0;
 
