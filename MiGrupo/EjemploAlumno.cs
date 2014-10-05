@@ -12,15 +12,19 @@ using TgcViewer.Utils.Input;
 using TgcViewer.Utils.TgcSceneLoader;
 using Microsoft.DirectX.DirectInput;
 using AlumnoEjemplos.MiGrupo.Entities;
+using TgcViewer.Utils.TgcSkeletalAnimation;
 
 namespace AlumnoEjemplos.MiGrupo
 {
     public class EjemploAlumno : TgcExample
     {
         //Objeto que va a hacer a modo de auto
-        TgcBox suelo;
-        TgcScene ciudadScene;
+
         TgcScene taxiScene;
+        float tiempoRestante = 60;
+        TgcScene ciudadScene;
+
+        Pasajero pas;
 
         public override string getCategory()
         {
@@ -50,28 +54,53 @@ namespace AlumnoEjemplos.MiGrupo
             //primero cargamos una escena 3D entera.
             TgcSceneLoader loader = new TgcSceneLoader();
 
-            //Cargamos la ciudad
-            ciudadScene = loader.loadSceneFromFile(alumnoMediaFolder + "LOS_BARTO\\ciudad\\ciudad-TgcScene.xml");
-
             //Luego cargamos otro modelo aparte que va a hacer el taxi
             taxiScene = loader.loadSceneFromFile(alumnoMediaFolder + "LOS_BARTO\\taxi\\taxi-TgcScene.xml");
+            //Cargamos la ciudad
+            ciudadScene = loader.loadSceneFromFile(alumnoMediaFolder + "LOS_BARTO\\ciudad\\ciudad-TgcScene.xml");
 
             //solo nos interesa el taxi
             Auto.getInstance().inicializar(taxiScene.Meshes[0]);
 
             Camara.inicializar(Auto.getInstance().getPosicion());
+
+
+            Cronometro.getInstance().inicializar();
+
+            pas = new Pasajero();
+            Vector3 pos = new Vector3(100, 5, -200);
+
+            pas.parar(pos);
+
+
         }
 
         public override void render(float elapsedTime)
         {
             Auto.getInstance().render(elapsedTime);
             ciudadScene.renderAll();
+
+            float distancia = Vector3.Length(Auto.getInstance().getPosicion() - pas.posicion);
+
+
+            tiempoRestante = Cronometro.getInstance().controlarTiempo(tiempoRestante, elapsedTime);
+            Cronometro.getInstance().render();
+
+
+            if (distancia < 100)
+            {
+                Vector3 dest = new Vector3(120, 0, 1);
+                pas.caminarHacia(dest);
+            }
+            pas.render();
         }
 
         public override void close()
         {
             Auto.getInstance().getMesh().dispose();
             ciudadScene.disposeAll();
+            pas.dispose();
+
         }
 
     }
