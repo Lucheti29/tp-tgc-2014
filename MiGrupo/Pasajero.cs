@@ -92,7 +92,7 @@ namespace AlumnoEjemplos.MiGrupo
         private int t;
         public static float DISTANCIA = 200f;
         private float rotacion = 0;
-        public static float VELOCIDAD = 4.0f;
+        public static float VELOCIDAD = 30.0f;
 
         public void movePasajero(float elapsedTime, Auto taxi)
         {
@@ -116,7 +116,7 @@ namespace AlumnoEjemplos.MiGrupo
                 float distanciaAlTaxi = getDistancia(taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
                 if ((distanciaAlTaxi < DISTANCIA) && (distanciaAlTaxi >= 50))
                 {
-                    movementVector = acercarse(taxi.getMesh().Position.X, taxi.getMesh().Position.Z, VELOCIDAD);
+                    movementVector = acercarse(taxi.getMesh().Position.X, taxi.getMesh().Position.Z, VELOCIDAD * elapsedTime);
                     rotacion = -FastMath.PI_HALF - calcular_angulo(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
                     
                     this.caminar();
