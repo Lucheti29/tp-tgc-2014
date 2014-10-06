@@ -23,7 +23,7 @@ namespace AlumnoEjemplos.MiGrupo
         TgcScene taxiScene;
         float tiempoRestante = 60;
         TgcScene ciudadScene;
-
+        TgcBox box;
         Pasajero pas;
 
         public override string getCategory()
@@ -74,6 +74,15 @@ namespace AlumnoEjemplos.MiGrupo
             Vector3 pos = new Vector3(100, 5, -200);
 
             pas.parar(pos);
+            pas.destino = new Vector3(100, 5, -450);
+
+
+            Vector3 size = new Vector3(50, 70, 80);
+            Vector3 center = pas.destino;
+
+            Color color = Color.Gray;
+
+            box = TgcBox.fromSize(center, size);
         }
 
         public override void render(float elapsedTime)
@@ -89,13 +98,23 @@ namespace AlumnoEjemplos.MiGrupo
             tiempoRestante = Cronometro.getInstance().controlarTiempo(tiempoRestante, elapsedTime);
             Cronometro.getInstance().render();
 
-
-            if (distancia < 100)
+            /*     if (pas.getDistancia(Auto.getInstance().getPosicion().X,Auto.getInstance().getPosicion().Z)< 100)
+                     {
+                
+                         pas.caminarHacia(Auto.getInstance().getPosicion());
+                     }*/
+            if (distancia < 200)
             {
-                Vector3 dest = new Vector3(120, 0, 1);
-                pas.caminarHacia(dest);
+                pas.movePasajero(elapsedTime, Auto.getInstance());
+            }
+            float distanciaDestino = Vector3.Length(Auto.getInstance().getPosicion() - pas.destino);
+            if (distanciaDestino < 100)
+            {
+                pas.bajarseDelTaxi(Auto.getInstance());
+                pas.getMesh().Enabled = true;
             }
             pas.render();
+            box.render();
         }
 
         public override void close()
@@ -103,6 +122,7 @@ namespace AlumnoEjemplos.MiGrupo
             Auto.getInstance().getMesh().dispose();
             ciudadScene.disposeAll();
             pas.dispose();
+            box.dispose();
 
         }
 
