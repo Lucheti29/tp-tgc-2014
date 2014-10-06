@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TgcViewer;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
 
@@ -20,6 +21,7 @@ namespace AlumnoEjemplos.MiGrupo
         //private Vector3 _direccionDerrape;
         private Velocity _velocidad;
         private float _currentElapsedTime;
+        private bool _collisionFound;
 
         // --------------- Fin variables de instancia ---------------
 
@@ -95,13 +97,44 @@ namespace AlumnoEjemplos.MiGrupo
                 _velocidad.desacelerar();
         }
 
+        public void checkCollision(TgcScene scene)
+        {
+            _collisionFound = false;
+            foreach (TgcMesh mesh in scene.Meshes)
+            {
+                //Los dos BoundingBox que vamos a testear
+                TgcBoundingBox mainMeshBoundingBox = _mesh.BoundingBox;
+                TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
+
+                //Ejecutar algoritmo de detección de colisiones
+                TgcCollisionUtils.BoxBoxResult collisionResult = TgcCollisionUtils.classifyBoxBox(mainMeshBoundingBox, sceneMeshBoundingBox);
+
+                //Hubo colisión con un objeto. Guardar resultado y abortar loop.
+                if (collisionResult == TgcCollisionUtils.BoxBoxResult.Adentro || collisionResult == TgcCollisionUtils.BoxBoxResult.Atravesando)
+                {
+                    _collisionFound = true;
+                    break;
+                }
+            }
+        }
+
         public void render(float elapsedTime)
         {
+            Vector3 lastPosicion = getPosicion();
             _currentElapsedTime = elapsedTime;
             Teclado.handlear();
             _velocidad.friccion();
             Camara.setearPosicion(getPosicion());
             _mesh.move(_direccion * _velocidad.getAmount() * elapsedTime);
+
+            //Si NO hay colision entonces movemos el taxi
+            if (_collisionFound)
+            {
+                _mesh.Position = new Vector3(-980, 15, -3000);
+                _velocidad = new Velocity();
+                
+            }
+            
             _mesh.render();
         }
         // --------------- Fin de métodos de instancia ---------------

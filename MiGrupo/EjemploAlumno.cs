@@ -59,11 +59,14 @@ namespace AlumnoEjemplos.MiGrupo
             //Cargamos la ciudad
             ciudadScene = loader.loadSceneFromFile(alumnoMediaFolder + "LOS_BARTO\\ciudad\\ciudad-TgcScene.xml");
 
+            TgcMesh taxiMesh = taxiScene.Meshes[0];
+            //Levantamos el mesh para que no este siempre en contacto con el suelo
+            taxiMesh.move(0, 15, 0);
+
             //solo nos interesa el taxi
-            Auto.getInstance().inicializar(taxiScene.Meshes[0]);
+            Auto.getInstance().inicializar(taxiMesh);
 
             Camara.inicializar(Auto.getInstance().getPosicion());
-
 
             Cronometro.getInstance().inicializar();
 
@@ -71,13 +74,13 @@ namespace AlumnoEjemplos.MiGrupo
             Vector3 pos = new Vector3(100, 5, -200);
 
             pas.parar(pos);
-
-
         }
 
         public override void render(float elapsedTime)
         {
+            Auto.getInstance().checkCollision(ciudadScene);
             Auto.getInstance().render(elapsedTime);
+
             ciudadScene.renderAll();
 
             float distancia = Vector3.Length(Auto.getInstance().getPosicion() - pas.posicion);
