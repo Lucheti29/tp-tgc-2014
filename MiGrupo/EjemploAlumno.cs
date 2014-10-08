@@ -21,11 +21,11 @@ namespace AlumnoEjemplos.MiGrupo
         //Objeto que va a hacer a modo de auto
 
         TgcScene taxiScene;
-        float tiempoRestante = 60;
+        // float tiempoRestante = 60;
         TgcScene ciudadScene;
         TgcBox box;
         Pasajero pas;
-
+        List<Pasajero> listaPas;
         public override string getCategory()
         {
             return "AlumnoEjemplos";
@@ -69,52 +69,55 @@ namespace AlumnoEjemplos.MiGrupo
             Camara.inicializar(Auto.getInstance().getPosicion());
 
             Cronometro.getInstance().inicializar();
-
+            Cronometro.getInstance().TiempoTotal = 60;
             pas = new Pasajero();
-            Vector3 pos = new Vector3(100, 5, -200);
+            Vector3 pos = new Vector3(100, 5, -850);
 
-            pas.parar(pos);
-            pas.destino = new Vector3(100, 5, -450);
+            pas.posicionar(pos);
+            pas.destino = new Vector3(700, 5, -850);
+            listaPas = new List<Pasajero>();
+            listaPas.Add(pas);
 
-
-            Vector3 size = new Vector3(50, 70, 80);
+            Vector3 size = new Vector3(30, 20, 30);
             Vector3 center = pas.destino;
 
             Color color = Color.Gray;
 
             box = TgcBox.fromSize(center, size);
+
+            GuiController.Instance.UserVars.addVar("posPas", pas.posicion);
+            GuiController.Instance.UserVars.addVar("posTaxi", Auto.getInstance().getMesh().Position);
+            GuiController.Instance.UserVars.addVar("posDest", pas.destino);
+            GuiController.Instance.UserVars.addVar("velocidad");
+            GuiController.Instance.UserVars.addVar("DistTaxi");
+            GuiController.Instance.UserVars.addVar("distDest");
         }
 
         public override void render(float elapsedTime)
         {
-            Auto.getInstance().checkCollision(ciudadScene);
+             Auto.getInstance().checkCollision(ciudadScene);
             Auto.getInstance().render(elapsedTime);
 
             ciudadScene.renderAll();
 
             float distancia = Vector3.Length(Auto.getInstance().getPosicion() - pas.posicion);
+            GuiController.Instance.UserVars.setValue("posPas", pas.posicion);
+            GuiController.Instance.UserVars.setValue("posTaxi", Auto.getInstance().getMesh().Position);
 
 
-            tiempoRestante = Cronometro.getInstance().controlarTiempo(tiempoRestante, elapsedTime);
+            Cronometro.getInstance().controlarTiempo(elapsedTime, listaPas.TrueForAll(llegaronTodos));
             Cronometro.getInstance().render();
 
-            /*     if (pas.getDistancia(Auto.getInstance().getPosicion().X,Auto.getInstance().getPosicion().Z)< 100)
-                     {
-                
-                         pas.caminarHacia(Auto.getInstance().getPosicion());
-                     }*/
-            if (distancia < 200)
-            {
-                pas.movePasajero(elapsedTime, Auto.getInstance());
-            }
-            float distanciaDestino = Vector3.Length(Auto.getInstance().getPosicion() - pas.destino);
-            if (distanciaDestino < 100)
-            {
-                pas.bajarseDelTaxi(Auto.getInstance());
-                pas.getMesh().Enabled = true;
-            }
+
+            pas.movePasajero(elapsedTime, Auto.getInstance());
+
             pas.render();
             box.render();
+        }
+
+        private bool llegaronTodos(Pasajero obj)
+        {
+            return obj.llego == true;
         }
 
         public override void close()

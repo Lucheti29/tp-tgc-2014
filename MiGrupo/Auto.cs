@@ -43,7 +43,7 @@ namespace AlumnoEjemplos.MiGrupo
             return _mesh.Position;
         }
 
-        private float getVelocity()
+        public float getVelocity()
         {
             return _velocidad.getAmount();
         }
@@ -95,6 +95,7 @@ namespace AlumnoEjemplos.MiGrupo
                 _velocidad.acelerar();
             else if (down)
                 _velocidad.desacelerar();
+            GuiController.Instance.UserVars.setValue("velocidad", _velocidad.getAmount());
         }
 
         public void checkCollision(TgcScene scene)

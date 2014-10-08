@@ -21,24 +21,33 @@ namespace AlumnoEjemplos.MiGrupo
            _instance.textTiempo.Color = Color.Red;
            _instance.textTiempo.changeFont(new System.Drawing.Font("TimesNewRoman", 25, FontStyle.Bold));
        }
- 
 
-       public float controlarTiempo(float tiempo, float elapsedTime)
+
+       public void controlarTiempo(float elapsedTime, bool llegaronTodos)
        {
-                 //Renderizo el timer
-            if (tiempo > 0)
-            {
-                tiempo-= elapsedTime;
-                int tiemposec = (int)tiempo;
-                textTiempo.Text = String.Format("Tiempo Restante: {0:00}:{1:00}.", tiemposec / 60, tiemposec % 60);
+           //Renderizo el timer
 
-            }
-            else
-            {
-                textTiempo.Text = String.Format("Tiempo Concluido!!!");
 
-            }
-            return tiempo;
+           if (this.TiempoTotal > 0)
+           {
+               this.TiempoTotal -= elapsedTime;
+               //tiempo -= elapsedTime;
+               int tiemposec = (int)this.TiempoTotal;
+               textTiempo.Text = String.Format("Tiempo Restante: {0:00}:{1:00}.", tiemposec / 60, tiemposec % 60);
+               if (llegaronTodos)
+               {
+
+                   textTiempo.Text = String.Format("FELICITACIONES!! GANASTEEEE!!!!");
+
+               }
+           }
+           else
+           {
+               textTiempo.Text = String.Format("Tiempo Concluido!!! PERDISTEEEE");
+
+           }
+
+
        }
        public void render()
        {

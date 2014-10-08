@@ -12,7 +12,7 @@ namespace AlumnoEjemplos.MiGrupo
 
     class Pasajero
     {
-       
+
         TgcSkeletalMesh pasajeroMesh;
         string[] animationList;
         //---propiedades
@@ -21,10 +21,16 @@ namespace AlumnoEjemplos.MiGrupo
         public Vector3 posicion
         {//donde se encuentra el pasajero actualmente 
             get { return pasajeroMesh.Position; }
-            set { pasajeroMesh.move(value); }
         }
-        //--propiedades
-
+        //_--para el metodo moverPasajero 
+        private int t;
+        public static float DISTANCIA = 200f;
+        private float rotacion = 0;
+        public static float VELOCIDAD = 30.0f;
+        private bool bajo = false;
+        public bool llego { set; get; }
+        private bool viajando { set; get; }
+        //---para el metodo moverPasajero
         //constructor
         public Pasajero()
         {
@@ -50,25 +56,22 @@ namespace AlumnoEjemplos.MiGrupo
             //Cargar mesh y animaciones
             TgcSkeletalLoader loaderSkeletal = new TgcSkeletalLoader();
             pasajeroMesh = loaderSkeletal.loadMeshAndAnimationsFromFile(pathMesh, mediaPath, animationsPath);
-
+            this.viajando = false;
+            this.llego = false;
         }
 
         //metodos
-        public void parar()
+        private void parar()
         {
             if (this.animacionActual != animationList[0])//me fijo si ya la animacion actual es diferente a la q quiero  
             {
                 pasajeroMesh.stopAnimation();// detengo la animacion actual
             }
-            this.animacionActual = animationList[0];
+            this.animacionActual = animationList[0];//ANIMACION STANDBY en la lista de animaciones
             pasajeroMesh.playAnimation(this.animacionActual, true);
         }
 
-        public void parar(Vector3 pos)
-        {
-            this.posicion = pos;
-            this.parar();
-        }
+
 
         private void caminar()
         {
@@ -81,73 +84,132 @@ namespace AlumnoEjemplos.MiGrupo
             pasajeroMesh.playAnimation(this.animacionActual, true);
         }
 
-      
+        public void posicionar(Vector3 pos)//POSCIONA EL PASAJERO EN LA POS PASADA POR PARAMETRO
+        {
+            pasajeroMesh.move(pos);
+            this.parar();
+        }
 
         //distancia entre el (_x,_z) enemigo, y el (x,z) pasados como parametro
-        public float getDistancia(float x, float z)
+        private float getDistancia(float x, float z)
         {
             return FastMath.Sqrt(FastMath.Pow2(x - pasajeroMesh.Position.X) + FastMath.Pow2(z - pasajeroMesh.Position.Z));
         }
 
-        private int t;
-        public static float DISTANCIA = 200f;
-        private float rotacion = 0;
-        public static float VELOCIDAD = 30.0f;
+
 
         public void movePasajero(float elapsedTime, Auto taxi)
         {
-            Vector3 posTaxi = new Vector3(taxi.getMesh().Position.X, taxi.getMesh().Position.Y, taxi.getMesh().Position.Z);
             Vector3 movementVector = new Vector3(0, 0, 0);
 
-            //t es un contador de frames
-            t++;
+            if (!this.viajando && !this.llego && !this.bajo)
+            {//EL PASAJERO ESPERA EL TAXI
+                Vector3 posTaxi = new Vector3(taxi.getMesh().Position.X, taxi.getMesh().Position.Y, taxi.getMesh().Position.Z);
 
-            /*
-             * 
-             * I.A. del Pasajero
-             *(1) por 140 frames el pasajero va hacia el taxi si estas cerca, si no se queda quieto 
-             *(2) luego por 80 frames se queda quieto
-             *vuelve a (1) y asi
-             *
-             */
 
-            if (t < 140)
-            {
-                float distanciaAlTaxi = getDistancia(taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
-                if ((distanciaAlTaxi < DISTANCIA) && (distanciaAlTaxi >= 50))
+                //t es un contador de frames
+                t++;
+
+                /* 
+                 * I.A. del Pasajero
+                 *(1) por 140 frames el pasajero va hacia el taxi si estas cerca, si no se queda quieto 
+                 *(2) luego por 80 frames se queda quieto
+                 *vuelve a (1) y asi
+                 *
+                 */
+
+                if (t < 140)
                 {
-                    movementVector = acercarse(taxi.getMesh().Position.X, taxi.getMesh().Position.Z, VELOCIDAD * elapsedTime);
-                    rotacion = -FastMath.PI_HALF - calcular_angulo(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
-                    
-                    this.caminar();
-                }
-                if (distanciaAlTaxi < 50)
-                {
-                    this.parar();
-                    pasajeroMesh.Enabled = false;
-                }
+                    float distanciaAlTaxi = getDistancia(taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
+                    GuiController.Instance.UserVars.setValue("DistTaxi", distanciaAlTaxi);
+                    if (distanciaAlTaxi < DISTANCIA)
+                    {
+                        if (distanciaAlTaxi >= 70)
+                        {//EL TAXI ESTA CERCA -> el pasaj intenta subirse
+                            movementVector = acercarse(taxi.getMesh().Position.X, taxi.getMesh().Position.Z, VELOCIDAD * elapsedTime);
+                            rotacion = -FastMath.PI_HALF - calcular_angulo(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
+                            this.caminar();
+                        }
+                        else
+                        {//EL PASAJERO SE SUBIO AL TAXI-> se deshabilita el renderizado del pasajeroMesh
+                            this.parar();
+                            pasajeroMesh.Enabled = false;
+                            pasajeroMesh.Position = taxi.getMesh().Position;
+                            this.viajando = true;
+                        }
+                    }
+                    else
+                    {
+                        this.parar();
+                    }
 
-            }
-            else if (t >= 140 && t < 220)
-            {
-                this.parar();
+                }
+                else
+                    t = 0;
+
             }
             else
-                t = 0;
+            {
+                if (!this.llego)
+                {//EL PASAJERO ESTA VIAJANDO EN EL TAXI-> la posicion del pasajero es la del taxi
+                    if (this.viajando)
+                    {
+                        pasajeroMesh.Position = taxi.getMesh().Position;
+
+                    }
+
+                    //t es un contador de frames
+                    t++;
+
+                    if (t < 140)
+                    {
+
+                        float distanciaDest = getDistancia(this.destino.X, this.destino.Z);//la distancia del pasajero(dentro del taxi) al destino
+
+                        GuiController.Instance.UserVars.setValue("distDest", distanciaDest);
 
 
 
-            // collisionManager.SlideFactor = (float)TgcViewer.GuiController.Instance.Modifiers["SlideFactor"];
+                        if (distanciaDest < 200 && this.viajando && (taxi.getVelocity() < 10 && taxi.getVelocity() > -10))
+                        {//EL PASAJERO DEBE BAJARSE DEL TAXI ->se habilita el mesh del pasajero  
+                            pasajeroMesh.Enabled = true;
+                            this.parar();
+                            this.viajando = false;
+                            this.bajo = true;
+
+                        }
+                        if (!this.viajando)
+                        {
+                            if (distanciaDest > 10)
+                            {
+                                movementVector = acercarse(destino.X, destino.Z, VELOCIDAD * elapsedTime);
+                                rotacion = -FastMath.PI_HALF - calcular_angulo(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, destino.X, destino.Z);
+                                this.caminar();
+                            }
+                            else
+                            {
+
+                                this.llego = true;
+                                this.parar();
+
+                            }
+                        }
 
 
+                    }
+                    else
+                        t = 0;
+
+                }
+
+            }
             float antirotar = pasajeroMesh.Rotation.Y;
             pasajeroMesh.rotateY(rotacion - antirotar);
-
-            //Mover personaje con detección de colisiones, sliding y gravedad
-            //   Vector3 realMovement = collisionManager.moveCharacter(characterSphere, movementVector, objetosColisionables);
             pasajeroMesh.move(movementVector);
-
         }
+
+
+
 
         //retorna el angulo formado por ambos puntos
         private float calcular_angulo(float posPasajX, float posPasjZ, float posTaxiX, float posTaxiZ)
@@ -211,16 +273,7 @@ namespace AlumnoEjemplos.MiGrupo
             return new Vector3(FastMath.Cos(angulo) * velocidad, 0, FastMath.Sin(angulo) * velocidad);
 
         }
-        public void bajarseDelTaxi(Auto taxi)//FIJARSE PORQUE NO SE RENDERIZA DE NUEVO
-        {
-            if (Vector3.Length(Auto.getInstance().getPosicion() - this.destino) < 100)
-            {
-                pasajeroMesh.Enabled = true;//SIRVE PARA Q VUELVA A RENDERIZAR (ESTA PROBADO EN EL EJEMPLOALUMNO)
-               /* pasajeroMesh.move(10, 5, 15);
-                pasajeroMesh.Position(10, 5, 15);*/
-                pasajeroMesh.Transform.Translate(10,5,15);
-            }
-        }
+
         public TgcSkeletalMesh getMesh()
         {
             return pasajeroMesh;
