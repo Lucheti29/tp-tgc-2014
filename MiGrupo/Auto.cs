@@ -126,14 +126,14 @@ namespace AlumnoEjemplos.MiGrupo
             Teclado.handlear();
             _velocidad.friccion(_currentElapsedTime);
             Camara.setearPosicion(getPosicion());
-            _mesh.move(_direccion * _velocidad.getAmount() * elapsedTime);
+            _mesh.move(_direccion * _velocidad.getAmount());
 
             //Si NO hay colision entonces movemos el taxi
+            //TODO: deshardcodear la nueva velocidad al chocar
             if (_collisionFound)
             {
-                _mesh.Position = new Vector3(-980, 15, -3000);
                 _velocidad = new Velocity();
-                
+                _velocidad.setAmount(40f * -1, elapsedTime);
             }
             
             _mesh.render();

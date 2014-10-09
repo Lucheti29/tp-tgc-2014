@@ -96,7 +96,7 @@ namespace AlumnoEjemplos.MiGrupo
 
         public override void render(float elapsedTime)
         {
-            // Auto.getInstance().checkCollision(ciudadScene);
+            Auto.getInstance().checkCollision(ciudadScene);
             Auto.getInstance().render(elapsedTime);
 
             ciudadScene.renderAll();
