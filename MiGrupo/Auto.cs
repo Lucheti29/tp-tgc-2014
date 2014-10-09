@@ -149,7 +149,7 @@ namespace AlumnoEjemplos.MiGrupo
             if (_collisionFound)
             {
                 _velocidad = new Velocity();
-                _velocidad.setAmount(40f * -1, elapsedTime);
+                _velocidad.setAmount(120f * -1, elapsedTime);
             }
             
             _mesh.render();
