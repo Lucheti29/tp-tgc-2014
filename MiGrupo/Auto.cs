@@ -22,6 +22,7 @@ namespace AlumnoEjemplos.MiGrupo
         private Velocity _velocidad;
         private float _currentElapsedTime;
         private bool _collisionFound;
+        private bool _llevaPasajero;
 
         // --------------- Fin variables de instancia ---------------
 
@@ -48,6 +49,21 @@ namespace AlumnoEjemplos.MiGrupo
             return _velocidad.getAmount();
         }
 
+        public bool llevaPasajero()
+        {
+            return _llevaPasajero;
+        }
+
+        public void subePasajero()
+        {
+            _llevaPasajero = true;
+        }
+
+        public void bajaPasajero()
+        {
+            _llevaPasajero = false;
+        }
+
         private void derrapar(Boolean right, Boolean left)
         {
             //TODO: hacer
@@ -70,12 +86,12 @@ namespace AlumnoEjemplos.MiGrupo
                 }
                 else if (left || right)
                 {
-                    int yaw = 1;
+                    int yaw = 55;
                     int sign = 1;
 
                     if (left)
                     {
-                        yaw = -1;
+                        yaw *= -1;
                         sign = -1;
                     }
 

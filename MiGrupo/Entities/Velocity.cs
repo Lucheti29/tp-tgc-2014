@@ -11,6 +11,7 @@ namespace AlumnoEjemplos.MiGrupo.Entities
         const float MIN_SPEED = -60f;
         const float ACCELERATION = 5f;
         const float ACCELERATION_BACK = 3f;
+        const float ACCELERATION_BACK_BRAKE = 9f;
         const float DESACCELERATION_BRAKE = 20f;
         const float FRICTION = 1f;
 
@@ -27,7 +28,7 @@ namespace AlumnoEjemplos.MiGrupo.Entities
             //Es más violento
             if (_amount > 0)
             {
-                _amount -= (ACCELERATION_BACK * currentElapsedTime);
+                _amount -= (ACCELERATION_BACK_BRAKE * currentElapsedTime);
             }
             //Esta yendo marcha atrás
             //Es más suave

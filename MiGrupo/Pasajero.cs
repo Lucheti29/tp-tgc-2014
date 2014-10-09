@@ -139,7 +139,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                     float distanciaAlTaxi = getDistancia(taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
                     GuiController.Instance.UserVars.setValue("DistTaxi", distanciaAlTaxi);
-                    if (distanciaAlTaxi < DISTANCIA && !taxi.llevaPasajero)
+                    if (distanciaAlTaxi < DISTANCIA && !taxi.llevaPasajero())
                     {
                         if (distanciaAlTaxi >= 70)
                         {//EL TAXI ESTA CERCA -> el pasaj intenta subirse
@@ -154,7 +154,7 @@ namespace AlumnoEjemplos.MiGrupo
                             this.marcaDestino.Enabled = true;
                             pasajeroMesh.Position = taxi.getMesh().Position;
                             this.viajando = true;
-                            taxi.llevaPasajero = true;
+                            taxi.subePasajero();
                             GuiController.Instance.UserVars.setValue("posDest", this.destino);
                         }
                     }
@@ -195,7 +195,7 @@ namespace AlumnoEjemplos.MiGrupo
                             this.viajando = false;
                             this.bajo = true;
                             Cronometro.getInstance().incrementar(10);
-                            taxi.llevaPasajero = false; //el taxi no lleva mas un pasajero
+                            taxi.bajaPasajero(); //el taxi no lleva mas un pasajero
 
                         }
                         if (!this.viajando)
