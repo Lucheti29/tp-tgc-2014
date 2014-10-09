@@ -77,14 +77,22 @@ namespace AlumnoEjemplos.MiGrupo
 
             pas1 = new Pasajero();
             pas1.posicionar(new Vector3(100, 5, -850));
-            pas1.cargarDestino(new Vector3(700, 5, -850));
+            pas1.cargarDestino(new Vector3(700, 5, -1850));
 
             pas2 = new Pasajero();
             pas2.posicionar(new Vector3(-100, 5, -850));
-            pas2.cargarDestino(new Vector3(-700, 5, -850));
+            pas2.cargarDestino(new Vector3(-1170, 15, 703));
 
 
-            listaPas = new List<Pasajero>() { pas1, pas2 };
+            pas3 = new Pasajero();
+            pas3.posicionar(new Vector3(335, 15, 1193));
+            pas3.cargarDestino(new Vector3(-4181, 15, -3235));
+
+            pas4 = new Pasajero();
+            pas4.posicionar(new Vector3(-6692, 15, -1179));
+            pas4.cargarDestino(new Vector3(-8692, 15, -979));
+
+            listaPas = new List<Pasajero>() { pas1, pas2, pas3, pas4 };
 
             GuiController.Instance.UserVars.addVar("posPas", pas1.posicion);
             GuiController.Instance.UserVars.addVar("posTaxi", Auto.getInstance().getMesh().Position);

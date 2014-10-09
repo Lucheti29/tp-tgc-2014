@@ -103,6 +103,12 @@ namespace AlumnoEjemplos.MiGrupo
             this.parar();
         }
 
+        public void posicionar(float posX, float posZ)//POSCIONA EL PASAJERO EN LA POS PASADA POR PARAMETRO
+        {
+            pasajeroMesh.Position = new Vector3(posX, 5, posZ);
+
+            this.parar();
+        }
 
         //distancia entre el (_x,_z) enemigo, y el (x,z) pasados como parametro
         private float getDistancia(float x, float z)
@@ -133,7 +139,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                     float distanciaAlTaxi = getDistancia(taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
                     GuiController.Instance.UserVars.setValue("DistTaxi", distanciaAlTaxi);
-                    if (distanciaAlTaxi < DISTANCIA)
+                    if (distanciaAlTaxi < DISTANCIA && !taxi.llevaPasajero)
                     {
                         if (distanciaAlTaxi >= 70)
                         {//EL TAXI ESTA CERCA -> el pasaj intenta subirse
@@ -148,6 +154,8 @@ namespace AlumnoEjemplos.MiGrupo
                             this.marcaDestino.Enabled = true;
                             pasajeroMesh.Position = taxi.getMesh().Position;
                             this.viajando = true;
+                            taxi.llevaPasajero = true;
+                            GuiController.Instance.UserVars.setValue("posDest", this.destino);
                         }
                     }
                     else
@@ -183,10 +191,11 @@ namespace AlumnoEjemplos.MiGrupo
                         if (distanciaDest < 200 && this.viajando && (taxi.getVelocity() < 20 && taxi.getVelocity() > -20))
                         {//EL PASAJERO DEBE BAJARSE DEL TAXI ->se habilita el mesh del pasajero  
                             pasajeroMesh.Enabled = true;
-                            this.parar();
+                            this.posicionar(taxi.getPosicion().X + 10, taxi.getPosicion().Z + 10);
                             this.viajando = false;
                             this.bajo = true;
                             Cronometro.getInstance().incrementar(10);
+                            taxi.llevaPasajero = false; //el taxi no lleva mas un pasajero
 
                         }
                         if (!this.viajando)
@@ -203,6 +212,7 @@ namespace AlumnoEjemplos.MiGrupo
                                 this.llego = true;
                                 this.parar();
                                 marcaDestino.Enabled = false;
+
                             }
                         }
 
