@@ -66,7 +66,7 @@ namespace AlumnoEjemplos.MiGrupo
                     else if (left)
                         derrapar(false, true);
                     else
-                        _velocidad.frenar();
+                        _velocidad.frenar(_currentElapsedTime);
                 }
                 else if (left || right)
                 {
@@ -92,9 +92,9 @@ namespace AlumnoEjemplos.MiGrupo
             }
 
             if (up)
-                _velocidad.acelerar();
+                _velocidad.acelerar(_currentElapsedTime);
             else if (down)
-                _velocidad.desacelerar();
+                _velocidad.desacelerar(_currentElapsedTime);
             GuiController.Instance.UserVars.setValue("velocidad", _velocidad.getAmount());
         }
 
@@ -124,7 +124,7 @@ namespace AlumnoEjemplos.MiGrupo
             Vector3 lastPosicion = getPosicion();
             _currentElapsedTime = elapsedTime;
             Teclado.handlear();
-            _velocidad.friccion();
+            _velocidad.friccion(_currentElapsedTime);
             Camara.setearPosicion(getPosicion());
             _mesh.move(_direccion * _velocidad.getAmount() * elapsedTime);
 
