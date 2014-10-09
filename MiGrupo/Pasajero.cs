@@ -1,6 +1,7 @@
 ﻿using Microsoft.DirectX;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using TgcViewer;
@@ -31,6 +32,7 @@ namespace AlumnoEjemplos.MiGrupo
         public bool llego { set; get; }
         private bool viajando { set; get; }
         //---para el metodo moverPasajero
+        TgcBox marcaDestino;
         //constructor
         public Pasajero()
         {
@@ -58,8 +60,19 @@ namespace AlumnoEjemplos.MiGrupo
             pasajeroMesh = loaderSkeletal.loadMeshAndAnimationsFromFile(pathMesh, mediaPath, animationsPath);
             this.viajando = false;
             this.llego = false;
+
+
+
         }
 
+        public void cargarDestino(Vector3 destino)
+        {
+            //creo la la caja para marcar el destino
+            Vector3 size = new Vector3(30, 0, 30);
+            this.destino = destino;
+            this.marcaDestino = TgcBox.fromSize(this.destino, size, Color.Green);
+            this.marcaDestino.Enabled = false;
+        }
         //metodos
         private void parar()
         {
@@ -90,6 +103,7 @@ namespace AlumnoEjemplos.MiGrupo
             this.parar();
         }
 
+
         //distancia entre el (_x,_z) enemigo, y el (x,z) pasados como parametro
         private float getDistancia(float x, float z)
         {
@@ -105,11 +119,8 @@ namespace AlumnoEjemplos.MiGrupo
             if (!this.viajando && !this.llego && !this.bajo)
             {//EL PASAJERO ESPERA EL TAXI
                 Vector3 posTaxi = new Vector3(taxi.getMesh().Position.X, taxi.getMesh().Position.Y, taxi.getMesh().Position.Z);
-
-
                 //t es un contador de frames
                 t++;
-
                 /* 
                  * I.A. del Pasajero
                  *(1) por 140 frames el pasajero va hacia el taxi si estas cerca, si no se queda quieto 
@@ -117,9 +128,9 @@ namespace AlumnoEjemplos.MiGrupo
                  *vuelve a (1) y asi
                  *
                  */
-
                 if (t < 140)
                 {
+
                     float distanciaAlTaxi = getDistancia(taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
                     GuiController.Instance.UserVars.setValue("DistTaxi", distanciaAlTaxi);
                     if (distanciaAlTaxi < DISTANCIA)
@@ -134,6 +145,7 @@ namespace AlumnoEjemplos.MiGrupo
                         {//EL PASAJERO SE SUBIO AL TAXI-> se deshabilita el renderizado del pasajeroMesh
                             this.parar();
                             pasajeroMesh.Enabled = false;
+                            this.marcaDestino.Enabled = true;
                             pasajeroMesh.Position = taxi.getMesh().Position;
                             this.viajando = true;
                         }
@@ -168,14 +180,13 @@ namespace AlumnoEjemplos.MiGrupo
 
                         GuiController.Instance.UserVars.setValue("distDest", distanciaDest);
 
-
-
-                        if (distanciaDest < 200 && this.viajando && (taxi.getVelocity() < 10 && taxi.getVelocity() > -10))
+                        if (distanciaDest < 200 && this.viajando && (taxi.getVelocity() < 20 && taxi.getVelocity() > -20))
                         {//EL PASAJERO DEBE BAJARSE DEL TAXI ->se habilita el mesh del pasajero  
                             pasajeroMesh.Enabled = true;
                             this.parar();
                             this.viajando = false;
                             this.bajo = true;
+                            Cronometro.getInstance().incrementar(10);
 
                         }
                         if (!this.viajando)
@@ -191,7 +202,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                                 this.llego = true;
                                 this.parar();
-
+                                marcaDestino.Enabled = false;
                             }
                         }
 
@@ -281,14 +292,15 @@ namespace AlumnoEjemplos.MiGrupo
         public void render()
         {
             pasajeroMesh.animateAndRender();
+            marcaDestino.render();
         }
 
         public void dispose()
         {
             pasajeroMesh.dispose();
+            marcaDestino.dispose();
         }
 
 
     }
 }
-
