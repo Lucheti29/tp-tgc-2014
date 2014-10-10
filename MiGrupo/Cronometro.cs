@@ -12,6 +12,7 @@ namespace AlumnoEjemplos.MiGrupo
         static Cronometro _instance = new Cronometro();
         public float TiempoTotal { get; set; }
         public TgcText2d textTiempo { get; set; }
+        private bool _activated = true;
 
         public void inicializar()
         {
@@ -26,28 +27,26 @@ namespace AlumnoEjemplos.MiGrupo
         public void controlarTiempo(float elapsedTime, bool llegaronTodos)
         {
             //Renderizo el timer
-
-
-            if (this.TiempoTotal > 0)
+            if (_activated)
             {
-                this.TiempoTotal -= elapsedTime;
-                //tiempo -= elapsedTime;
-                int tiemposec = (int)this.TiempoTotal;
-                textTiempo.Text = String.Format("Tiempo Restante: {0:00}:{1:00}.", tiemposec / 60, tiemposec % 60);
-                if (llegaronTodos)
+                if (this.TiempoTotal > 0)
                 {
-
-                    textTiempo.Text = String.Format("FELICITACIONES!! GANASTEEEE!!!!");
-
+                    this.TiempoTotal -= elapsedTime;
+                    //tiempo -= elapsedTime;
+                    int tiemposec = (int)this.TiempoTotal;
+                    textTiempo.Text = String.Format("Tiempo Restante: {0:00}:{1:00}.", tiemposec / 60, tiemposec % 60);
+                    if (llegaronTodos)
+                    {
+                        textTiempo.Text = String.Format("FELICITACIONES!! GANASTEEEE!!!!");
+                        _activated = false;
+                    }
+                }
+                else
+                {
+                    textTiempo.Text = String.Format("Tiempo Concluido!!! PERDISTEEEE");
+                    _activated = false;
                 }
             }
-            else
-            {
-                textTiempo.Text = String.Format("Tiempo Concluido!!! PERDISTEEEE");
-
-            }
-
-
         }
         public void render()
         {
