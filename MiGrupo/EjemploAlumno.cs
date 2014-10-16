@@ -69,6 +69,8 @@ namespace AlumnoEjemplos.MiGrupo
 
             //solo nos interesa el taxi
             Auto.getInstance().inicializar(taxiMesh);
+            Flecha.getInstance().inicializar();
+            Flecha.getInstance().show();
 
             Camara.inicializar(Auto.getInstance().getPosicion());
 
@@ -108,8 +110,10 @@ namespace AlumnoEjemplos.MiGrupo
 
         public override void render(float elapsedTime)
         {
+            Teclado.handlear();
             Auto.getInstance().checkCollision(ciudadScene);
             Auto.getInstance().render(elapsedTime);
+            Flecha.getInstance().render(elapsedTime);
 
             ciudadScene.renderAll();
 

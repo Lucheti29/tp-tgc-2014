@@ -69,8 +69,14 @@ namespace AlumnoEjemplos.MiGrupo
             //TODO: hacer
         }
 
-        public void aplicarMovimiento(Boolean right, Boolean left, Boolean up, Boolean down, Boolean brake)
+        public void aplicarMovimiento()
         {
+            bool right = Teclado.getInput(InputType.RIGHT);
+            bool left = Teclado.getInput(InputType.LEFT);
+            bool up = Teclado.getInput(InputType.UP);
+            bool down = Teclado.getInput(InputType.DOWN);
+            bool brake = Teclado.getInput(InputType.SPACE);
+
             Vector3 direccionAuxiliar = new Vector3(_direccion.X, _direccion.Y, _direccion.Z);
 
             if (!(_velocidad.getAmount() < 0.5f && _velocidad.getAmount() > -0.5f))
@@ -137,9 +143,8 @@ namespace AlumnoEjemplos.MiGrupo
 
         public void render(float elapsedTime)
         {
-            Vector3 lastPosicion = getPosicion();
             _currentElapsedTime = elapsedTime;
-            Teclado.handlear();
+            this.aplicarMovimiento();
             _velocidad.friccion(_currentElapsedTime);
             Camara.setearPosicion(getPosicion());
             _mesh.move(_direccion * _velocidad.getAmount());
