@@ -11,58 +11,29 @@ using TgcViewer.Utils.TgcSkeletalAnimation;
 namespace AlumnoEjemplos.MiGrupo
 {
 
-    class Pasajero
+    public class Pasajero : Persona
     {
 
-        TgcSkeletalMesh pasajeroMesh;
-        string[] animationList;
-        //---propiedades
-        private string animacionActual { get; set; }
-        public Vector3 destino { get; set; }//la posicion donde quiere ir el pasajero
-        public Vector3 posicion
-        {//donde se encuentra el pasajero actualmente 
-            get { return pasajeroMesh.Position; }
-        }
+
+
         //_--para el metodo moverPasajero 
         private int t;
-        public static float DISTANCIA = 200f;
+        private static float DISTANCIA = 200f;
         private float rotacion = 0;
-        public static float VELOCIDAD = 30.0f;
+        private static float VELOCIDAD = 30.0f;
         private bool bajo = false;
+        public Vector3 destino { get; set; }
         public bool llego { set; get; }
         private bool viajando { set; get; }
         //---para el metodo moverPasajero
         TgcBox marcaDestino;
         //constructor
-        public Pasajero()
+        public Pasajero(string mesh, string textura)
+            : base(mesh, textura)
         {
 
-            //Paths para archivo XML de la malla
-            string pathMesh = GuiController.Instance.ExamplesMediaDir + "SkeletalAnimations\\BasicHuman\\WomanJeans-TgcSkeletalMesh.xml";
-            //Path para carpeta de texturas de la malla
-            string mediaPath = GuiController.Instance.ExamplesMediaDir + "SkeletalAnimations\\BasicHuman\\";
-
-            //Lista de animaciones disponibles
-            animationList = new string[]{
-                "StandBy",
-                "Walk",
-            };
-
-            //Crear rutas con cada animacion
-            string[] animationsPath = new string[animationList.Length];
-            for (int i = 0; i < animationList.Length; i++)
-            {
-                animationsPath[i] = mediaPath + "Animations\\" + animationList[i] + "-TgcSkeletalAnim.xml";
-            }
-
-            //Cargar mesh y animaciones
-            TgcSkeletalLoader loaderSkeletal = new TgcSkeletalLoader();
-            pasajeroMesh = loaderSkeletal.loadMeshAndAnimationsFromFile(pathMesh, mediaPath, animationsPath);
             this.viajando = false;
             this.llego = false;
-
-
-
         }
 
         public void cargarDestino(Vector3 destino)
@@ -73,29 +44,7 @@ namespace AlumnoEjemplos.MiGrupo
             this.marcaDestino = TgcBox.fromSize(this.destino, size, Color.Green);
             this.marcaDestino.Enabled = false;
         }
-        //metodos
-        private void parar()
-        {
-            if (this.animacionActual != animationList[0])//me fijo si ya la animacion actual es diferente a la q quiero  
-            {
-                pasajeroMesh.stopAnimation();// detengo la animacion actual
-            }
-            this.animacionActual = animationList[0];//ANIMACION STANDBY en la lista de animaciones
-            pasajeroMesh.playAnimation(this.animacionActual, true);
-        }
 
-
-
-        private void caminar()
-        {
-            if (this.animacionActual != animationList[1])//me fijo si la animacion actual es diferente a la q quiero  
-            {
-                pasajeroMesh.stopAnimation();// detengo la animacion actual
-            }
-            //le asigno la animacion de caminar y la ejecuto
-            this.animacionActual = animationList[1];
-            pasajeroMesh.playAnimation(this.animacionActual, true);
-        }
 
         public void posicionar(Vector3 pos)//POSCIONA EL PASAJERO EN LA POS PASADA POR PARAMETRO
         {
@@ -106,11 +55,10 @@ namespace AlumnoEjemplos.MiGrupo
         public void posicionar(float posX, float posZ)//POSCIONA EL PASAJERO EN LA POS PASADA POR PARAMETRO
         {
             pasajeroMesh.Position = new Vector3(posX, 5, posZ);
-
             this.parar();
         }
 
-        //distancia entre el (_x,_z) enemigo, y el (x,z) pasados como parametro
+        //distancia entre el (_x,_z) pasajero, y el (x,z) pasados como parametro
         private float getDistancia(float x, float z)
         {
             return FastMath.Sqrt(FastMath.Pow2(x - pasajeroMesh.Position.X) + FastMath.Pow2(z - pasajeroMesh.Position.Z));
@@ -118,27 +66,28 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-        public void movePasajero(float elapsedTime, Auto taxi)
+        public void move(float elapsedTime)
         {
             Vector3 movementVector = new Vector3(0, 0, 0);
-
+            Auto taxi = Auto.getInstance();
             if (!this.viajando && !this.llego && !this.bajo)
             {//EL PASAJERO ESPERA EL TAXI
                 Vector3 posTaxi = new Vector3(taxi.getMesh().Position.X, taxi.getMesh().Position.Y, taxi.getMesh().Position.Z);
-                //t es un contador de frames
-                t++;
+
+                t++; //t es un contador de frames
                 /* 
                  * I.A. del Pasajero
                  *(1) por 140 frames el pasajero va hacia el taxi si estas cerca, si no se queda quieto 
-                 *(2) luego por 80 frames se queda quieto
-                 *vuelve a (1) y asi
+                 
                  *
                  */
                 if (t < 140)
                 {
 
                     float distanciaAlTaxi = getDistancia(taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
+
                     GuiController.Instance.UserVars.setValue("DistTaxi", distanciaAlTaxi);
+
                     if (distanciaAlTaxi < DISTANCIA && !taxi.llevaPasajero())
                     {
                         if (distanciaAlTaxi >= 70)
@@ -188,7 +137,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                         GuiController.Instance.UserVars.setValue("distDest", distanciaDest);
 
-                        if (distanciaDest < 200 && this.viajando && (taxi.getVelocity() < 20 && taxi.getVelocity() > -20))
+                        if (distanciaDest < 200 && this.viajando && (taxi.getVelocity() < 5 && taxi.getVelocity() > -5))
                         {//EL PASAJERO DEBE BAJARSE DEL TAXI ->se habilita el mesh del pasajero  
                             pasajeroMesh.Enabled = true;
                             this.posicionar(taxi.getPosicion().X + 10, taxi.getPosicion().Z + 10);
@@ -295,22 +244,22 @@ namespace AlumnoEjemplos.MiGrupo
 
         }
 
-        public TgcSkeletalMesh getMesh()
-        {
-            return pasajeroMesh;
-        }
-        public void render()
+        public override void render()
         {
             pasajeroMesh.animateAndRender();
             marcaDestino.render();
         }
 
-        public void dispose()
+        public override void dispose()
         {
             pasajeroMesh.dispose();
             marcaDestino.dispose();
         }
 
 
+
+
+
     }
 }
+
