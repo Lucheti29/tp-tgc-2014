@@ -23,20 +23,24 @@ namespace AlumnoEjemplos.MiGrupo
         private float _currentElapsedTime;
         private bool _collisionFound;
         private bool _llevaPasajero;
-
+        private TgcObb obb;
         // --------------- Fin variables de instancia ---------------
 
         // --------------- Métodos de instancia ---------------
         public void inicializar(TgcMesh mesh)
         {
             _mesh = mesh;
-            _direccion = new Vector3(0,0,-1);
+
+            //Computar OBB a partir del AABB del mesh. Inicialmente genera el mismo volumen que el AABB, pero luego te permite rotarlo (cosa que el AABB no puede)
+            obb = TgcObb.computeFromAABB(mesh.BoundingBox);
+
+            _direccion = new Vector3(0, 0, -1);
             _velocidad = new Velocity();
         }
 
         public TgcMesh getMesh()
         {
-           return _mesh;
+            return _mesh;
         }
 
         public Vector3 getPosicion()
@@ -109,6 +113,9 @@ namespace AlumnoEjemplos.MiGrupo
 
                     //Rotar auto y camara en Y
                     _mesh.rotateY(angle);
+
+                    obb.rotate(new Vector3(0, angle, 0));
+
                     Camara.rotar(angle);
                 }
             }
@@ -148,6 +155,8 @@ namespace AlumnoEjemplos.MiGrupo
             _velocidad.friccion(_currentElapsedTime);
             Camara.setearPosicion(getPosicion());
             _mesh.move(_direccion * _velocidad.getAmount());
+            obb.move(_direccion * _velocidad.getAmount());
+
 
             //Si NO hay colision entonces movemos el taxi
             //TODO: deshardcodear la nueva velocidad al chocar
@@ -156,8 +165,13 @@ namespace AlumnoEjemplos.MiGrupo
                 _velocidad = new Velocity();
                 _velocidad.setAmount(120f * -1, elapsedTime);
             }
-            
+
             _mesh.render();
+            //Ver si hay que mostrar el BoundingBox
+            if ((bool)GuiController.Instance.Modifiers.getValue("showBoundingBox"))
+            {
+                obb.render();
+            }
         }
         // --------------- Fin de métodos de instancia ---------------
 

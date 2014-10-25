@@ -110,6 +110,9 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.UserVars.addVar("ptosRec");// punto en el q esta el recorrido del auto
             GuiController.Instance.UserVars.addVar("DistpRec");
             #endregion seteoPasajero
+            //Modifier para habilitar o no el renderizado del BoundingBox del personaje
+            GuiController.Instance.Modifiers.addBoolean("showBoundingBox", "Bouding Box", false);
+
             string ejemploMediaFolder = GuiController.Instance.ExamplesMediaDir;
             auto1 = new AutoComun(alumnoMediaFolder + "LOS_BARTO\\auto\\auto-TgcScene.xml");
             auto1.setPosition(new Vector3(910, 15, -689));
@@ -119,6 +122,9 @@ namespace AlumnoEjemplos.MiGrupo
 
         public override void render(float elapsedTime)
         {
+            //Ver si hay que mostrar el BoundingBox
+            bool showBB = (bool)GuiController.Instance.Modifiers.getValue("showBoundingBox");
+
             Teclado.handlear();
             Auto.getInstance().checkCollision(ciudadScene);
             Auto.getInstance().render(elapsedTime);
