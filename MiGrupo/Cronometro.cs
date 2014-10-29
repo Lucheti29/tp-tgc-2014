@@ -13,45 +13,11 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class Cronometro
     {
-
         static Cronometro _instance = new Cronometro();
         public float TiempoTotal { get; set; }
-        public TgcText2d textTiempo { get; set; }
         private bool _activated = true;
 
-        TgcSprite _spritePrimerDig = new TgcSprite();
-        TgcSprite _spriteSegundoDig = new TgcSprite();
-        TgcSprite _spriteDosPuntos = new TgcSprite();
-        TgcSprite _spriteTercerDig = new TgcSprite();
-        TgcSprite _spriteCuartoDig = new TgcSprite();
-
         string alumnoMediaFolder = GuiController.Instance.AlumnoEjemplosMediaDir;
-
-        public void inicializar()
-        {
-            Device d3dDevice = GuiController.Instance.D3dDevice;
-
-            //seteo el timer
-            _instance.textTiempo = new TgcText2d();
-
-            _instance.textTiempo.Color = Color.Red;
-            _instance.textTiempo.changeFont(new System.Drawing.Font("TimesNewRoman", 25, FontStyle.Bold));
-
-            _spritePrimerDig = new TgcSprite();
-            _spriteSegundoDig = new TgcSprite();
-            _spriteDosPuntos = new TgcSprite();
-            _spriteTercerDig = new TgcSprite();
-            _spriteCuartoDig = new TgcSprite();
-
-            //Los dos puntos son estáticos
-            _spritePrimerDig.Texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\dospuntos.png");
-
-            //Ubicarlo centrado en la pantalla
-            Size screenSize = GuiController.Instance.Panel3d.Size;
-            Size textureSize = _spritePrimerDig.Texture.Size;
-            _spritePrimerDig.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSize.Width / 2, 0), FastMath.Max(screenSize.Height / 2 - textureSize.Height / 2, 0));
-        }
-
 
         public void controlarTiempo(float elapsedTime, bool llegaronTodos)
         {
@@ -62,48 +28,93 @@ namespace AlumnoEjemplos.MiGrupo
                 {
                     this.TiempoTotal -= elapsedTime;
                     int tiemposec = (int)this.TiempoTotal;
-                    textTiempo.Text = String.Format("Tiempo Restante: {0:00}:{1:00}.", tiemposec / 60, tiemposec % 60);
 
-                    int min, seg;
+                    int min, minDecena, minUnidad, seg, segDecimo, segCentesimo;
 
                     min = tiemposec / 60;
                     seg = tiemposec % 60;
 
-                    if (min == 1)
-                    {
-                        _spritePrimerDig.Texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\uno.png");
-                    }
-                    else
-                    {
-                        _spritePrimerDig.Texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cero.png");
-                    }
+                    minDecena = min / 10;
+                    minUnidad = min % 10;
+                    segDecimo = seg / 10;
+                    segCentesimo = seg % 10;
+
+                    GuiController.Instance.UserVars.setValue("Minuto", min);
+                    GuiController.Instance.UserVars.setValue("Segundo", seg);
+
+                    GuiController.Instance.UserVars.setValue("MinutoUno", minDecena);
+                    GuiController.Instance.UserVars.setValue("MinutoDos", minUnidad);
+
+                    GuiController.Instance.UserVars.setValue("SegundoUno", segDecimo);
+                    GuiController.Instance.UserVars.setValue("SegundoDos", segCentesimo);
+
+                    Sprites.getInstance().setTexture(selectTexture(minDecena), selectTexture(minUnidad), selectTexture(segDecimo), selectTexture(segCentesimo));
 
                     if (llegaronTodos)
                     {
-                        textTiempo.Text = String.Format("FELICITACIONES!! GANASTEEEE!!!!");
+                        //Gano
                         _activated = false;
                     }
                 }
                 else
                 {
-                    textTiempo.Text = String.Format("Tiempo Concluido!!! PERDISTEEEE");
+                    //Perdio
                     _activated = false;
                 }
             }
         }
+
+        public TgcTexture selectTexture(int num)
+        {
+            TgcTexture texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cero.png");
+
+            switch(num)
+            {
+                case 0:
+                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cero.png");
+                    break;
+                case 1:
+                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\uno.png");
+                    break;
+                case 2:
+                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\dos.png");
+                    break;
+                case 3:
+                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\tres.png");
+                    break;
+                case 4:
+                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cuatro.png");
+                    break;
+                case 5:
+                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cinco.png");
+                    break;
+                case 6:
+                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\seis.png");
+                    break;
+                case 7:
+                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\siete.png");
+                    break;
+                case 8:
+                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\ocho.png");
+                    break;
+                case 9:
+                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\nueve.png");
+                    break;
+            }
+
+            return texture;
+        }
+
+        public void incrementar(int p)
+        {
+            this.TiempoTotal += 10;
+        }
+
         public void render()
         {
-            textTiempo.render();
-
-            //Iniciar dibujado de todos los Sprites de la escena (en este caso es solo uno)
-            GuiController.Instance.Drawer2D.beginDrawSprite();
-
-            //Dibujar sprite (si hubiese mas, deberian ir todos aquí)
-            _spritePrimerDig.render();
-
-            //Finalizar el dibujado de Sprites
-            GuiController.Instance.Drawer2D.endDrawSprite();
+            Sprites.getInstance().render();
         }
+
         // --------------- Métodos estáticos ---------------
         public static Cronometro getInstance()
         {
@@ -120,9 +131,70 @@ namespace AlumnoEjemplos.MiGrupo
         }
         // --------------- Fin Métodos estáticos -------------
 
-        public void incrementar(int p)
+        public class Sprites
         {
-            this.TiempoTotal += 10;
+            private static Sprites _instance;
+
+            private TgcSprite _minDecenaSprite = new TgcSprite();
+            private TgcSprite _minUnidadSprite = new TgcSprite();
+            private TgcSprite _dosPuntosSprite = new TgcSprite();
+            private TgcSprite _segDecimoSprite = new TgcSprite();
+            private TgcSprite _segCentesimoSprite = new TgcSprite();
+
+            public Sprites()
+            {
+                string alumnoMediaFolder = GuiController.Instance.AlumnoEjemplosMediaDir;
+                Size screenSize = GuiController.Instance.Panel3d.Size;
+
+                _dosPuntosSprite.Texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\dospuntos.png");
+
+                this.setPosition();
+            }
+
+            public void setTexture(TgcTexture minDecena, TgcTexture minUnidad, TgcTexture segDecimo, TgcTexture segCentesimo)
+            {
+                _minDecenaSprite.Texture = minDecena;
+                _minUnidadSprite.Texture = minUnidad;
+                _segDecimoSprite.Texture = segDecimo;
+                _segCentesimoSprite.Texture = segCentesimo;
+            }
+
+            private void setPosition()
+            {
+                Size screenSize = GuiController.Instance.Panel3d.Size;
+
+                //Todas las texturas tienen el mismo tamaño
+                Size textureSize = _dosPuntosSprite.Texture.Size;
+
+                _minDecenaSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) - (2 * textureSize.Width) - 10, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
+                _minUnidadSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) - textureSize.Width - 10, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
+                _dosPuntosSprite.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSize.Width / 2, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
+                _segDecimoSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) + textureSize.Width - 10, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
+                _segCentesimoSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) + (2 * textureSize.Width) - 10, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
+            }
+
+            public void render()
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                _minDecenaSprite.render();
+                _minUnidadSprite.render();
+                _dosPuntosSprite.render();
+                _segDecimoSprite.render();
+                _segCentesimoSprite.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+            }
+
+            public static Sprites getInstance()
+            {
+                if (_instance == null)
+                {
+                    _instance = new Sprites();
+                }
+
+                return _instance;
+            }
         }
     }
 

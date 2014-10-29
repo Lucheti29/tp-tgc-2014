@@ -72,7 +72,6 @@ namespace AlumnoEjemplos.MiGrupo
 
             Camara.inicializar(Auto.getInstance().getPosicion());
 
-            Cronometro.getInstance().inicializar();
             Cronometro.getInstance().TiempoTotal = 120;
             #region seteoPasajero
             pas1 = new Pasajero("SkeletalAnimations\\BasicHuman\\WomanJeans-TgcSkeletalMesh.xml", "SkeletalAnimations\\BasicHuman\\");
@@ -105,6 +104,14 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.UserVars.addVar("distDest");
             GuiController.Instance.UserVars.addVar("ptosRec");// punto en el q esta el recorrido del auto
             GuiController.Instance.UserVars.addVar("DistpRec");
+
+            GuiController.Instance.UserVars.addVar("Minuto"); 
+            GuiController.Instance.UserVars.addVar("Segundo");
+
+            GuiController.Instance.UserVars.addVar("MinutoUno");
+            GuiController.Instance.UserVars.addVar("MinutoDos");
+            GuiController.Instance.UserVars.addVar("SegundoUno");
+            GuiController.Instance.UserVars.addVar("SegundoDos");
             #endregion seteoPasajero
             //Modifier para habilitar o no el renderizado del BoundingBox del personaje
             GuiController.Instance.Modifiers.addBoolean("showBoundingBox", "Bouding Box", false);
@@ -130,8 +137,10 @@ namespace AlumnoEjemplos.MiGrupo
 
             Cronometro.getInstance().controlarTiempo(elapsedTime, listaPas.TrueForAll(llegaronTodos));
             Cronometro.getInstance().render();
+
             auto1.render();
             auto1.move(elapsedTime);
+
             foreach (Pasajero pas in listaPas)
             {
                 GuiController.Instance.UserVars.setValue("posPas", pas.posicion);
