@@ -18,10 +18,7 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class EjemploAlumno : TgcExample
     {
-        //Objeto que va a hacer a modo de auto
-
         TgcScene taxiScene;
-        // float tiempoRestante = 60;
         TgcScene ciudadScene;
 
         Pasajero pas1;
@@ -85,7 +82,6 @@ namespace AlumnoEjemplos.MiGrupo
             pas2 = new Pasajero("SkeletalAnimations\\BasicHuman\\WomanJeans-TgcSkeletalMesh.xml", "SkeletalAnimations\\BasicHuman\\");
             pas2.posicionar(new Vector3(-100, 5, -850));
             pas2.cargarDestino(new Vector3(-1170, 15, 703));
-
 
             pas3 = new Pasajero("SkeletalAnimations\\BasicHuman\\BasicHuman-TgcSkeletalMesh.xml", "SkeletalAnimations\\BasicHuman\\");
             pas3.posicionar(new Vector3(335, 15, 1193));

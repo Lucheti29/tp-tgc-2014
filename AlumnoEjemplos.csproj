@@ -89,7 +89,8 @@
   <ItemGroup>
     <Compile Include="MiGrupo\Auto.cs" />
     <Compile Include="MiGrupo\Camara.cs" />
-    <Compile Include="MiGrupo\InputType.cs" />
+    <Compile Include="MiGrupo\Utils.cs" />
+    <Compile Include="MiGrupo\Enums\InputType.cs" />
     <Compile Include="MiGrupo\Flecha.cs" />
     <Compile Include="MiGrupo\Cronometro.cs" />
     <Compile Include="MiGrupo\EjemploAlumno.cs" />

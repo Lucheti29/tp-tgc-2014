@@ -13,9 +13,6 @@ namespace AlumnoEjemplos.MiGrupo
 
     public class Pasajero : Persona
     {
-
-
-
         //_--para el metodo moverPasajero 
         private int t;
         private static float DISTANCIA = 200f;
@@ -93,7 +90,7 @@ namespace AlumnoEjemplos.MiGrupo
                         if (distanciaAlTaxi >= 70)
                         {//EL TAXI ESTA CERCA -> el pasaj intenta subirse
                             movementVector = acercarse(taxi.getMesh().Position.X, taxi.getMesh().Position.Z, VELOCIDAD * elapsedTime);
-                            rotacion = -FastMath.PI_HALF - calcular_angulo(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
+                            rotacion = -FastMath.PI_HALF - Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
                             this.caminar();
                         }
                         else
@@ -152,7 +149,7 @@ namespace AlumnoEjemplos.MiGrupo
                             if (distanciaDest > 10)
                             {
                                 movementVector = acercarse(destino.X, destino.Z, VELOCIDAD * elapsedTime);
-                                rotacion = -FastMath.PI_HALF - calcular_angulo(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, destino.X, destino.Z);
+                                rotacion = -FastMath.PI_HALF - Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, destino.X, destino.Z);
                                 this.caminar();
                             }
                             else
@@ -178,67 +175,10 @@ namespace AlumnoEjemplos.MiGrupo
             pasajeroMesh.move(movementVector);
         }
 
-
-
-
-        //retorna el angulo formado por ambos puntos
-        private float calcular_angulo(float posPasajX, float posPasjZ, float posTaxiX, float posTaxiZ)
-        {
-            float cateto_o;
-            float cateto_a;
-            float angulo = 0.0f;
-            bool arriba = true;
-            bool iguales = false;
-
-            if (posPasjZ < posTaxiZ)
-                arriba = true;
-            else if (posPasjZ > posTaxiZ)
-                arriba = false;
-            else
-                iguales = true;
-
-            cateto_a = posTaxiX - posPasajX;
-            cateto_o = posTaxiZ - posPasjZ;
-
-
-            if (arriba)
-            {
-
-                angulo = FastMath.Atan((float)(cateto_o / cateto_a));
-
-                if (angulo < 0.0f)
-                    angulo = FastMath.PI + angulo;
-
-            }//arriba
-            else if (!arriba)
-            {
-
-                angulo = FastMath.Atan((float)(cateto_o / cateto_a));
-
-                if (angulo >= 0.0f)
-                    angulo = FastMath.PI + angulo;
-                else
-                    angulo = FastMath.PI * 2 + angulo;
-
-            }//abajo
-
-
-            if (iguales)
-            {
-                if (cateto_a > 0)
-                    angulo = 0.0f;
-                else
-                    angulo = FastMath.PI;
-            }
-
-            return angulo;
-        }
-
-
         //retorna el vector movimiento al acercarse a tal punto a tal velocidad
         private Vector3 acercarse(float x, float z, float velocidad)
         {
-            float angulo = calcular_angulo(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, x, z);
+            float angulo = Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, x, z);
 
             return new Vector3(FastMath.Cos(angulo) * velocidad, 0, FastMath.Sin(angulo) * velocidad);
 

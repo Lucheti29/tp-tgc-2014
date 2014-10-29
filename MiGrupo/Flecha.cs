@@ -9,15 +9,14 @@ using TgcViewer.Utils.TgcSceneLoader;
 
 namespace AlumnoEjemplos.MiGrupo
 {
-    class Flecha
+    public class Flecha
     {
         private Vector3 _position = new Vector3(0,75,0);
         private Vector3 _direccion = new Vector3(0, 0, -1);
-        private Vector3 _objetivo = new Vector3(-1037, 857, -1070);
+        private Vector3 _objetivo = new Vector3(-100, 5, -850);
         private Boolean _show = false;
         private static Flecha _instance;
         private TgcBox _mesh;
-        private float _currentElapsedTime = 0f;
 
         public void inicializar()
         {
@@ -25,32 +24,21 @@ namespace AlumnoEjemplos.MiGrupo
             _mesh = TgcBox.fromSize(_position, size);
         }
 
-        //El Y es constante
         public void setPosition()
         {
             _mesh.getPosition(_position);
         }
 
-        //No es funcional aun
-        public void rotate()
+        public TgcBox getMesh()
         {
-            //Vector3 vecAuxiliar = new Vector3(_direccion.X, _direccion.Y, _direccion.Z);
-            Vector3 vecAuxiliar2 = new Vector3(_objetivo.X, _objetivo.Y, _objetivo.Z);
-
-            float angle = FastMath.Acos(Vector3.Dot(Vector3.Normalize(_direccion), Vector3.Normalize(vecAuxiliar2)));
-
-            float yaw = FastMath.ToRad(angle);
-            Matrix rotation = Matrix.RotationYawPitchRoll(yaw, 0, 0);
-
-            Vector4 transformedVec4 = Vector3.Transform(_direccion, rotation);
-            Vector3 transformedVec3 = new Vector3(transformedVec4.X, transformedVec4.Y, transformedVec4.Z);
-
-            _direccion = transformedVec3;
+            return _mesh;
         }
 
-        public void rotateY(float angle)
+        public void rotate()
         {
-            _mesh.rotateY(angle);
+            float angle = -FastMath.PI_HALF - Utils.calculateAngle(_position.X, _position.Z, _objetivo.X, _objetivo.Z);
+            float antiRotate = _mesh.Rotation.Y;
+            _mesh.rotateY(angle - antiRotate);
         }
 
         public void show()
@@ -65,13 +53,12 @@ namespace AlumnoEjemplos.MiGrupo
 
         public void render(float elapsedTime)
         {
-            //_currentElapsedTime = elapsedTime;
-            //if(_show)
-            //{
-            //    this.setPosition();
-                //this.rotate();
-            //    _mesh.render();
-            //}
+            _mesh.getPosition(_position);
+            if(_show)
+            {
+                this.rotate();
+                _mesh.render();
+            }
         }
 
         public static Flecha getInstance()

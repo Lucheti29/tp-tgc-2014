@@ -1,4 +1,5 @@
 ﻿using AlumnoEjemplos.MiGrupo.Entities;
+using AlumnoEjemplos.MiGrupo.Enums;
 using Microsoft.DirectX;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,11 @@ namespace AlumnoEjemplos.MiGrupo
         public Vector3 getPosicion()
         {
             return _mesh.Position;
+        }
+
+        public Vector3 getDireccion()
+        {
+            return _direccion;
         }
 
         public float getVelocity()
@@ -156,7 +162,6 @@ namespace AlumnoEjemplos.MiGrupo
             Camara.setearPosicion(getPosicion());
             _mesh.move(_direccion * _velocidad.getAmount());
             obb.move(_direccion * _velocidad.getAmount());
-
 
             //Si NO hay colision entonces movemos el taxi
             //TODO: deshardcodear la nueva velocidad al chocar
