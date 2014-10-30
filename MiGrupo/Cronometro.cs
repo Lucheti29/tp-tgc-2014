@@ -111,8 +111,6 @@ namespace AlumnoEjemplos.MiGrupo
 
                 _dosPuntosSprite.Texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\dospuntos.png");
 
-                this.setPosition();
-
                 //Se crean una sola vez las texturas
                 _numberTextures[0] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cero.png");
                 _numberTextures[1] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\uno.png");
@@ -124,6 +122,9 @@ namespace AlumnoEjemplos.MiGrupo
                 _numberTextures[7] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\siete.png");
                 _numberTextures[8] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\ocho.png");
                 _numberTextures[9] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\nueve.png");
+
+                this.setTexture(0, 0, 0, 0);
+                this.setPosition();
             }
 
             public void setTexture(int minDecena, int minUnidad, int segDecimo, int segCentesimo)
@@ -137,15 +138,15 @@ namespace AlumnoEjemplos.MiGrupo
             private void setPosition()
             {
                 Size screenSize = GuiController.Instance.Panel3d.Size;
-
+                Size textureSizeDosPuntos = _dosPuntosSprite.Texture.Size;
                 //Todas las texturas tienen el mismo tamaño
-                Size textureSize = _dosPuntosSprite.Texture.Size;
+                Size textureSizeDefault = _minDecenaSprite.Texture.Size;
 
-                _minDecenaSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) - (2 * textureSize.Width) - 10, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
-                _minUnidadSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) - textureSize.Width - 10, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
-                _dosPuntosSprite.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSize.Width / 2, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
-                _segDecimoSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) + textureSize.Width - 10, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
-                _segCentesimoSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) + (2 * textureSize.Width) - 10, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
+                _minDecenaSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) - (2 * textureSizeDosPuntos.Width) - textureSizeDosPuntos.Width / 4, 0), FastMath.Max((-screenSize.Height - 15) - textureSizeDosPuntos.Height / 8, 0));
+                _minUnidadSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) - textureSizeDosPuntos.Width - textureSizeDosPuntos.Width / 4, 0), FastMath.Max((-screenSize.Height - 15) - textureSizeDosPuntos.Height / 8, 0));
+                _dosPuntosSprite.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizeDosPuntos.Width / 4, 0), FastMath.Max((-screenSize.Height - 15) - textureSizeDosPuntos.Height / 8, 0));
+                _segDecimoSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) + textureSizeDosPuntos.Width, 0), FastMath.Max((-screenSize.Height - 15) - textureSizeDosPuntos.Height / 8, 0));
+                _segCentesimoSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) + (2 * textureSizeDosPuntos.Width), 0), FastMath.Max((-screenSize.Height - 15) - textureSizeDosPuntos.Height / 8, 0));
             }
 
             public TgcTexture selectTexture(int num)
