@@ -46,18 +46,20 @@ namespace AlumnoEjemplos.MiGrupo
                     GuiController.Instance.UserVars.setValue("SegundoUno", segDecimo);
                     GuiController.Instance.UserVars.setValue("SegundoDos", segCentesimo);
 
-                    Sprites.getInstance().setTexture(minDecena, minUnidad, segDecimo, segCentesimo);
+                    Sprites.getInstance().setTextureNumbers(minDecena, minUnidad, segDecimo, segCentesimo);
 
                     if (llegaronTodos)
                     {
                         //Gano
                         _activated = false;
+                        Sprites.getInstance().setTextureWinOrLose(true);
                     }
                 }
                 else
                 {
                     //Perdio
                     _activated = false;
+                    Sprites.getInstance().setTextureWinOrLose(false);
                 }
             }
         }
@@ -69,7 +71,7 @@ namespace AlumnoEjemplos.MiGrupo
 
         public void render()
         {
-            Sprites.getInstance().render();
+            Sprites.getInstance().render(_activated);
         }
 
         public static Cronometro getInstance()
@@ -102,7 +104,11 @@ namespace AlumnoEjemplos.MiGrupo
             private TgcSprite _segDecimoSprite = new TgcSprite();
             private TgcSprite _segCentesimoSprite = new TgcSprite();
 
+            private TgcSprite _winOrLose = new TgcSprite();
+
             private TgcTexture[] _numberTextures = new TgcTexture[10];
+            private TgcTexture _win;
+            private TgcTexture _lose;
 
             public Sprites()
             {
@@ -123,16 +129,33 @@ namespace AlumnoEjemplos.MiGrupo
                 _numberTextures[8] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\ocho.png");
                 _numberTextures[9] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\nueve.png");
 
-                this.setTexture(0, 0, 0, 0);
+                _win = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\win.png");
+                _lose = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\lose.png");
+
+                //Para evitar NPEs
+                this.setTextureNumbers(0, 0, 0, 0);
+                _winOrLose.Texture = _win;
                 this.setPosition();
             }
 
-            public void setTexture(int minDecena, int minUnidad, int segDecimo, int segCentesimo)
+            public void setTextureNumbers(int minDecena, int minUnidad, int segDecimo, int segCentesimo)
             {
                 _minDecenaSprite.Texture = selectTexture(minDecena);
                 _minUnidadSprite.Texture = selectTexture(minUnidad);
                 _segDecimoSprite.Texture = selectTexture(segDecimo);
                 _segCentesimoSprite.Texture = selectTexture(segCentesimo);
+            }
+
+            public void setTextureWinOrLose(bool result)
+            {
+                if (result)
+                {
+                    _winOrLose.Texture = _win;
+                }
+                else
+                {
+                    _winOrLose.Texture = _lose;
+                }
             }
 
             private void setPosition()
@@ -147,6 +170,8 @@ namespace AlumnoEjemplos.MiGrupo
                 _dosPuntosSprite.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizeDosPuntos.Width / 4, 0), FastMath.Max((-screenSize.Height - 15) - textureSizeDosPuntos.Height / 8, 0));
                 _segDecimoSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) + textureSizeDosPuntos.Width, 0), FastMath.Max((-screenSize.Height - 15) - textureSizeDosPuntos.Height / 8, 0));
                 _segCentesimoSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) + (2 * textureSizeDosPuntos.Width), 0), FastMath.Max((-screenSize.Height - 15) - textureSizeDosPuntos.Height / 8, 0));
+
+                _winOrLose.Position = new Vector2(screenSize.Width / 2 - _winOrLose.Texture.Size.Width / 2, screenSize.Height / 2 - _winOrLose.Texture.Size.Height / 2);
             }
 
             public TgcTexture selectTexture(int num)
@@ -190,15 +215,22 @@ namespace AlumnoEjemplos.MiGrupo
                 return texture;
             }
 
-            public void render()
+            public void render(bool activated)
             {
                 GuiController.Instance.Drawer2D.beginDrawSprite();
 
-                _minDecenaSprite.render();
-                _minUnidadSprite.render();
-                _dosPuntosSprite.render();
-                _segDecimoSprite.render();
-                _segCentesimoSprite.render();
+                if (activated)
+                {
+                    _minDecenaSprite.render();
+                    _minUnidadSprite.render();
+                    _dosPuntosSprite.render();
+                    _segDecimoSprite.render();
+                    _segCentesimoSprite.render();
+                }
+                else
+                {
+                    _winOrLose.render();
+                }
 
                 GuiController.Instance.Drawer2D.endDrawSprite();
             }
