@@ -17,8 +17,6 @@ namespace AlumnoEjemplos.MiGrupo
         public float TiempoTotal { get; set; }
         private bool _activated = true;
 
-        string alumnoMediaFolder = GuiController.Instance.AlumnoEjemplosMediaDir;
-
         public void controlarTiempo(float elapsedTime, bool llegaronTodos)
         {
             //Renderizo el timer
@@ -48,7 +46,7 @@ namespace AlumnoEjemplos.MiGrupo
                     GuiController.Instance.UserVars.setValue("SegundoUno", segDecimo);
                     GuiController.Instance.UserVars.setValue("SegundoDos", segCentesimo);
 
-                    Sprites.getInstance().setTexture(selectTexture(minDecena), selectTexture(minUnidad), selectTexture(segDecimo), selectTexture(segCentesimo));
+                    Sprites.getInstance().setTexture(minDecena, minUnidad, segDecimo, segCentesimo);
 
                     if (llegaronTodos)
                     {
@@ -64,47 +62,6 @@ namespace AlumnoEjemplos.MiGrupo
             }
         }
 
-        public TgcTexture selectTexture(int num)
-        {
-            TgcTexture texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cero.png");
-
-            switch(num)
-            {
-                case 0:
-                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cero.png");
-                    break;
-                case 1:
-                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\uno.png");
-                    break;
-                case 2:
-                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\dos.png");
-                    break;
-                case 3:
-                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\tres.png");
-                    break;
-                case 4:
-                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cuatro.png");
-                    break;
-                case 5:
-                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cinco.png");
-                    break;
-                case 6:
-                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\seis.png");
-                    break;
-                case 7:
-                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\siete.png");
-                    break;
-                case 8:
-                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\ocho.png");
-                    break;
-                case 9:
-                    texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\nueve.png");
-                    break;
-            }
-
-            return texture;
-        }
-
         public void incrementar(int p)
         {
             this.TiempoTotal += 10;
@@ -115,7 +72,6 @@ namespace AlumnoEjemplos.MiGrupo
             Sprites.getInstance().render();
         }
 
-        // --------------- Métodos estáticos ---------------
         public static Cronometro getInstance()
         {
             if (_instance == null)
@@ -129,7 +85,12 @@ namespace AlumnoEjemplos.MiGrupo
         {
             _instance = new Cronometro();
         }
-        // --------------- Fin Métodos estáticos -------------
+
+        /// <summary>
+        /// Clase Sprites:
+        /// Gestiona la posición en pantalla y las texturas
+        /// de los Sprites del cronómetro
+        /// </summary>
 
         public class Sprites
         {
@@ -141,6 +102,8 @@ namespace AlumnoEjemplos.MiGrupo
             private TgcSprite _segDecimoSprite = new TgcSprite();
             private TgcSprite _segCentesimoSprite = new TgcSprite();
 
+            private TgcTexture[] _numberTextures = new TgcTexture[10];
+
             public Sprites()
             {
                 string alumnoMediaFolder = GuiController.Instance.AlumnoEjemplosMediaDir;
@@ -149,14 +112,26 @@ namespace AlumnoEjemplos.MiGrupo
                 _dosPuntosSprite.Texture = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\dospuntos.png");
 
                 this.setPosition();
+
+                //Se crean una sola vez las texturas
+                _numberTextures[0] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cero.png");
+                _numberTextures[1] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\uno.png");
+                _numberTextures[2] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\dos.png");
+                _numberTextures[3] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\tres.png");
+                _numberTextures[4] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cuatro.png");
+                _numberTextures[5] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\cinco.png");
+                _numberTextures[6] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\seis.png");
+                _numberTextures[7] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\siete.png");
+                _numberTextures[8] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\ocho.png");
+                _numberTextures[9] = TgcTexture.createTexture(alumnoMediaFolder + "LOS_BARTO\\cronometro\\nueve.png");
             }
 
-            public void setTexture(TgcTexture minDecena, TgcTexture minUnidad, TgcTexture segDecimo, TgcTexture segCentesimo)
+            public void setTexture(int minDecena, int minUnidad, int segDecimo, int segCentesimo)
             {
-                _minDecenaSprite.Texture = minDecena;
-                _minUnidadSprite.Texture = minUnidad;
-                _segDecimoSprite.Texture = segDecimo;
-                _segCentesimoSprite.Texture = segCentesimo;
+                _minDecenaSprite.Texture = selectTexture(minDecena);
+                _minUnidadSprite.Texture = selectTexture(minUnidad);
+                _segDecimoSprite.Texture = selectTexture(segDecimo);
+                _segCentesimoSprite.Texture = selectTexture(segCentesimo);
             }
 
             private void setPosition()
@@ -171,6 +146,47 @@ namespace AlumnoEjemplos.MiGrupo
                 _dosPuntosSprite.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSize.Width / 2, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
                 _segDecimoSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) + textureSize.Width - 10, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
                 _segCentesimoSprite.Position = new Vector2(FastMath.Max((screenSize.Width / 2) + (2 * textureSize.Width) - 10, 0), FastMath.Max((-screenSize.Height - 10) - textureSize.Height / 8, 0));
+            }
+
+            public TgcTexture selectTexture(int num)
+            {
+                TgcTexture texture = _numberTextures[0];
+
+                switch(num)
+                {
+                    case 0:
+                        texture = _numberTextures[0];
+                        break;
+                    case 1:
+                        texture = _numberTextures[1];
+                        break;
+                    case 2:
+                        texture = _numberTextures[2];
+                        break;
+                    case 3:
+                        texture = _numberTextures[3];
+                        break;
+                    case 4:
+                        texture = _numberTextures[4];
+                        break;
+                    case 5:
+                        texture = _numberTextures[5];
+                        break;
+                    case 6:
+                        texture = _numberTextures[6];
+                        break;
+                    case 7:
+                        texture = _numberTextures[7];
+                        break;
+                    case 8:
+                        texture = _numberTextures[8];
+                        break;
+                    case 9:
+                        texture = _numberTextures[9];
+                        break;
+                }
+
+                return texture;
             }
 
             public void render()
