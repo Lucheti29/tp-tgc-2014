@@ -37,15 +37,6 @@ namespace AlumnoEjemplos.MiGrupo
                     segDecimo = seg / 10;
                     segCentesimo = seg % 10;
 
-                    GuiController.Instance.UserVars.setValue("Minuto", min);
-                    GuiController.Instance.UserVars.setValue("Segundo", seg);
-
-                    GuiController.Instance.UserVars.setValue("MinutoUno", minDecena);
-                    GuiController.Instance.UserVars.setValue("MinutoDos", minUnidad);
-
-                    GuiController.Instance.UserVars.setValue("SegundoUno", segDecimo);
-                    GuiController.Instance.UserVars.setValue("SegundoDos", segCentesimo);
-
                     Sprites.getInstance().setTextureNumbers(minDecena, minUnidad, segDecimo, segCentesimo);
 
                     if (llegaronTodos)
@@ -91,7 +82,8 @@ namespace AlumnoEjemplos.MiGrupo
         /// <summary>
         /// Clase Sprites:
         /// Gestiona la posición en pantalla y las texturas
-        /// de los Sprites del cronómetro
+        /// de los Sprites del cronómetro y los mensajes de
+        /// ganaste o perdiste
         /// </summary>
 
         public class Sprites
