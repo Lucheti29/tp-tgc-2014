@@ -37,6 +37,9 @@ namespace AlumnoEjemplos.MiGrupo
 
             _direccion = new Vector3(0, 0, -1);
             _velocidad = new Velocity();
+
+            //Para que no esté en contacto con el suelo
+            _mesh.move(0, 15, 0);
         }
 
         public TgcMesh getMesh()

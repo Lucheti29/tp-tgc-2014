@@ -55,14 +55,6 @@ namespace AlumnoEjemplos.MiGrupo
             this.parar();
         }
 
-        //distancia entre el (_x,_z) pasajero, y el (x,z) pasados como parametro
-        private float getDistancia(float x, float z)
-        {
-            return FastMath.Sqrt(FastMath.Pow2(x - pasajeroMesh.Position.X) + FastMath.Pow2(z - pasajeroMesh.Position.Z));
-        }
-
-
-
         public void move(float elapsedTime)
         {
             Vector3 movementVector = new Vector3(0, 0, 0);
@@ -81,7 +73,7 @@ namespace AlumnoEjemplos.MiGrupo
                 if (t < 140)
                 {
 
-                    float distanciaAlTaxi = getDistancia(taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
+                    float distanciaAlTaxi = Utils.getDistance(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
 
                     GuiController.Instance.UserVars.setValue("DistTaxi", distanciaAlTaxi);
 
@@ -130,7 +122,7 @@ namespace AlumnoEjemplos.MiGrupo
                     if (t < 140)
                     {
 
-                        float distanciaDest = getDistancia(this.destino.X, this.destino.Z);//la distancia del pasajero(dentro del taxi) al destino
+                        float distanciaDest = Utils.getDistance(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, this.destino.X, this.destino.Z);//la distancia del pasajero(dentro del taxi) al destino
 
                         GuiController.Instance.UserVars.setValue("distDest", distanciaDest);
 

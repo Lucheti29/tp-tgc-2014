@@ -52,7 +52,7 @@ namespace AlumnoEjemplos.MiGrupo
         {
             _recorrido = recorrido;
             _ptoRecorrido = recorrido[0];
-            GuiController.Instance.UserVars.setValue("ptosRec", _ptoRecorrido);
+            //GuiController.Instance.UserVars.setValue("ptosRec", _ptoRecorrido);
         }
 
         //distancia entre el (_x,_z) auto, y el (x,z) pasados como parametro
@@ -78,7 +78,7 @@ namespace AlumnoEjemplos.MiGrupo
                 if (i < _recorrido.Count)
                 {
                     _ptoRecorrido = _recorrido[i];
-                    GuiController.Instance.UserVars.setValue("ptosRec", _ptoRecorrido);
+                    //GuiController.Instance.UserVars.setValue("ptosRec", _ptoRecorrido);
                 }
                 else
                 {

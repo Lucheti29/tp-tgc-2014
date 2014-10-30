@@ -9,6 +9,14 @@ namespace AlumnoEjemplos.MiGrupo
     public class Utils
     {
         /// <summary>
+        /// Retorna la distancia entre dos posiciones
+        /// </summary>
+        public static float getDistance(float x1, float z1, float x2, float z2)
+        {
+            return FastMath.Sqrt(FastMath.Pow2(x2 - x1) + FastMath.Pow2(z2 - z1));
+        }
+
+        /// <summary>
         /// Retorna el ángulo formado por ambos puntos
         /// </summary>
         public static float calculateAngle(float pos1X, float pos1Z, float pos2X, float pos2Z)
