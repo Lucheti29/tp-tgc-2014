@@ -24,7 +24,10 @@ namespace AlumnoEjemplos.MiGrupo
         private float _currentElapsedTime;
         private bool _collisionFound;
         private bool _llevaPasajero;
-        private TgcObb obb;
+        private TgcObb _obb;
+        private Vector3 _objetivo;
+        public List<Vector3> _pasajeros;// posiciones de los pasajeros
+        private int _nroPasaj = 0;
         // --------------- Fin variables de instancia ---------------
 
         // --------------- Métodos de instancia ---------------
@@ -33,13 +36,14 @@ namespace AlumnoEjemplos.MiGrupo
             _mesh = mesh;
 
             //Computar OBB a partir del AABB del mesh. Inicialmente genera el mismo volumen que el AABB, pero luego te permite rotarlo (cosa que el AABB no puede)
-            obb = TgcObb.computeFromAABB(mesh.BoundingBox);
+            _obb = TgcObb.computeFromAABB(mesh.BoundingBox);
 
             _direccion = new Vector3(0, 0, -1);
             _velocidad = new Velocity();
 
             //Para que no esté en contacto con el suelo
             _mesh.move(0, 15, 0);
+            _pasajeros = new List<Vector3>();//lista con la ubicacion de cada pasajero q debe llevar
         }
 
         public TgcMesh getMesh()
@@ -56,7 +60,10 @@ namespace AlumnoEjemplos.MiGrupo
         {
             return _direccion;
         }
-
+        public Vector3 getObjetivo()
+        {
+            return _objetivo;
+        }
         public float getVelocity()
         {
             return _velocidad.getAmount();
@@ -67,14 +74,19 @@ namespace AlumnoEjemplos.MiGrupo
             return _llevaPasajero;
         }
 
-        public void subePasajero()
+        public void subePasajero(Vector3 destino)
         {
             _llevaPasajero = true;
+            _objetivo = destino;
         }
 
         public void bajaPasajero()
         {
             _llevaPasajero = false;
+            if (_pasajeros.Count > 0)
+            {
+                _objetivo = _pasajeros[_nroPasaj++];
+            }
         }
 
         private void derrapar(Boolean right, Boolean left)
@@ -123,7 +135,7 @@ namespace AlumnoEjemplos.MiGrupo
                     //Rotar auto y camara en Y
                     _mesh.rotateY(angle);
 
-                    obb.rotate(new Vector3(0, angle, 0));
+                    _obb.rotate(new Vector3(0, angle, 0));
 
                     Camara.rotar(angle);
                 }
@@ -164,7 +176,7 @@ namespace AlumnoEjemplos.MiGrupo
             _velocidad.friccion(_currentElapsedTime);
             Camara.setearPosicion(getPosicion());
             _mesh.move(_direccion * _velocidad.getAmount());
-            obb.move(_direccion * _velocidad.getAmount());
+            _obb.move(_direccion * _velocidad.getAmount());
 
             //Si NO hay colision entonces movemos el taxi
             //TODO: deshardcodear la nueva velocidad al chocar
@@ -178,7 +190,7 @@ namespace AlumnoEjemplos.MiGrupo
             //Ver si hay que mostrar el BoundingBox
             if ((bool)GuiController.Instance.Modifiers.getValue("showBoundingBox"))
             {
-                obb.render();
+                _obb.render();
             }
         }
         // --------------- Fin de métodos de instancia ---------------
@@ -198,8 +210,6 @@ namespace AlumnoEjemplos.MiGrupo
             _instance = new Auto();
         }
         // --------------- Fin Métodos estáticos ---------------
-
-
 
     }
 }

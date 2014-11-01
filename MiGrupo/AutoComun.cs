@@ -12,28 +12,75 @@ namespace AlumnoEjemplos.MiGrupo
     public class AutoComun
     {
         private TgcMesh _mesh;
+
+        private TgcObb obb;
         private Vector3 _ptoRecorrido;
         private int i = 0;
         private float _velocidad = 100f;
-        private int frames;
+        private float _velAux = 100f;
+
         private float rotacion = 0;
         private List<Vector3> _recorrido;
-        const float epsilon = 0.001f; // error de la distancia al objetivo
+
+        private bool _collisionFound;
+
         public AutoComun(string archXML)
         {
-            
+
             //primero cargamos una escena 3D entera.
             TgcSceneLoader loader = new TgcSceneLoader();
 
             //Luego cargamos otro modelo aparte que va a hacer el taxi
-            TgcScene scene = loader.loadSceneFromFile( archXML);
+            TgcScene scene = loader.loadSceneFromFile(archXML);
 
-            this._mesh= scene.Meshes[0];
+            this._mesh = scene.Meshes[0];
+            //Computar OBB a partir del AABB del mesh. Inicialmente genera el mismo volumen que el AABB, pero luego te permite rotarlo (cosa que el AABB no puede)
+            obb = TgcObb.computeFromAABB(this._mesh.BoundingBox);
 
         }
-        public void render()
+        public void render(float elapsedTime)
         {
+
+            if (_collisionFound)
+            {
+                _velAux = _velocidad;
+                _velocidad = 0;
+
+            }
+            else
+            {
+                _velocidad = _velAux;
+            }
+
             _mesh.render();
+            this.move(elapsedTime);
+            //Ver si hay que mostrar el BoundingBox
+            if ((bool)GuiController.Instance.Modifiers.getValue("showBoundingBox"))
+            {
+                obb.render();
+            }
+
+        }
+        public void checkCollision(List<TgcMesh> obs)
+        {
+            _collisionFound = false;
+            foreach (TgcMesh mesh in obs)
+            {
+                //Los dos BoundingBox que vamos a testear
+                TgcBoundingBox mainMeshBoundingBox = _mesh.BoundingBox;
+
+                TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
+
+                //Ejecutar algoritmo de detección de colisiones
+                TgcCollisionUtils.BoxBoxResult collisionResult = TgcCollisionUtils.classifyBoxBox(mainMeshBoundingBox, sceneMeshBoundingBox);
+
+                //Hubo colisión con un objeto. Guardar resultado y abortar loop.
+                if (collisionResult != TgcCollisionUtils.BoxBoxResult.Afuera)
+                {
+                    _collisionFound = true;
+                    break;
+                }
+            }
         }
         public void dispose()
         {
@@ -41,7 +88,7 @@ namespace AlumnoEjemplos.MiGrupo
         }
         public void setPosition(Vector3 pos)
         {
-            
+
             _mesh.Position = pos;
         }
         public Vector3 getPosition()
@@ -60,17 +107,18 @@ namespace AlumnoEjemplos.MiGrupo
         {
             return FastMath.Sqrt(FastMath.Pow2(x - _mesh.Position.X) + FastMath.Pow2(z - _mesh.Position.Z));
         }
-        
+
         public void move(float elapsedtime)
         {
-            if ( getDistancia(_ptoRecorrido.X, _ptoRecorrido.Z) >1)
+            if (getDistancia(_ptoRecorrido.X, _ptoRecorrido.Z) > 1)
             {
                 Vector3 movementVector = acercarse(_ptoRecorrido.X, _ptoRecorrido.Z, _velocidad * elapsedtime);
-                rotacion = -FastMath.PI_HALF - calcular_angulo(_mesh.Position.X, _mesh.Position.Z, _ptoRecorrido.X, _ptoRecorrido.Z);
+                rotacion = -FastMath.PI_HALF - Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, _ptoRecorrido.X, _ptoRecorrido.Z);
                 float antirotar = _mesh.Rotation.Y;
                 _mesh.rotateY(rotacion - antirotar);
                 _mesh.move(movementVector);
-               GuiController.Instance.UserVars.setValue("DistpRec", getDistancia(_ptoRecorrido.X, _ptoRecorrido.Z));
+                obb.move(movementVector);
+                GuiController.Instance.UserVars.setValue("DistpRec", getDistancia(_ptoRecorrido.X, _ptoRecorrido.Z));
             }
             else
             {
@@ -86,67 +134,16 @@ namespace AlumnoEjemplos.MiGrupo
                 }
             }
 
-          
+
         }
 
-        //retorna el angulo formado por ambos puntos
-        private float calcular_angulo(float posPasajX, float posPasjZ, float posTaxiX, float posTaxiZ)
-        {
-            float cateto_o;
-            float cateto_a;
-            float angulo = 0.0f;
-            bool arriba = true;
-            bool iguales = false;
 
-            if (posPasjZ < posTaxiZ)
-                arriba = true;
-            else if (posPasjZ > posTaxiZ)
-                arriba = false;
-            else
-                iguales = true;
-
-            cateto_a = posTaxiX - posPasajX;
-            cateto_o = posTaxiZ - posPasjZ;
-
-
-            if (arriba)
-            {
-
-                angulo = FastMath.Atan((float)(cateto_o / cateto_a));
-
-                if (angulo < 0.0f)
-                    angulo = FastMath.PI + angulo;
-
-            }//arriba
-            else if (!arriba)
-            {
-
-                angulo = FastMath.Atan((float)(cateto_o / cateto_a));
-
-                if (angulo >= 0.0f)
-                    angulo = FastMath.PI + angulo;
-                else
-                    angulo = FastMath.PI * 2 + angulo;
-
-            }//abajo
-
-
-            if (iguales)
-            {
-                if (cateto_a > 0)
-                    angulo = 0.0f;
-                else
-                    angulo = FastMath.PI;
-            }
-
-            return angulo;
-        }
 
 
         //retorna el vector movimiento al acercarse a tal punto a tal velocidad
         private Vector3 acercarse(float x, float z, float velocidad)
         {
-            float angulo = calcular_angulo(_mesh.Position.X, _mesh.Position.Z, x, z);
+            float angulo = Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, x, z);
 
             return new Vector3(FastMath.Cos(angulo) * velocidad, 0, FastMath.Sin(angulo) * velocidad);
 

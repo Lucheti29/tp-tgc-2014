@@ -29,9 +29,11 @@ namespace AlumnoEjemplos.MiGrupo
             foreach (PasajeroInfo pas in Config.getPasajeros())
             {
                 pas.getPasajero().posicionar(pas.getPosicion());
+                Auto.getInstance()._pasajeros.Add(pas.getPosicion());
                 pas.getPasajero().cargarDestino(pas.getDestino());
 
                 _listaPas.Add(pas.getPasajero());
+
             }
 
             foreach (AutoInfo auto in Config.getAutos())
@@ -60,17 +62,18 @@ namespace AlumnoEjemplos.MiGrupo
             Cronometro.getInstance().controlarTiempo(elapsedTime, GameControl.getInstance().getListaPasajeros().TrueForAll(llego));
             Cronometro.getInstance().render();
 
-            foreach(AutoComun auto in _listaAutoComun)
+            foreach (AutoComun auto in _listaAutoComun)
             {
-                auto.move(elapsedTime);
+                //TODO ver si se quiere q se mueva el auto mientras no se esta viendo! 
 
-                if(Utils.getDistance(auto.getPosition().X, auto.getPosition().Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
+                if (Utils.getDistance(auto.getPosition().X, auto.getPosition().Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
-                    auto.render();
+                    // auto.checkCollision();
+                    auto.render(elapsedTime);
                 }
             }
 
-            foreach(Pasajero pas in _listaPas)
+            foreach (Pasajero pas in _listaPas)
             {
                 GuiController.Instance.UserVars.setValue("posPas", pas.posicion);
                 GuiController.Instance.UserVars.setValue("posTaxi", Auto.getInstance().getMesh().Position);

@@ -92,7 +92,7 @@ namespace AlumnoEjemplos.MiGrupo
                             this.marcaDestino.Enabled = true;
                             pasajeroMesh.Position = taxi.getMesh().Position;
                             this.viajando = true;
-                            taxi.subePasajero();
+                            taxi.subePasajero(this.destino);
                             GuiController.Instance.UserVars.setValue("posDest", this.destino);
                         }
                     }
@@ -187,11 +187,6 @@ namespace AlumnoEjemplos.MiGrupo
             pasajeroMesh.dispose();
             marcaDestino.dispose();
         }
-
-
-
-
-
     }
 }
 

@@ -11,9 +11,9 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class Flecha
     {
-        private Vector3 _position = new Vector3(0,75,0);
+
         private Vector3 _direccion = new Vector3(0, 0, -1);
-        private Vector3 _objetivo = new Vector3(-100, 5, -850);
+        private Vector3 _objetivo;
         private Boolean _show = false;
         private static Flecha _instance;
         private TgcBox _mesh;
@@ -21,14 +21,18 @@ namespace AlumnoEjemplos.MiGrupo
         public void inicializar()
         {
             Vector3 size = new Vector3(2, 2, 10);
+            Vector3 _position = new Vector3(Auto.getInstance().getMesh().Position.X, 75, Auto.getInstance().getMesh().Position.Z);
             _mesh = TgcBox.fromSize(_position, size);
         }
 
-        public void setPosition()
+        public void setPosition(Vector3 pos)
         {
-            _mesh.getPosition(_position);
+            _mesh.Position = pos;
         }
-
+        public Vector3 getPosition()
+        {
+            return this.getMesh().Position;
+        }
         public TgcBox getMesh()
         {
             return _mesh;
@@ -36,9 +40,10 @@ namespace AlumnoEjemplos.MiGrupo
 
         public void rotate()
         {
-            float angle = -FastMath.PI_HALF - Utils.calculateAngle(_position.X, _position.Z, _objetivo.X, _objetivo.Z);
+            float angle = -FastMath.PI_HALF - Utils.calculateAngle(this.getPosition().X, this.getPosition().Z, _objetivo.X, _objetivo.Z);
             float antiRotate = _mesh.Rotation.Y;
             _mesh.rotateY(angle - antiRotate);
+
         }
 
         public void show()
@@ -53,8 +58,12 @@ namespace AlumnoEjemplos.MiGrupo
 
         public void render(float elapsedTime)
         {
-            _mesh.getPosition(_position);
-            if(_show)
+            this.setPosition(new Vector3(Auto.getInstance().getMesh().Position.X, 75, Auto.getInstance().getMesh().Position.Z));
+            if (_objetivo != Auto.getInstance().getObjetivo() || _objetivo == null)
+            {
+                _objetivo = Auto.getInstance().getObjetivo();
+            }
+            if (_show)
             {
                 this.rotate();
                 _mesh.render();

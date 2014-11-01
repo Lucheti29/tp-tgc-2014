@@ -88,23 +88,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MiGrupo\Auto.cs" />
+    <Compile Include="MiGrupo\AutoComun.cs" />
     <Compile Include="MiGrupo\Camara.cs" />
     <Compile Include="MiGrupo\Config.cs" />
-    <Compile Include="MiGrupo\Entities\PeatonInfo.cs" />
-    <Compile Include="MiGrupo\Entities\PasajeroInfo.cs" />
-    <Compile Include="MiGrupo\Entities\AutoInfo.cs" />
-    <Compile Include="MiGrupo\GameControl.cs" />
-    <Compile Include="MiGrupo\Utils.cs" />
-    <Compile Include="MiGrupo\Enums\InputType.cs" />
-    <Compile Include="MiGrupo\Flecha.cs" />
     <Compile Include="MiGrupo\Cronometro.cs" />
     <Compile Include="MiGrupo\EjemploAlumno.cs" />
-    <Compile Include="MiGrupo\Velocity.cs" />
+    <Compile Include="MiGrupo\Entities\AutoInfo.cs" />
+    <Compile Include="MiGrupo\Entities\PasajeroInfo.cs" />
+    <Compile Include="MiGrupo\Entities\PeatonInfo.cs" />
+    <Compile Include="MiGrupo\Enums\InputType.cs" />
+    <Compile Include="MiGrupo\EnviromentMap.cs" />
+    <Compile Include="MiGrupo\Flecha.cs" />
+    <Compile Include="MiGrupo\GameControl.cs" />
     <Compile Include="MiGrupo\Movement.cs" />
     <Compile Include="MiGrupo\Pasajero.cs" />
-    <Compile Include="MiGrupo\Teclado.cs" />
-    <Compile Include="MiGrupo\AutoComun.cs" />
     <Compile Include="MiGrupo\Persona.cs" />
+    <Compile Include="MiGrupo\Teclado.cs" />
+    <Compile Include="MiGrupo\Utils.cs" />
+    <Compile Include="MiGrupo\Velocity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +131,29 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="AlumnoMedia\LOS_BARTO\ciudad\ciudad.max" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\ciudad-TgcScene.xml" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Door Rusty.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Floor.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\GlassPattern.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Grass.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Grey Bricks.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Marble.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Metal Pattern.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Path.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Red Bricks.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Road Union.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Road.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Traffic Light.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\White Wall.JPG" />
+    <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Yellow Painted.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\taxi\taxi-TgcScene.xml" />
+    <Content Include="AlumnoMedia\LOS_BARTO\taxi\Textures\12682EE3.jpg" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

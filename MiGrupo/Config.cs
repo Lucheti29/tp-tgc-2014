@@ -27,9 +27,9 @@ namespace AlumnoEjemplos.MiGrupo
             _autos = new List<AutoInfo>();
 
             //Load pasajeros
-            _pasajeros.Add(new PasajeroInfo("SkeletalAnimations\\BasicHuman\\WomanJeans-TgcSkeletalMesh.xml", 
+            _pasajeros.Add(new PasajeroInfo("SkeletalAnimations\\BasicHuman\\WomanJeans-TgcSkeletalMesh.xml",
                 "SkeletalAnimations\\BasicHuman\\", new Vector3(100, 5, -850), new Vector3(700, 5, -1850)));
-            _pasajeros.Add(new PasajeroInfo("SkeletalAnimations\\BasicHuman\\WomanJeans-TgcSkeletalMesh.xml", 
+            _pasajeros.Add(new PasajeroInfo("SkeletalAnimations\\BasicHuman\\WomanJeans-TgcSkeletalMesh.xml",
                 "SkeletalAnimations\\BasicHuman\\", new Vector3(-100, 5, -850), new Vector3(-1170, 15, 703)));
             _pasajeros.Add(new PasajeroInfo("SkeletalAnimations\\BasicHuman\\BasicHuman-TgcSkeletalMesh.xml",
                 "SkeletalAnimations\\BasicHuman\\", new Vector3(335, 15, 1193), new Vector3(-4181, 15, -3235)));
@@ -40,7 +40,9 @@ namespace AlumnoEjemplos.MiGrupo
 
             //Load autos
             _autos.Add(new AutoInfo(alumnoMediaFolder + "LOS_BARTO\\auto\\auto-TgcScene.xml", new Vector3(910, 15, -689), new List<Vector3>() { new Vector3(970, 15, -2848), new Vector3(713, 15, -2928), new Vector3(-778, 15, -2924), new Vector3(-819, 15, -2918), new Vector3(-883, 15, -2844), new Vector3(-899, 15, -2778), new Vector3(-922, 15, -1384), new Vector3(-922, 15, -1245), new Vector3(-919, 15, -1211), new Vector3(-902, 15, -1159), new Vector3(-873, 15, -1111), new Vector3(-762, 15, -1086), new Vector3(650, 15, -1069), new Vector3(816, 15, -1065), new Vector3(913, 15, -1131), new Vector3(939, 15, -1266) }));
-             
+            _autos.Add(new AutoInfo(alumnoMediaFolder + "LOS_BARTO\\auto\\auto-TgcScene.xml", new Vector3(1105, 25, -830), new List<Vector3>() { new Vector3(1105, 25, 1055), new Vector3(749, 30, 1055), new Vector3(-700, 30, 1055) }));
+
+
         }
 
         public static List<PasajeroInfo> getPasajeros()
