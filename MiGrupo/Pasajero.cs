@@ -17,7 +17,7 @@ namespace AlumnoEjemplos.MiGrupo
         private int t;
         private static float DISTANCIA = 200f;
         private float rotacion = 0;
-        private static float VELOCIDAD = 30.0f;
+        
         private bool bajo = false;
         public Vector3 destino { get; set; }
         public bool llego { set; get; }
@@ -43,19 +43,9 @@ namespace AlumnoEjemplos.MiGrupo
         }
 
 
-        public void posicionar(Vector3 pos)//POSCIONA EL PASAJERO EN LA POS PASADA POR PARAMETRO
-        {
-            pasajeroMesh.move(pos);
-            this.parar();
-        }
+       
 
-        public void posicionar(float posX, float posZ)//POSCIONA EL PASAJERO EN LA POS PASADA POR PARAMETRO
-        {
-            pasajeroMesh.Position = new Vector3(posX, 5, posZ);
-            this.parar();
-        }
-
-        public void move(float elapsedTime)
+        public override void move(float elapsedTime)
         {
             Vector3 movementVector = new Vector3(0, 0, 0);
             Auto taxi = Auto.getInstance();
@@ -86,14 +76,18 @@ namespace AlumnoEjemplos.MiGrupo
                             this.caminar();
                         }
                         else
-                        {//EL PASAJERO SE SUBIO AL TAXI-> se deshabilita el renderizado del pasajeroMesh
-                            this.parar();
-                            pasajeroMesh.Enabled = false;
-                            this.marcaDestino.Enabled = true;
-                            pasajeroMesh.Position = taxi.getMesh().Position;
-                            this.viajando = true;
-                            taxi.subePasajero(this.destino);
-                            GuiController.Instance.UserVars.setValue("posDest", this.destino);
+                        {
+                            if (taxi.getVelocity() < 5 && taxi.getVelocity() > -5)
+                            {
+                                //EL PASAJERO SE SUBIO AL TAXI-> se deshabilita el renderizado del pasajeroMesh
+                                this.parar();
+                                pasajeroMesh.Enabled = false;
+                                this.marcaDestino.Enabled = true;
+                                pasajeroMesh.Position = taxi.getMesh().Position;
+                                this.viajando = true;
+                                taxi.subePasajero(this.destino);
+                                GuiController.Instance.UserVars.setValue("posDest", this.destino);
+                            }
                         }
                     }
                     else
@@ -137,10 +131,10 @@ namespace AlumnoEjemplos.MiGrupo
 
                         }
                         if (!this.viajando)
-                        {
+                        {// el pasajero se bajo del taxi ahora camina hacia el destino
                             if (distanciaDest > 10)
                             {
-                                movementVector = acercarse(destino.X, destino.Z, VELOCIDAD * elapsedTime);
+                                movementVector = this.acercarse(destino.X, destino.Z, VELOCIDAD * elapsedTime);
                                 rotacion = -FastMath.PI_HALF - Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, destino.X, destino.Z);
                                 this.caminar();
                             }
@@ -167,14 +161,7 @@ namespace AlumnoEjemplos.MiGrupo
             pasajeroMesh.move(movementVector);
         }
 
-        //retorna el vector movimiento al acercarse a tal punto a tal velocidad
-        private Vector3 acercarse(float x, float z, float velocidad)
-        {
-            float angulo = Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, x, z);
-
-            return new Vector3(FastMath.Cos(angulo) * velocidad, 0, FastMath.Sin(angulo) * velocidad);
-
-        }
+ 
 
         public override void render()
         {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TgcViewer;
+using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSkeletalAnimation;
 
 namespace AlumnoEjemplos.MiGrupo
@@ -14,11 +15,25 @@ namespace AlumnoEjemplos.MiGrupo
        protected string[] animationList;
        //---propiedades
        protected string animacionActual { get; set; }
-     
-       public Vector3 posicion
+       protected static float VELOCIDAD = 30.0f;
+
+      public Vector3 posicion
        {//donde se encuentra el pasajero actualmente 
            get { return pasajeroMesh.Position; }
        }
+       public void posicionar(Vector3 pos)//POSCIONA EL PASAJERO EN LA POS PASADA POR PARAMETRO
+       {
+           pasajeroMesh.move(pos);
+           this.parar();
+       }
+
+       public void posicionar(float posX, float posZ)//POSCIONA EL PASAJERO EN LA POS PASADA POR PARAMETRO
+       {
+           pasajeroMesh.Position = new Vector3(posX, 5, posZ);
+           this.parar();
+       }
+
+
        public Persona(string mesh, string textura)
        {          
           //Paths para archivo XML de la malla
@@ -74,12 +89,16 @@ namespace AlumnoEjemplos.MiGrupo
            return pasajeroMesh;
        }
 
+       //retorna el vector movimiento al acercarse a tal punto a tal velocidad
+       protected Vector3 acercarse(float x, float z, float velocidad)
+       {
+           float angulo = Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, x, z);
 
-
-       public void move(){
-
+           return new Vector3(FastMath.Cos(angulo) * velocidad, 0, FastMath.Sin(angulo) * velocidad);
 
        }
+
+       public virtual void move(float elapsedTime){}
        public virtual void render()
        {
            pasajeroMesh.animateAndRender();

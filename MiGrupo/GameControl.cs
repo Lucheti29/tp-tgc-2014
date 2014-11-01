@@ -21,7 +21,7 @@ namespace AlumnoEjemplos.MiGrupo
 
         private List<Pasajero> _listaPas = new List<Pasajero>();
         private List<AutoComun> _listaAutoComun = new List<AutoComun>();
-
+        private List<Peaton> _listaPeatones = new List<Peaton>();
         public void inicializar()
         {
             Config.load();
@@ -35,7 +35,14 @@ namespace AlumnoEjemplos.MiGrupo
                 _listaPas.Add(pas.getPasajero());
 
             }
+            foreach (PeatonInfo peaton in Config.getPeatones())
+            {
+                peaton.getPeaton().posicionar(peaton.getPosicion());
+                peaton.getPeaton().setRecorrido(peaton.getRecorrido());    
 
+                _listaPeatones.Add(peaton.getPeaton());
+
+            }
             foreach (AutoInfo auto in Config.getAutos())
             {
                 auto.getAuto().setPosition(auto.getPosicion());
@@ -51,7 +58,10 @@ namespace AlumnoEjemplos.MiGrupo
         {
             return _listaPas;
         }
-
+        public List<Peaton> getListaPeatones()
+        {
+            return _listaPeatones;
+        }
         public List<AutoComun> getListaAutosComunes()
         {
             return _listaAutoComun;
@@ -70,6 +80,16 @@ namespace AlumnoEjemplos.MiGrupo
                 {
                     // auto.checkCollision();
                     auto.render(elapsedTime);
+                }
+            }
+            
+            foreach ( Peaton peaton in _listaPeatones)
+            {
+                if (Utils.getDistance(peaton.posicion.X, peaton.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
+                {
+                    
+                    peaton.move(elapsedTime);
+                    peaton.render();
                 }
             }
 

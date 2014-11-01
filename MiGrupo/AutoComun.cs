@@ -99,18 +99,11 @@ namespace AlumnoEjemplos.MiGrupo
         {
             _recorrido = recorrido;
             _ptoRecorrido = recorrido[0];
-            //GuiController.Instance.UserVars.setValue("ptosRec", _ptoRecorrido);
         }
-
-        //distancia entre el (_x,_z) auto, y el (x,z) pasados como parametro
-        private float getDistancia(float x, float z)
-        {
-            return FastMath.Sqrt(FastMath.Pow2(x - _mesh.Position.X) + FastMath.Pow2(z - _mesh.Position.Z));
-        }
-
+     
         public void move(float elapsedtime)
         {
-            if (getDistancia(_ptoRecorrido.X, _ptoRecorrido.Z) > 1)
+            if (Utils.getDistance(_ptoRecorrido.X, _ptoRecorrido.Z, this.getPosition().X,this.getPosition().Z) > 1)
             {
                 Vector3 movementVector = acercarse(_ptoRecorrido.X, _ptoRecorrido.Z, _velocidad * elapsedtime);
                 rotacion = -FastMath.PI_HALF - Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, _ptoRecorrido.X, _ptoRecorrido.Z);
@@ -118,27 +111,18 @@ namespace AlumnoEjemplos.MiGrupo
                 _mesh.rotateY(rotacion - antirotar);
                 _mesh.move(movementVector);
                 obb.move(movementVector);
-                GuiController.Instance.UserVars.setValue("DistpRec", getDistancia(_ptoRecorrido.X, _ptoRecorrido.Z));
+             
             }
             else
             {
                 i++;
-                if (i < _recorrido.Count)
-                {
-                    _ptoRecorrido = _recorrido[i];
-                    //GuiController.Instance.UserVars.setValue("ptosRec", _ptoRecorrido);
-                }
-                else
+                if (i >= _recorrido.Count)
                 {
                     i = 0;
                 }
+                _ptoRecorrido = _recorrido[i];
             }
-
-
         }
-
-
-
 
         //retorna el vector movimiento al acercarse a tal punto a tal velocidad
         private Vector3 acercarse(float x, float z, float velocidad)
@@ -146,8 +130,6 @@ namespace AlumnoEjemplos.MiGrupo
             float angulo = Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, x, z);
 
             return new Vector3(FastMath.Cos(angulo) * velocidad, 0, FastMath.Sin(angulo) * velocidad);
-
         }
-
     }
 }
