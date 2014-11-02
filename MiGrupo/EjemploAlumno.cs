@@ -16,6 +16,7 @@ using TgcViewer.Utils.TgcSkeletalAnimation;
 using TgcViewer.Utils.Shaders;
 using System.Windows.Forms;
 using TgcViewer.Utils.Terrain;
+using AlumnoEjemplos.MiGrupo.Optimizacion.GrillaRegular;
 
 namespace AlumnoEjemplos.MiGrupo
 {
@@ -27,7 +28,8 @@ namespace AlumnoEjemplos.MiGrupo
         float kx;       // coef. de reflexion
         float kc;       // coef. de refraccion
         bool fresnel = true;
-       
+
+        GrillaRegular grilla;
 
         public override string getCategory()
         {
@@ -82,6 +84,12 @@ namespace AlumnoEjemplos.MiGrupo
             
             //Modifier para habilitar o no el renderizado del BoundingBox del personaje
             GuiController.Instance.Modifiers.addBoolean("showBoundingBox", "Bouding Box", false);
+
+            //Crear Grid Regular
+            //TODO: habría que dividir el piso del resto de los mesh
+            grilla = new GrillaRegular();
+            grilla.create(ciudadScene.Meshes, ciudadScene.BoundingBox);
+            grilla.createDebugMeshes();
 
             #region inicializo EnvMap
             // Arreglo las normales del taxi
@@ -221,7 +229,8 @@ namespace AlumnoEjemplos.MiGrupo
             else {
                 renderScene(elapsedTime, false);
             }
-
+            
+            renderScene(elapsedTime, false);
 
         }
 
@@ -231,7 +240,10 @@ namespace AlumnoEjemplos.MiGrupo
            
             //Ver si hay que mostrar el BoundingBox
             bool showBB = (bool)GuiController.Instance.Modifiers.getValue("showBoundingBox");
-            ciudadScene.renderAll();
+            //ciudadScene.renderAll();
+
+            grilla.render(GuiController.Instance.Frustum, false);
+
             if (showBB)
             {
                 foreach (TgcMesh mesh in ciudadScene.Meshes)
@@ -263,7 +275,6 @@ namespace AlumnoEjemplos.MiGrupo
         {
             Auto.getInstance().getMesh().dispose();
             ciudadScene.disposeAll();
-
             GameControl.getInstance().disposeAll();
         }
     }
