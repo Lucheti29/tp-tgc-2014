@@ -38,9 +38,8 @@ namespace AlumnoEjemplos.MiGrupo
             obb = TgcObb.computeFromAABB(this._mesh.BoundingBox);
 
         }
-        public void render(float elapsedTime)
+        public void calculate(float elapsedTime)
         {
-
             if (_collisionFound)
             {
                 _velAux = _velocidad;
@@ -52,15 +51,9 @@ namespace AlumnoEjemplos.MiGrupo
                 _velocidad = _velAux;
             }
 
-            _mesh.render();
             this.move(elapsedTime);
-            //Ver si hay que mostrar el BoundingBox
-            if ((bool)GuiController.Instance.Modifiers.getValue("showBoundingBox"))
-            {
-                obb.render();
-            }
-
         }
+
         public void checkCollision(List<TgcMesh> obs)
         {
             _collisionFound = false;
@@ -82,19 +75,23 @@ namespace AlumnoEjemplos.MiGrupo
                 }
             }
         }
+
         public void dispose()
         {
             _mesh.dispose();
         }
+
         public void setPosition(Vector3 pos)
         {
 
             _mesh.Position = pos;
         }
+
         public Vector3 getPosition()
         {
             return _mesh.Position;
         }
+
         public void setRecorrido(List<Vector3> recorrido)
         {
             _recorrido = recorrido;
@@ -130,6 +127,16 @@ namespace AlumnoEjemplos.MiGrupo
             float angulo = Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, x, z);
 
             return new Vector3(FastMath.Cos(angulo) * velocidad, 0, FastMath.Sin(angulo) * velocidad);
+        }
+
+        public void render()
+        {
+            _mesh.render();
+            //Ver si hay que mostrar el BoundingBox
+            if ((bool)GuiController.Instance.Modifiers.getValue("showBoundingBox"))
+            {
+                obb.render();
+            }
         }
     }
 }

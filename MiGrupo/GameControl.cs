@@ -22,6 +22,7 @@ namespace AlumnoEjemplos.MiGrupo
         private List<Pasajero> _listaPas = new List<Pasajero>();
         private List<AutoComun> _listaAutoComun = new List<AutoComun>();
         private List<Peaton> _listaPeatones = new List<Peaton>();
+
         public void inicializar()
         {
             Config.load();
@@ -67,9 +68,43 @@ namespace AlumnoEjemplos.MiGrupo
             return _listaAutoComun;
         }
 
-        public void render(float elapsedTime)
+        public void calculate(float elapsedTime)
         {
             Cronometro.getInstance().controlarTiempo(elapsedTime, GameControl.getInstance().getListaPasajeros().TrueForAll(llego));
+
+            foreach (AutoComun auto in _listaAutoComun)
+            {
+                //TODO ver si se quiere q se mueva el auto mientras no se esta viendo! 
+
+                if (Utils.getDistance(auto.getPosition().X, auto.getPosition().Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
+                {
+                    // auto.checkCollision();
+                    auto.calculate(elapsedTime);
+                }
+            }
+            
+            foreach ( Peaton peaton in _listaPeatones)
+            {
+                if (Utils.getDistance(peaton.posicion.X, peaton.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
+                {
+                    peaton.move(elapsedTime);
+                }
+            }
+
+            foreach (Pasajero pas in _listaPas)
+            {
+                GuiController.Instance.UserVars.setValue("posPas", pas.posicion);
+                GuiController.Instance.UserVars.setValue("posTaxi", Auto.getInstance().getMesh().Position);
+
+                if (Utils.getDistance(pas.posicion.X, pas.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
+                {
+                    pas.move(elapsedTime);
+                }
+            }
+        }
+
+        public void renderAll()
+        {
             Cronometro.getInstance().render();
 
             foreach (AutoComun auto in _listaAutoComun)
@@ -79,26 +114,19 @@ namespace AlumnoEjemplos.MiGrupo
                 if (Utils.getDistance(auto.getPosition().X, auto.getPosition().Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
                     // auto.checkCollision();
-                    auto.render(elapsedTime);
+                    auto.render();
                 }
             }
-            
-            foreach ( Peaton peaton in _listaPeatones)
+            foreach (Peaton peaton in _listaPeatones)
             {
                 if (Utils.getDistance(peaton.posicion.X, peaton.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
-                    
-                    peaton.move(elapsedTime);
                     peaton.render();
                 }
             }
 
             foreach (Pasajero pas in _listaPas)
             {
-                GuiController.Instance.UserVars.setValue("posPas", pas.posicion);
-                GuiController.Instance.UserVars.setValue("posTaxi", Auto.getInstance().getMesh().Position);
-                pas.move(elapsedTime);
-
                 if (Utils.getDistance(pas.posicion.X, pas.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
                     pas.render();

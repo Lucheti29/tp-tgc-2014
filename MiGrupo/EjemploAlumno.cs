@@ -115,8 +115,11 @@ namespace AlumnoEjemplos.MiGrupo
 
         public override void render(float elapsedTime)
         {
+            //Calculos de movimiento previos
             Teclado.handlear();
             Flecha.getInstance().calculate(elapsedTime);
+            GameControl.getInstance().calculate(elapsedTime);
+
            //este if envita q el  cubeMap se actualice.
            //Para q el env Map funcione bien el cubeMap debe actualizarse en cada frame pero puse esto para q vean como varian los FPS
             if ((bool)GuiController.Instance.Modifiers.getValue("cubicMap"))
@@ -240,6 +243,9 @@ namespace AlumnoEjemplos.MiGrupo
             bool showBB = (bool)GuiController.Instance.Modifiers.getValue("showBoundingBox");
             //ciudadScene.renderAll();
 
+            //Render
+            GameControl.getInstance().renderAll();
+            Flecha.getInstance().render();
             grilla.render(GuiController.Instance.Frustum, false);
 
             if (showBB)
@@ -249,11 +255,6 @@ namespace AlumnoEjemplos.MiGrupo
                     mesh.BoundingBox.render();
                 }
             }
-  
-            GameControl.getInstance().render(elapsedTime);
-
-            //Render
-            Flecha.getInstance().render();
 
             if (!cubemap)
             {
