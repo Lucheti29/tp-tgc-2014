@@ -119,6 +119,8 @@ namespace AlumnoEjemplos.MiGrupo
             Teclado.handlear();
             Flecha.getInstance().calculate(elapsedTime);
             GameControl.getInstance().calculate(elapsedTime);
+            Auto.getInstance().checkCollision(ciudadScene);
+            Auto.getInstance().calculate(elapsedTime);
 
            //este if envita q el  cubeMap se actualice.
            //Para q el env Map funcione bien el cubeMap debe actualizarse en cada frame pero puse esto para q vean como varian los FPS
@@ -248,6 +250,7 @@ namespace AlumnoEjemplos.MiGrupo
             Flecha.getInstance().render();
             grilla.render(GuiController.Instance.Frustum, false);
 
+            //Muestra los Bounding Box de la escena (edificios)
             if (showBB)
             {
                 foreach (TgcMesh mesh in ciudadScene.Meshes)
@@ -259,10 +262,8 @@ namespace AlumnoEjemplos.MiGrupo
             if (!cubemap)
             {
                 // dibujo el mesh
-                
                 Auto.getInstance().getMesh().Technique = "RenderCubeMap";
-                Auto.getInstance().checkCollision(ciudadScene); 
-                Auto.getInstance().render(elapsedTime);
+                Auto.getInstance().render();
             }
         }
 

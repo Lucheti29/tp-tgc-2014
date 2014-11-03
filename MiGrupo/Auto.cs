@@ -169,7 +169,7 @@ namespace AlumnoEjemplos.MiGrupo
             }
         }
 
-        public void render(float elapsedTime)
+        public void calculate(float elapsedTime)
         {
             _currentElapsedTime = elapsedTime;
             this.aplicarMovimiento();
@@ -185,7 +185,10 @@ namespace AlumnoEjemplos.MiGrupo
                 _velocidad = new Velocity();
                 _velocidad.setAmount(120f * -1, elapsedTime);
             }
+        }
 
+        public void render()
+        {
             _mesh.render();
             //Ver si hay que mostrar el BoundingBox
             if ((bool)GuiController.Instance.Modifiers.getValue("showBoundingBox"))
