@@ -77,6 +77,11 @@ namespace AlumnoEjemplos.MiGrupo
             }
         }
 
+        public void dispose()
+        {
+            _mesh.dispose();
+        }
+
         public static Flecha getInstance()
         {
             if (_instance == null)

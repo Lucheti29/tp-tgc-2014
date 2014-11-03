@@ -90,6 +90,7 @@
     <Compile Include="MiGrupo\Auto.cs" />
     <Compile Include="MiGrupo\AutoComun.cs" />
     <Compile Include="MiGrupo\Camara.cs" />
+    <Compile Include="MiGrupo\Render.cs" />
     <Compile Include="MiGrupo\Config.cs" />
     <Compile Include="MiGrupo\Cronometro.cs" />
     <Compile Include="MiGrupo\EjemploAlumno.cs" />
@@ -97,7 +98,7 @@
     <Compile Include="MiGrupo\Entities\PasajeroInfo.cs" />
     <Compile Include="MiGrupo\Entities\PeatonInfo.cs" />
     <Compile Include="MiGrupo\Enums\InputType.cs" />
-    <Compile Include="MiGrupo\EnviromentMap.cs" />
+    <Compile Include="MiGrupo\Shaders\EnviromentMap.cs" />
     <Compile Include="MiGrupo\Flecha.cs" />
     <Compile Include="MiGrupo\GameControl.cs" />
     <Compile Include="MiGrupo\Movement.cs" />
