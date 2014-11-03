@@ -16,13 +16,21 @@ namespace AlumnoEjemplos.MiGrupo
         private Vector3 _objetivo;
         private Boolean _show = false;
         private static Flecha _instance;
-        private TgcBox _mesh;
+        private TgcMesh _mesh;
 
         public void inicializar()
         {
             Vector3 size = new Vector3(2, 2, 10);
             Vector3 _position = new Vector3(Auto.getInstance().getMesh().Position.X, 75, Auto.getInstance().getMesh().Position.Z);
-            _mesh = TgcBox.fromSize(_position, size);
+            //_mesh = TgcBox.fromSize(_position, size);
+
+            //primero cargamos una escena 3D entera.
+            TgcSceneLoader loader = new TgcSceneLoader();
+
+            //Luego cargamos otro modelo aparte que va a hacer el taxi
+            TgcScene scene = loader.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTO\\FLECHA\\flecha-TgcScene.xml");
+
+            _mesh = scene.Meshes[0];
         }
 
         public void setPosition(Vector3 pos)
@@ -33,7 +41,7 @@ namespace AlumnoEjemplos.MiGrupo
         {
             return this.getMesh().Position;
         }
-        public TgcBox getMesh()
+        public TgcMesh getMesh()
         {
             return _mesh;
         }
