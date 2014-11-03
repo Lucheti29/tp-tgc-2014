@@ -56,16 +56,23 @@ namespace AlumnoEjemplos.MiGrupo
             _show = false;
         }
 
-        public void render(float elapsedTime)
+        public void calculate(float elapsedTime)
         {
-            this.setPosition(new Vector3(Auto.getInstance().getMesh().Position.X, 75, Auto.getInstance().getMesh().Position.Z));
-            if (_objetivo != Auto.getInstance().getObjetivo() || _objetivo == null)
-            {
-                _objetivo = Auto.getInstance().getObjetivo();
-            }
             if (_show)
             {
+                this.setPosition(new Vector3(Auto.getInstance().getMesh().Position.X, 75, Auto.getInstance().getMesh().Position.Z));
+                if (_objetivo != Auto.getInstance().getObjetivo() || _objetivo == null)
+                {
+                    _objetivo = Auto.getInstance().getObjetivo();
+                }
                 this.rotate();
+            }
+        }
+
+        public void render()
+        {
+            if (_show)
+            {
                 _mesh.render();
             }
         }
