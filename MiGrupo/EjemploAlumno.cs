@@ -229,9 +229,6 @@ namespace AlumnoEjemplos.MiGrupo
             else {
                 renderScene(elapsedTime, false);
             }
-            
-            renderScene(elapsedTime, false);
-
         }
 
 
