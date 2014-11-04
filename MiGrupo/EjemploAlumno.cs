@@ -14,6 +14,7 @@ using Microsoft.DirectX.DirectInput;
 using AlumnoEjemplos.MiGrupo.Entities;
 using TgcViewer.Utils.TgcSkeletalAnimation;
 using TgcViewer.Utils.Shaders;
+using TgcViewer.Utils.Sound;
 using System.Windows.Forms;
 using TgcViewer.Utils.Terrain;
 using AlumnoEjemplos.MiGrupo.Optimizacion.GrillaRegular;
@@ -93,12 +94,29 @@ namespace AlumnoEjemplos.MiGrupo
 
         public override void render(float elapsedTime)
         {
+            //Sonido ambiente
+            GuiController.Instance.Mp3Player.FileName = GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTO\\citty_ambiance.mp3";
+
             //Calculos de movimiento previos
             Teclado.handlear();
             Flecha.getInstance().calculate(elapsedTime);
             GameControl.getInstance().calculate(elapsedTime);
             Auto.getInstance().checkCollision();
             Auto.getInstance().calculate(elapsedTime);
+
+            TgcMp3Player player = GuiController.Instance.Mp3Player;
+            TgcMp3Player.States currentState = player.getStatus();
+            if (currentState == TgcMp3Player.States.Open)
+            {
+                //Reproducir MP3
+                player.play(true);
+            }
+            if (currentState == TgcMp3Player.States.Stopped)
+            {
+                //Parar y reproducir MP3
+                player.closeFile();
+                player.play(true);
+            }
 
             //El Shader llama al render
             envMap.calculate(elapsedTime);
