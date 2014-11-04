@@ -1,4 +1,4 @@
-﻿using AlumnoEjemplos.MiGrupo.Optimizacion.GrillaRegular;
+﻿using AlumnoEjemplos.MiGrupo.Optimizacion.Quadtree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +10,19 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class Render
     {
-        private static GrillaRegular _grid;
+        private static Quadtree _quadtree;
         private static TgcScene _scene;
 
         public static void createGrid(TgcScene scene, bool debug)
         {
-            //TODO: habria que separar los edificios del resto
             _scene = scene;
-            _grid = new GrillaRegular();
-            _grid.create(scene.Meshes, scene.BoundingBox);
+
+            _quadtree = new Quadtree();
+            _quadtree.create(scene.Meshes, scene.BoundingBox);
 
             if(debug)
             {
-                _grid.createDebugMeshes();
+                _quadtree.createDebugQuadtreeMeshes();
             }
         }
 
@@ -36,7 +36,7 @@ namespace AlumnoEjemplos.MiGrupo
             //Render
             GameControl.getInstance().renderAll();
             Flecha.getInstance().render();
-            _grid.render(GuiController.Instance.Frustum, false);
+            _quadtree.render(GuiController.Instance.Frustum, false);
 
             //Muestra los Bounding Box de la escena (edificios)
             if (showBB)
@@ -61,7 +61,7 @@ namespace AlumnoEjemplos.MiGrupo
         /// </summary>
         public static void envRender()
         {
-            _grid.render(GuiController.Instance.Frustum, false);
+            _quadtree.render(GuiController.Instance.Frustum, false);
         }
     }
 }
