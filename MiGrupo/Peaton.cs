@@ -33,14 +33,15 @@ namespace AlumnoEjemplos.MiGrupo
         {
             if (Utils.getDistance(_ptoRecorrido.X, _ptoRecorrido.Z, this.getMesh().Position.X, this.getMesh().Position.Z) > 1)
             {
-                Vector3 movementVector = this.acercarse(_ptoRecorrido.X, _ptoRecorrido.Z,  VELOCIDAD * elapsedTime);
-                rotacion = -FastMath.PI_HALF - Utils.calculateAngle(this.getMesh().Position.X, this.getMesh().Position.Z, _ptoRecorrido.X, _ptoRecorrido.Z);
+
+                float angulo =Utils.calculateAngle(this.getMesh().Position.X, this.getMesh().Position.Z, _ptoRecorrido.X, _ptoRecorrido.Z);
+               Vector3 movementVector = Utils.movementVector(VELOCIDAD * elapsedTime, angulo);
+                rotacion = -FastMath.PI_HALF - angulo;
                 float antirotar = this.getMesh().Rotation.Y;
                 this.getMesh().rotateY(rotacion - antirotar);
                 this.caminar();
                 this.getMesh().move(movementVector);
-               // obb.move(movementVector);
-                
+               // obb.move(movementVector);   
             }
             else
             {

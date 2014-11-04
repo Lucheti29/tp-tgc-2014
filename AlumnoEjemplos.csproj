@@ -107,6 +107,7 @@
     <Compile Include="MiGrupo\Pasajero.cs" />
     <Compile Include="MiGrupo\Peaton.cs" />
     <Compile Include="MiGrupo\Persona.cs" />
+    <Compile Include="MiGrupo\Sonidos.cs" />
     <Compile Include="MiGrupo\Teclado.cs" />
     <Compile Include="MiGrupo\Utils.cs" />
     <Compile Include="MiGrupo\Velocity.cs" />
@@ -154,6 +155,8 @@
     <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Traffic Light.jpg" />
     <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\White Wall.JPG" />
     <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Yellow Painted.jpg" />
+    <Content Include="AlumnoMedia\LOS_BARTO\sonidos\auto-choquePequeño.wav" />
+    <Content Include="AlumnoMedia\LOS_BARTO\sonidos\auto-encendido.wav" />
     <Content Include="AlumnoMedia\LOS_BARTO\taxi\taxi-TgcScene.xml" />
     <Content Include="AlumnoMedia\LOS_BARTO\taxi\Textures\12682EE3.jpg" />
   </ItemGroup>

@@ -19,6 +19,7 @@ namespace AlumnoEjemplos.MiGrupo
 
         private TgcMesh _mesh;
         private Vector3 _direccion;
+        private bool foward; //indica si va para adelante
         //private Vector3 _direccionDerrape;
         private Velocity _velocidad;
         private float _currentElapsedTime;
@@ -28,22 +29,22 @@ namespace AlumnoEjemplos.MiGrupo
         private Vector3 _objetivo;
         public List<Vector3> _pasajeros;// posiciones de los pasajeros
         private int _nroPasaj = 0;
+        private List<TgcObb> _obstaculos;
         // --------------- Fin variables de instancia ---------------
 
         // --------------- Métodos de instancia ---------------
         public void inicializar(TgcMesh mesh)
         {
-            _mesh = mesh;
-
-            //Computar OBB a partir del AABB del mesh. Inicialmente genera el mismo volumen que el AABB, pero luego te permite rotarlo (cosa que el AABB no puede)
-            _obb = TgcObb.computeFromAABB(mesh.BoundingBox);
-
+            _mesh = mesh;         
             _direccion = new Vector3(0, 0, -1);
             _velocidad = new Velocity();
 
             //Para que no esté en contacto con el suelo
             _mesh.move(0, 15, 0);
+            //Computar OBB a partir del AABB del mesh.
+            _obb = TgcObb.computeFromAABB(mesh.BoundingBox);
             _pasajeros = new List<Vector3>();//lista con la ubicacion de cada pasajero q debe llevar
+            _obstaculos = new List<TgcObb>();
         }
 
         public TgcMesh getMesh()
@@ -55,7 +56,14 @@ namespace AlumnoEjemplos.MiGrupo
         {
             return _mesh.Position;
         }
-
+        public TgcObb orientedBB()
+        {
+            return _obb;
+        }
+        public List<TgcObb> getObstaculos()
+        {
+            return _obstaculos;
+        }
         public Vector3 getDireccion()
         {
             return _direccion;
@@ -88,7 +96,7 @@ namespace AlumnoEjemplos.MiGrupo
                 _objetivo = _pasajeros[_nroPasaj++];
             }
         }
-
+        #region movimiento
         private void derrapar(Boolean right, Boolean left)
         {
             //TODO: hacer
@@ -142,26 +150,30 @@ namespace AlumnoEjemplos.MiGrupo
             }
 
             if (up)
-                _velocidad.acelerar(_currentElapsedTime);
-            else if (down)
-                _velocidad.desacelerar(_currentElapsedTime);
-            GuiController.Instance.UserVars.setValue("velocidad", _velocidad.getAmount());
-        }
-
-        public void checkCollision(TgcScene scene)
-        {
-            _collisionFound = false;
-            foreach (TgcMesh mesh in scene.Meshes)
             {
-                //Los dos BoundingBox que vamos a testear
-                TgcBoundingBox mainMeshBoundingBox = _mesh.BoundingBox;
-                TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
+                if (_velocidad.getAmount() == 0)
+                {
+                    Sonido.getInstance().play(GuiController.Instance.AlumnoEjemplosMediaDir +"LOS_BARTO\\sonidos\\auto-encendido.wav",false);
+                }
+                _velocidad.acelerar(_currentElapsedTime);
+                
+                foward = true;
+            }
+            else if (down)
+            {
+                _velocidad.desacelerar(_currentElapsedTime);
+                foward = false;
+            }
+            GuiController.Instance.UserVars.setValue("velocidad", this.getVelocity());
+        }
+        #endregion movimiento
 
-                //Ejecutar algoritmo de detección de colisiones
-                TgcCollisionUtils.BoxBoxResult collisionResult = TgcCollisionUtils.classifyBoxBox(mainMeshBoundingBox, sceneMeshBoundingBox);
-
-                //Hubo colisión con un objeto. Guardar resultado y abortar loop.
-                if (collisionResult == TgcCollisionUtils.BoxBoxResult.Adentro || collisionResult == TgcCollisionUtils.BoxBoxResult.Atravesando)
+        public void checkCollision()
+        { 
+            _collisionFound = false;
+            foreach (TgcObb obstaculo in _obstaculos)
+            {
+                if (TgcCollisionUtils.testObbObb(this.orientedBB(), obstaculo))
                 {
                     _collisionFound = true;
                     break;
@@ -178,12 +190,21 @@ namespace AlumnoEjemplos.MiGrupo
             _mesh.move(_direccion * _velocidad.getAmount());
             _obb.move(_direccion * _velocidad.getAmount());
 
-            //Si NO hay colision entonces movemos el taxi
-            //TODO: deshardcodear la nueva velocidad al chocar
+        
+         
             if (_collisionFound)
             {
                 _velocidad = new Velocity();
-                _velocidad.setAmount(120f * -1, elapsedTime);
+                Sonido.getInstance().play(GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTO\\sonidos\\auto-choquePequeño.wav",false);
+                if (!foward)//puede haber problemas con el rebote
+                {
+                    _velocidad.setAmount(120f, elapsedTime);
+                    foward = true;
+                }
+                else
+                {
+                    _velocidad.setAmount(120f * -1, elapsedTime);
+                }
             }
         }
 

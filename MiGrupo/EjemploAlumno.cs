@@ -57,10 +57,14 @@ namespace AlumnoEjemplos.MiGrupo
             //Luego cargamos otro modelo aparte que va a hacer el taxi
             taxiScene = loader.loadSceneFromFile(alumnoMediaFolder + "LOS_BARTO\\taxi\\taxi-TgcScene.xml");
             //Cargamos la ciudad
-            ciudadScene = loader.loadSceneFromFile(alumnoMediaFolder + "LOS_BARTO\\ciudad\\ciudad-TgcScene.xml");
+            ciudadScene = loader.loadSceneFromFile(alumnoMediaFolder + "LOS_BARTO\\ciudad\\ciudad2-TgcScene.xml");
 
             //solo nos interesa el taxi
             Auto.getInstance().inicializar(taxiScene.Meshes[0]);
+            foreach (TgcMesh mesh in ciudadScene.Meshes){
+                 Auto.getInstance().getObstaculos().Add(TgcObb.computeFromAABB(mesh.BoundingBox));
+            }
+        
             Flecha.getInstance().inicializar();
             Flecha.getInstance().show();
 
@@ -93,7 +97,7 @@ namespace AlumnoEjemplos.MiGrupo
             Teclado.handlear();
             Flecha.getInstance().calculate(elapsedTime);
             GameControl.getInstance().calculate(elapsedTime);
-            Auto.getInstance().checkCollision(ciudadScene);
+            Auto.getInstance().checkCollision();
             Auto.getInstance().calculate(elapsedTime);
 
             //El Shader llama al render

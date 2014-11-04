@@ -17,7 +17,7 @@ namespace AlumnoEjemplos.MiGrupo
         private Vector3 _ptoRecorrido;
         private int i = 0;
         private float _velocidad = 100f;
-        private float _velAux = 100f;
+       
 
         private float rotacion = 0;
         private List<Vector3> _recorrido;
@@ -40,40 +40,30 @@ namespace AlumnoEjemplos.MiGrupo
         }
         public void calculate(float elapsedTime)
         {
+
+            float _lastVelocidad = _velocidad;
+            Vector3 _lastPosition = this.getPosition();
+            this.move(elapsedTime);
             if (_collisionFound)
             {
-                _velAux = _velocidad;
-                _velocidad = 0;
-
+                this.setPosition(_lastPosition);
             }
-            else
-            {
-                _velocidad = _velAux;
-            }
-
-            this.move(elapsedTime);
+            
         }
 
-        public void checkCollision(List<TgcMesh> obs)
-        {
+        public void checkCollision( )
+        { //el objeto con el q puede colisionar el AutoComun es el taxi
             _collisionFound = false;
-            foreach (TgcMesh mesh in obs)
-            {
-                //Los dos BoundingBox que vamos a testear
-                TgcBoundingBox mainMeshBoundingBox = _mesh.BoundingBox;
-
-                TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
-
-                //Ejecutar algoritmo de detección de colisiones
-                TgcCollisionUtils.BoxBoxResult collisionResult = TgcCollisionUtils.classifyBoxBox(mainMeshBoundingBox, sceneMeshBoundingBox);
-
-                //Hubo colisión con un objeto. Guardar resultado y abortar loop.
-                if (collisionResult != TgcCollisionUtils.BoxBoxResult.Afuera)
-                {
-                    _collisionFound = true;
-                    break;
-                }
+         
+            if (TgcCollisionUtils.testObbObb(this.obb, Auto.getInstance().orientedBB()))
+            {   
+                _collisionFound = true; 
             }
+
+        }
+        public TgcMesh getMesh()
+        {
+            return _mesh;
         }
 
         public void dispose()
@@ -83,8 +73,8 @@ namespace AlumnoEjemplos.MiGrupo
 
         public void setPosition(Vector3 pos)
         {
-
             _mesh.Position = pos;
+            obb.move( pos);
         }
 
         public Vector3 getPosition()
@@ -102,10 +92,12 @@ namespace AlumnoEjemplos.MiGrupo
         {
             if (Utils.getDistance(_ptoRecorrido.X, _ptoRecorrido.Z, this.getPosition().X,this.getPosition().Z) > 1)
             {
-                Vector3 movementVector = acercarse(_ptoRecorrido.X, _ptoRecorrido.Z, _velocidad * elapsedtime);
-                rotacion = -FastMath.PI_HALF - Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, _ptoRecorrido.X, _ptoRecorrido.Z);
+                float angulo = Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, _ptoRecorrido.X, _ptoRecorrido.Z);
+                Vector3 movementVector = Utils.movementVector(_velocidad * elapsedtime, angulo);
+                rotacion = -FastMath.PI_HALF - angulo;
                 float antirotar = _mesh.Rotation.Y;
                 _mesh.rotateY(rotacion - antirotar);
+                obb.rotate(new Vector3(0, rotacion - antirotar, 0));
                 _mesh.move(movementVector);
                 obb.move(movementVector);
              
@@ -121,21 +113,18 @@ namespace AlumnoEjemplos.MiGrupo
             }
         }
 
-        //retorna el vector movimiento al acercarse a tal punto a tal velocidad
-        private Vector3 acercarse(float x, float z, float velocidad)
-        {
-            float angulo = Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, x, z);
-
-            return new Vector3(FastMath.Cos(angulo) * velocidad, 0, FastMath.Sin(angulo) * velocidad);
-        }
+    
 
         public void render()
         {
             _mesh.render();
+            obb.updateValues();
             //Ver si hay que mostrar el BoundingBox
             if ((bool)GuiController.Instance.Modifiers.getValue("showBoundingBox"))
             {
+               
                 obb.render();
+                _mesh.BoundingBox.render();
             }
         }
     }

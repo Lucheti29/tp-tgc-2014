@@ -15,7 +15,7 @@ namespace AlumnoEjemplos.MiGrupo
        protected string[] animationList;
        //---propiedades
        protected string animacionActual { get; set; }
-       protected static float VELOCIDAD = 30.0f;
+       protected static float VELOCIDAD = 10.0f;
 
       public Vector3 posicion
        {//donde se encuentra el pasajero actualmente 
@@ -72,8 +72,6 @@ namespace AlumnoEjemplos.MiGrupo
            pasajeroMesh.playAnimation(this.animacionActual, true);
        }
 
-
-
        protected void caminar()
        {
            if (this.animacionActual != animationList[1])//me fijo si la animacion actual es diferente a la q quiero  
@@ -89,14 +87,7 @@ namespace AlumnoEjemplos.MiGrupo
            return pasajeroMesh;
        }
 
-       //retorna el vector movimiento al acercarse a tal punto a tal velocidad
-       protected Vector3 acercarse(float x, float z, float velocidad)
-       {
-           float angulo = Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, x, z);
-
-           return new Vector3(FastMath.Cos(angulo) * velocidad, 0, FastMath.Sin(angulo) * velocidad);
-
-       }
+    
 
        public virtual void move(float elapsedTime){}
        public virtual void render()

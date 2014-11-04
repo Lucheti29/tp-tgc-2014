@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TgcViewer;
+using TgcViewer.Utils.TgcGeometry;
 
 namespace AlumnoEjemplos.MiGrupo
 {
@@ -48,10 +49,11 @@ namespace AlumnoEjemplos.MiGrupo
             {
                 auto.getAuto().setPosition(auto.getPosicion());
                 auto.getAuto().setRecorrido(auto.getRecorrido());
-
+                
                 _listaAutoComun.Add(auto.getAuto());
+                Auto.getInstance().getObstaculos().Add(TgcObb.computeFromAABB(auto.getAuto().getMesh().BoundingBox));
             }
-
+            
             Cronometro.getInstance().TiempoTotal = 120;
         }
 
@@ -78,7 +80,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                 if (Utils.getDistance(auto.getPosition().X, auto.getPosition().Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
-                    // auto.checkCollision();
+                    auto.checkCollision();
                     auto.calculate(elapsedTime);
                 }
             }

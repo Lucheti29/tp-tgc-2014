@@ -71,8 +71,9 @@ namespace AlumnoEjemplos.MiGrupo
                     {
                         if (distanciaAlTaxi >= 70)
                         {//EL TAXI ESTA CERCA -> el pasaj intenta subirse
-                            movementVector = acercarse(taxi.getMesh().Position.X, taxi.getMesh().Position.Z, VELOCIDAD * elapsedTime);
-                            rotacion = -FastMath.PI_HALF - Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
+                            float angulo = Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
+                            movementVector = Utils.movementVector( VELOCIDAD * elapsedTime, angulo);
+                            rotacion = -FastMath.PI_HALF - angulo;
                             this.caminar();
                         }
                         else
@@ -134,8 +135,9 @@ namespace AlumnoEjemplos.MiGrupo
                         {// el pasajero se bajo del taxi ahora camina hacia el destino
                             if (distanciaDest > 10)
                             {
-                                movementVector = this.acercarse(destino.X, destino.Z, VELOCIDAD * elapsedTime);
-                                rotacion = -FastMath.PI_HALF - Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, destino.X, destino.Z);
+                                float angulo = Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
+                                movementVector = Utils.movementVector(VELOCIDAD * elapsedTime, angulo);
+                                rotacion = -FastMath.PI_HALF - angulo;
                                 this.caminar();
                             }
                             else
