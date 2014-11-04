@@ -17,7 +17,6 @@ using TgcViewer.Utils.Shaders;
 using TgcViewer.Utils.Sound;
 using System.Windows.Forms;
 using TgcViewer.Utils.Terrain;
-using AlumnoEjemplos.MiGrupo.Optimizacion.GrillaRegular;
 
 namespace AlumnoEjemplos.MiGrupo
 {
@@ -86,7 +85,7 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.Modifiers.addBoolean("showBoundingBox", "Bouding Box", false);
 
             //Crear Grid Regular
-            Render.createGrid(ciudadScene, true);
+            Render.createGrid(ciudadScene, false);
 
             //Inicializacion de Shader
             envMap = new EnviromentMap();

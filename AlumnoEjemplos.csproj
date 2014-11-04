@@ -90,6 +90,9 @@
     <Compile Include="MiGrupo\Auto.cs" />
     <Compile Include="MiGrupo\AutoComun.cs" />
     <Compile Include="MiGrupo\Camara.cs" />
+    <Compile Include="MiGrupo\Optimizacion\Quadtree.cs" />
+    <Compile Include="MiGrupo\Optimizacion\QuadtreeBuilder.cs" />
+    <Compile Include="MiGrupo\Optimizacion\QuadtreeNode.cs" />
     <Compile Include="MiGrupo\Render.cs" />
     <Compile Include="MiGrupo\Config.cs" />
     <Compile Include="MiGrupo\Cronometro.cs" />
@@ -102,8 +105,6 @@
     <Compile Include="MiGrupo\Flecha.cs" />
     <Compile Include="MiGrupo\GameControl.cs" />
     <Compile Include="MiGrupo\Movement.cs" />
-    <Compile Include="MiGrupo\Optimizacion\GrillaRegular.cs" />
-    <Compile Include="MiGrupo\Optimizacion\GrillaRegularNode.cs" />
     <Compile Include="MiGrupo\Pasajero.cs" />
     <Compile Include="MiGrupo\Peaton.cs" />
     <Compile Include="MiGrupo\Persona.cs" />
