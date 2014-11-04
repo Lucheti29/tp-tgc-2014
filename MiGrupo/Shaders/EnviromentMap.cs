@@ -67,6 +67,8 @@ namespace AlumnoEjemplos.MiGrupo
                 // Genero las caras del enviroment map
                 for (CubeMapFace nFace = CubeMapFace.PositiveX; nFace <= CubeMapFace.NegativeZ; ++nFace)
                 {
+                    if (nFace != CubeMapFace.NegativeY)
+                    {
                     Surface pFace = g_pCubeMap.GetCubeMapSurface(nFace, 0);
                     device.SetRenderTarget(0, pFace);
                     Vector3 Dir, VUP;
@@ -126,8 +128,7 @@ namespace AlumnoEjemplos.MiGrupo
                     device.EndScene();
                     //string fname = string.Format("face{0:D}.bmp", nFace);
                     //SurfaceLoader.Save(fname, ImageFileFormat.Bmp, pFace);
-
-
+                    }
                 }
                 // restuaro el render target
                 device.SetRenderTarget(0, pOldRT);
