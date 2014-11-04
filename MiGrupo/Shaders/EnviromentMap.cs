@@ -120,7 +120,8 @@ namespace AlumnoEjemplos.MiGrupo
                     device.BeginScene();
 
                     //Renderizar 
-                    Render.renderScene(elapsedTime, true);
+                    //Render.renderScene(elapsedTime, true);
+                    Render.envRender();
 
                     device.EndScene();
                     //string fname = string.Format("face{0:D}.bmp", nFace);

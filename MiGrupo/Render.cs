@@ -54,5 +54,14 @@ namespace AlumnoEjemplos.MiGrupo
                 Auto.getInstance().render();
             }
         }
+
+        /// <summary>
+        /// Sólo se renderiza lo que necesita el envMap
+        /// En este caso, la ciudad
+        /// </summary>
+        public static void envRender()
+        {
+            _grid.render(GuiController.Instance.Frustum, false);
+        }
     }
 }
