@@ -74,15 +74,27 @@ namespace AlumnoEjemplos.MiGrupo
         
  
         /// <summary>      
-        /// retorna el vector movimiento para acercarse a un punto,con una velocidad y con un angulo dados  
+        /// Retorna el vector movimiento para acercarse a un punto,con una velocidad y con un angulo dados  
         /// </summary>
-        /// <param name="velocidad"></param>
-        /// <param name="angulo"></param>
-        /// <returns></returns>
         public static Vector3 movementVector(float velocidad,float angulo)
         {
             return new Vector3(FastMath.Cos(angulo) * velocidad, 0, FastMath.Sin(angulo) * velocidad);
 
+        }
+
+        /// <summary>
+        /// Retorna una matriz de transformación que tiene
+        /// la rotación aplicada
+        /// </summary>
+        public static Vector3 doblar(Vector3 movement, float elapsedTime, int angle)
+        {
+            float yaw = FastMath.ToRad(angle) * elapsedTime;
+            Matrix rotation = Matrix.RotationYawPitchRoll(yaw, 0, 0);
+
+            Vector4 transformedVec4 = Vector3.Transform(movement, rotation);
+            Vector3 transformedVec3 = new Vector3(transformedVec4.X, transformedVec4.Y, transformedVec4.Z);
+
+            return transformedVec3;
         }
     }
 }

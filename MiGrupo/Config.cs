@@ -12,8 +12,8 @@ namespace AlumnoEjemplos.MiGrupo
     {
         /// <summary>
         /// Config: se encarga de guardar toda la información
-        /// de entidades (pasajeros, autos, peatones), permitiendo
-        /// agregar nuevas de manera rápida
+        /// de entidades para su inicialización (pasajeros, autos, peatones), 
+        /// permitiendo agregar nuevas de manera rápida
         /// </summary>
 
         private static string alumnoMediaFolder = GuiController.Instance.AlumnoEjemplosMediaDir;

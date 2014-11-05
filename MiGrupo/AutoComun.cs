@@ -11,8 +11,12 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class AutoComun
     {
-        private TgcMesh _mesh;
+        /// <summary>
+        /// AutoComun: es un auto que va circulando por la ciudad
+        /// por medio de una ruta predefinida
+        /// </summary>
 
+        private TgcMesh _mesh;
         private TgcObb obb;
         private Vector3 _ptoRecorrido;
         private int i = 0;

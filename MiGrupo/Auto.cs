@@ -13,6 +13,11 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class Auto
     {
+        /// <summary>
+        /// Auto: es el objeto que se maneja por teclado.
+        /// Esta clase contiene toda la lógica de su física
+        /// </summary>
+
         static Auto _instance = new Auto();
 
         // --------------- Variables de instancia ---------------
@@ -97,10 +102,6 @@ namespace AlumnoEjemplos.MiGrupo
             }
         }
         #region movimiento
-        private void derrapar(Boolean right, Boolean left)
-        {
-            //TODO: hacer
-        }
 
         public void aplicarMovimiento()
         {
@@ -116,12 +117,7 @@ namespace AlumnoEjemplos.MiGrupo
             {
                 if (brake)
                 {
-                    if (right)
-                        derrapar(true, false);
-                    else if (left)
-                        derrapar(false, true);
-                    else
-                        _velocidad.frenar(_currentElapsedTime);
+                    _velocidad.frenar(_currentElapsedTime);
                 }
                 else if (left || right)
                 {
@@ -134,7 +130,7 @@ namespace AlumnoEjemplos.MiGrupo
                         sign = -1;
                     }
 
-                    _direccion = Movement.doblar(_direccion, _currentElapsedTime, yaw);
+                    _direccion = Utils.doblar(_direccion, _currentElapsedTime, yaw);
                     _direccion = Vector3.Normalize(_direccion);
 
                     //Calcular ángulo entre movimiento anterior y el nuevo

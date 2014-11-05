@@ -10,6 +10,10 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class Render
     {
+        /// <summary>
+        /// Render: se encarga de determinar qué
+        /// se va a renderizar en cada caso
+        /// </summary>
         private static Quadtree _quadtree;
         private static TgcScene _scene;
 

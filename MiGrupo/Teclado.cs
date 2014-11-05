@@ -11,6 +11,12 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class Teclado
     {
+        /// <summary>
+        /// Manejador del teclado: todos los objetos que
+        /// lo necesiten, se comunican con el teclado por medio
+        /// de la esta clase
+        /// </summary>
+
         Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
         static TgcD3dInput input = GuiController.Instance.D3dInput;
 

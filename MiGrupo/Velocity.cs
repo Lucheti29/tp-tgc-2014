@@ -7,6 +7,11 @@ namespace AlumnoEjemplos.MiGrupo.Entities
 {
     public class Velocity
     {
+        /// <summary>
+        /// Velocity: contiene toda la lógica de la 
+        /// velocidad del Auto
+        /// </summary>
+        /// 
         const float MAX_SPEED = 120f;
         const float MIN_SPEED = -60f;
         const float ACCELERATION = 5f;

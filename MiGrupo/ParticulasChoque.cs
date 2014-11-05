@@ -11,11 +11,15 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class ParticulasChoque
     {
+        /// <summary>
+        /// ParticulasChoque: emisor de particulas que se
+        /// genera por cada choque que tiene el auto
+        /// </summary>
+
         protected bool ejecutando;
         protected EmisorDeParticulas emisorParticulas;
         protected float time;
         protected Vector3 posiction;
-        //protected BoundingBox boundary;
         protected string name;
 
         public ParticulasChoque(Vector3 posicion)

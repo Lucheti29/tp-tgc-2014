@@ -10,6 +10,11 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class Peaton : Persona
     {
+        /// <summary>
+        /// Peaton: persona que no se sube al taxi y
+        /// tiene una ruta determinada por la cual caminar
+        /// </summary>
+
         private List<Vector3> _recorrido;
         private Vector3 _ptoRecorrido;
         private float rotacion;

@@ -11,9 +11,9 @@ namespace AlumnoEjemplos.MiGrupo
     public class GameControl
     {
         /// <summary>
-        /// GameControl: (por el momento) se encarga de
-        /// instanciar, controlar y eliminar todas las
-        /// entidades (autos, pasajeros, peatones)
+        /// GameControl: se encarga de instanciar
+        /// controlar y eliminar todas las entidades
+        /// (autos, pasajeros, peatones)
         /// </summary>
 
         private static GameControl _instance;
@@ -76,8 +76,6 @@ namespace AlumnoEjemplos.MiGrupo
 
             foreach (AutoComun auto in _listaAutoComun)
             {
-                //TODO ver si se quiere q se mueva el auto mientras no se esta viendo! 
-
                 if (Utils.getDistance(auto.getPosition().X, auto.getPosition().Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
                     auto.checkCollision();
@@ -111,8 +109,6 @@ namespace AlumnoEjemplos.MiGrupo
 
             foreach (AutoComun auto in _listaAutoComun)
             {
-                //TODO ver si se quiere q se mueva el auto mientras no se esta viendo! 
-
                 if (Utils.getDistance(auto.getPosition().X, auto.getPosition().Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
                     auto.checkCollision();

@@ -11,6 +11,11 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class Flecha
     {
+        /// <summary>
+        /// Flecha: es la flecha que se encuentra por encima
+        /// del auto y se actualiza su dirección en base al
+        /// destino del pasajero actual
+        /// </summary>
 
         private Vector3 _direccion = new Vector3(0, 0, -1);
         private Vector3 _objetivo;

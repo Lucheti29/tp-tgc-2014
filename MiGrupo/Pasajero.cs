@@ -10,10 +10,15 @@ using TgcViewer.Utils.TgcSkeletalAnimation;
 
 namespace AlumnoEjemplos.MiGrupo
 {
-
     public class Pasajero : Persona
     {
-        //_--para el metodo moverPasajero 
+        /// <summary>
+        /// Pasajero: es la persona que se sube al taxi
+        /// cuando se encuentra a una distancia determinada.
+        /// Al subir, se crea un triángulo en su destino y al llegar
+        /// se baja y camina hasta el mismo
+        /// </summary>
+
         private int t;
         private static float DISTANCIA = 200f;
         private float rotacion = 0;

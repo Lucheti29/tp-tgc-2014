@@ -13,6 +13,11 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class Cronometro
     {
+        /// <summary>
+        /// Cronometro: visualiza, por medio de sprites)
+        /// y controla la actualización del tiempo en pantalla
+        /// </summary>
+
         static Cronometro _instance = new Cronometro();
         public float TiempoTotal { get; set; }
         private bool _activated = true;

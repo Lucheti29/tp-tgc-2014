@@ -11,6 +11,11 @@ namespace AlumnoEjemplos.MiGrupo
 {
     public class Persona
     {
+        /// <summary>
+        /// Persona: clase padre de Pasajero y Peaton
+        /// Describe la lógica común a estos dos (caminar, moverse, parar)
+        /// </summary>
+
        protected TgcSkeletalMesh pasajeroMesh;
        protected string[] animationList;
        //---propiedades
