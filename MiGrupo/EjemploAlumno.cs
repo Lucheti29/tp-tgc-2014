@@ -26,6 +26,8 @@ namespace AlumnoEjemplos.MiGrupo
         TgcScene ciudadScene;
         EnviromentMap envMap;
 
+        ParticulasChoque choque;
+
         public override string getCategory()
         {
             return "AlumnoEjemplos";
@@ -105,10 +107,14 @@ namespace AlumnoEjemplos.MiGrupo
             Teclado.handlear();
             Flecha.getInstance().calculate(elapsedTime);
             GameControl.getInstance().calculate(elapsedTime);
-            Auto.getInstance().checkCollision();
+            if (Auto.getInstance().checkCollision())
+            {
+                choque = new ParticulasChoque(Auto.getInstance().getMesh().Position + new Vector3(0, 15, 0));
+            }
+
             Auto.getInstance().calculate(elapsedTime);
 
-            TgcMp3Player player = GuiController.Instance.Mp3Player;
+            /*TgcMp3Player player = GuiController.Instance.Mp3Player;
             TgcMp3Player.States currentState = player.getStatus();
             if (currentState == TgcMp3Player.States.Open)
             {
@@ -120,10 +126,15 @@ namespace AlumnoEjemplos.MiGrupo
                 //Parar y reproducir MP3
                 player.closeFile();
                 player.play(true);
-            }
+            }*/
 
             //El Shader llama al render
             envMap.calculate(elapsedTime);
+
+            if (choque != null)
+            {
+                choque.render(elapsedTime);
+            }
         }
 
         public override void close()

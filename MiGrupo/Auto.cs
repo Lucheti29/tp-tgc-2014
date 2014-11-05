@@ -168,7 +168,7 @@ namespace AlumnoEjemplos.MiGrupo
         }
         #endregion movimiento
 
-        public void checkCollision()
+        public bool checkCollision()
         { 
             _collisionFound = false;
             foreach (TgcObb obstaculo in _obstaculos)
@@ -179,6 +179,8 @@ namespace AlumnoEjemplos.MiGrupo
                     break;
                 }
             }
+
+            return _collisionFound;
         }
 
         public void calculate(float elapsedTime)

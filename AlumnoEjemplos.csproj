@@ -90,9 +90,14 @@
     <Compile Include="MiGrupo\Auto.cs" />
     <Compile Include="MiGrupo\AutoComun.cs" />
     <Compile Include="MiGrupo\Camara.cs" />
+    <Compile Include="MiGrupo\ParticulasChoque.cs" />
     <Compile Include="MiGrupo\Optimizacion\Quadtree.cs" />
     <Compile Include="MiGrupo\Optimizacion\QuadtreeBuilder.cs" />
     <Compile Include="MiGrupo\Optimizacion\QuadtreeNode.cs" />
+    <Compile Include="MiGrupo\Particulas\ColaDeParticulas.cs" />
+    <Compile Include="MiGrupo\Particulas\EmisorDeParticulas.cs" />
+    <Compile Include="MiGrupo\Particulas\Particula.cs" />
+    <Compile Include="MiGrupo\Particulas\PilaDeParticulas.cs" />
     <Compile Include="MiGrupo\Render.cs" />
     <Compile Include="MiGrupo\Config.cs" />
     <Compile Include="MiGrupo\Cronometro.cs" />
