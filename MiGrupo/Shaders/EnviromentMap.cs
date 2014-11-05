@@ -122,7 +122,6 @@ namespace AlumnoEjemplos.MiGrupo
                     device.BeginScene();
 
                     //Renderizar 
-                    //Render.renderScene(elapsedTime, true);
                     Render.envRender();
 
                     device.EndScene();

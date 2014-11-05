@@ -14,19 +14,38 @@ namespace AlumnoEjemplos.MiGrupo
         /// Render: se encarga de determinar qué
         /// se va a renderizar en cada caso
         /// </summary>
-        private static Quadtree _quadtree;
-        private static TgcScene _scene;
 
+        private static Quadtree _quadtree1; //Incluye todos los meshes de la ciudad
+        private static Quadtree _quadtree2; //Incluye todos los meshes excepto la vereda y la calle (para el env map)
+        private static TgcScene _scene;
+        private static List<TgcMesh> _reduceMeshes;
+        private static List<TgcMesh> _vereda;
+
+        /// <summary>
+        /// Crea 2 quadtree: uno con todos los modelos (174 meshes)
+        /// de la ciudad y otro igual pero sin la vereda (150 meshes)
+        /// (esta ultima no le sirve al EnvMap)
+        /// </summary>
         public static void createGrid(TgcScene scene, bool debug)
         {
             _scene = scene;
 
-            _quadtree = new Quadtree();
-            _quadtree.create(scene.Meshes, scene.BoundingBox);
+            _scene.separeteMeshList(new string[] { "Vereda" }, out _vereda, out _reduceMeshes);
+
+            _quadtree1 = new Quadtree();
+            _quadtree1.create(_scene.Meshes, scene.BoundingBox);
 
             if(debug)
             {
-                _quadtree.createDebugQuadtreeMeshes();
+                _quadtree1.createDebugQuadtreeMeshes();
+            }
+
+            _quadtree2 = new Quadtree();
+            _quadtree2.create(_reduceMeshes, scene.BoundingBox);
+
+            if (debug)
+            {
+                _quadtree2.createDebugQuadtreeMeshes();
             }
         }
 
@@ -40,7 +59,7 @@ namespace AlumnoEjemplos.MiGrupo
             //Render
             GameControl.getInstance().renderAll();
             Flecha.getInstance().render();
-            _quadtree.render(GuiController.Instance.Frustum, false);
+            _quadtree1.render(GuiController.Instance.Frustum, false);
 
             //Muestra los Bounding Box de la escena (edificios)
             if (showBB)
@@ -61,11 +80,11 @@ namespace AlumnoEjemplos.MiGrupo
 
         /// <summary>
         /// Sólo se renderiza lo que necesita el envMap
-        /// En este caso, la ciudad
+        /// En este caso, los edificios (sin el piso)
         /// </summary>
         public static void envRender()
         {
-            _quadtree.render(GuiController.Instance.Frustum, false);
+            _quadtree2.render(GuiController.Instance.Frustum, false);
         }
     }
 }
