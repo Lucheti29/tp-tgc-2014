@@ -196,7 +196,7 @@ namespace AlumnoEjemplos.MiGrupo
             {
                 _velocidad = new Velocity();
                 Sonido.getInstance().play(GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTO\\sonidos\\auto-choquePequeño.wav",false);
-                if (!foward)//puede haber problemas con el rebote
+               /* if (!foward)//puede haber problemas con el rebote
                 {
                     _velocidad.setAmount(120f, elapsedTime);
                     foward = true;
@@ -204,7 +204,8 @@ namespace AlumnoEjemplos.MiGrupo
                 else
                 {
                     _velocidad.setAmount(120f * -1, elapsedTime);
-                }
+                }*/
+                _velocidad.setAmount(120f * -1, elapsedTime);
             }
         }
 

@@ -34,8 +34,7 @@ namespace AlumnoEjemplos.MiGrupo
             TgcScene scene = loader.loadSceneFromFile(archXML);
 
             this._mesh = scene.Meshes[0];
-            //Computar OBB a partir del AABB del mesh. Inicialmente genera el mismo volumen que el AABB, pero luego te permite rotarlo (cosa que el AABB no puede)
-            obb = TgcObb.computeFromAABB(this._mesh.BoundingBox);
+            
 
         }
         public void calculate(float elapsedTime)
@@ -51,6 +50,12 @@ namespace AlumnoEjemplos.MiGrupo
             
         }
 
+        private void createObb(Vector3 pos)
+        {
+            //Computar OBB a partir del AABB del mesh. Inicialmente genera el mismo volumen que el AABB, pero luego te permite rotarlo (cosa que el AABB no puede)
+            obb = TgcObb.computeFromAABB(this._mesh.BoundingBox);
+
+        }
         public void checkCollision( )
         { //el objeto con el q puede colisionar el AutoComun es el taxi
             _collisionFound = false;
@@ -60,6 +65,10 @@ namespace AlumnoEjemplos.MiGrupo
                 _collisionFound = true; 
             }
 
+        }
+        public TgcObb getOBB()
+        {
+            return obb;
         }
         public TgcMesh getMesh()
         {
@@ -74,7 +83,14 @@ namespace AlumnoEjemplos.MiGrupo
         public void setPosition(Vector3 pos)
         {
             _mesh.Position = pos;
-            obb.move( pos);
+            if (obb == null)
+            {
+                createObb(pos);
+            }
+            else
+            {
+                obb.move(pos);
+            }
         }
 
         public Vector3 getPosition()
@@ -97,7 +113,7 @@ namespace AlumnoEjemplos.MiGrupo
                 rotacion = -FastMath.PI_HALF - angulo;
                 float antirotar = _mesh.Rotation.Y;
                 _mesh.rotateY(rotacion - antirotar);
-                obb.rotate(new Vector3(0, rotacion - antirotar, 0));
+                //obb.rotate(new Vector3(0, rotacion - antirotar, 0));
                 _mesh.move(movementVector);
                 obb.move(movementVector);
              
@@ -119,12 +135,12 @@ namespace AlumnoEjemplos.MiGrupo
         {
             _mesh.render();
             obb.updateValues();
-            //Ver si hay que mostrar el BoundingBox
+            //Ver si hay que mostrar el obb
             if ((bool)GuiController.Instance.Modifiers.getValue("showBoundingBox"))
             {
                
                 obb.render();
-                _mesh.BoundingBox.render();
+               // _mesh.BoundingBox.render();
             }
         }
     }

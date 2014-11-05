@@ -69,6 +69,11 @@ namespace AlumnoEjemplos.MiGrupo
             Flecha.getInstance().show();
 
             Camara.inicializar(Auto.getInstance().getPosicion());
+            Camara.getObstaculos().AddRange(ciudadScene.Meshes);
+            //Modifiers para modificar propiedades de la camara. pueden servir para ajustar el env map
+            GuiController.Instance.Modifiers.addFloat("offsetHeight", 0, 300, 100);
+            GuiController.Instance.Modifiers.addFloat("offsetForward", -400, 400, -300);
+            GuiController.Instance.Modifiers.addVertex3f("displacement", new Vector3(0, 0, 0), new Vector3(100, 200, 500), new Vector3(0, 100, 300));
 
             GameControl.getInstance().inicializar();
 
