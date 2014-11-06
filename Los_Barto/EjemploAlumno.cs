@@ -72,15 +72,10 @@ namespace AlumnoEjemplos.Los_Barto
 
             Camara.inicializar(Auto.getInstance().getPosicion());
             Camara.getObstaculos().AddRange(ciudadScene.Meshes);
-            //Modifiers para modificar propiedades de la camara. pueden servir para ajustar el env map
-            GuiController.Instance.Modifiers.addFloat("offsetHeight", 0, 300, 160);
-            GuiController.Instance.Modifiers.addFloat("offsetForward", -400, 400, -300);
-            
 
             EntitiesControl.getInstance().inicializar();
 
             GuiController.Instance.UserVars.addVar("velocidad");
-            GuiController.Instance.UserVars.addVar("PosTaxi",Auto.getInstance().getPosicion());
 
             //Modifier para habilitar o no el renderizado del BoundingBox del personaje
             GuiController.Instance.Modifiers.addBoolean("showBoundingBox", "Bouding Box", false);
@@ -111,8 +106,6 @@ namespace AlumnoEjemplos.Los_Barto
             }
 
             Auto.getInstance().calculate(elapsedTime);
-
-            GuiController.Instance.UserVars.setValue("PosTaxi", Auto.getInstance().getPosicion());
 
             //El Shader llama al render
             envMap.calculate(elapsedTime);

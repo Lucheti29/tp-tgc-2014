@@ -44,8 +44,8 @@ namespace AlumnoEjemplos.Los_Barto
         {
 
             TgcThirdPersonCamera camera = GuiController.Instance.ThirdPersonCamera;
-            camera.OffsetHeight = (float)GuiController.Instance.Modifiers["offsetHeight"];
-            camera.OffsetForward = (float)GuiController.Instance.Modifiers["offsetForward"];
+			camera.OffsetHeight = 160;
+            camera.OffsetForward = -300;
             
             //Pedirle a la camara cual va a ser su proxima posicion
             Vector3 segmentA;
