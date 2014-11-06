@@ -18,8 +18,6 @@ namespace AlumnoEjemplos.MiGrupo
 
         private static GameControl _instance;
 
-        private static int VIEW_DISTANCE = 1250;
-
         private List<Pasajero> _listaPas = new List<Pasajero>();
         private List<AutoComun> _listaAutoComun = new List<AutoComun>();
         private List<Peaton> _listaPeatones = new List<Peaton>();
@@ -76,32 +74,17 @@ namespace AlumnoEjemplos.MiGrupo
 
             foreach (AutoComun auto in _listaAutoComun)
             {
-                if (Utils.getDistance(auto.getPosition().X, auto.getPosition().Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
-                {
-                   
-                    auto.calculate(elapsedTime);
-                }
+                auto.calculate(elapsedTime);
             }
             
             foreach ( Peaton peaton in _listaPeatones)
             {
-                if (Utils.getDistance(peaton.posicion.X, peaton.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
-                {
-                    
-                    peaton.move(elapsedTime);
-                }
+                peaton.move(elapsedTime);
             }
 
             foreach (Pasajero pas in _listaPas)
             {
-                GuiController.Instance.UserVars.setValue("posPas", pas.posicion);
-                GuiController.Instance.UserVars.setValue("posTaxi", Auto.getInstance().getMesh().Position);
-
-                if (Utils.getDistance(pas.posicion.X, pas.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
-                {
-                    
-                    pas.move(elapsedTime);
-                }
+                pas.move(elapsedTime);
             }
         }
 
@@ -111,28 +94,19 @@ namespace AlumnoEjemplos.MiGrupo
 
             foreach (AutoComun auto in _listaAutoComun)
             {
-                if (Utils.getDistance(auto.getPosition().X, auto.getPosition().Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
-                {
-                    auto.checkCollision();
-                    auto.render();
-                }
+                auto.checkCollision();
+                auto.render();
             }
             foreach (Peaton peaton in _listaPeatones)
             {
-                if (Utils.getDistance(peaton.posicion.X, peaton.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
-                {
-                    peaton.checkCollision();
-                    peaton.render();
-                }
+                peaton.checkCollision();
+                peaton.render();
             }
 
             foreach (Pasajero pas in _listaPas)
             {
-                if (Utils.getDistance(pas.posicion.X, pas.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
-                {
-                    pas.checkCollision();
-                    pas.render();
-                }
+                pas.checkCollision();
+                pas.render();
             }
         }
 

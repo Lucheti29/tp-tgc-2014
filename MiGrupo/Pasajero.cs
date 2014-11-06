@@ -56,8 +56,6 @@ namespace AlumnoEjemplos.MiGrupo
             Auto taxi = Auto.getInstance();
             if (!this.viajando && !this.llego && !this.bajo)
             {//EL PASAJERO ESPERA EL TAXI
-                Vector3 posTaxi = new Vector3(taxi.getMesh().Position.X, taxi.getMesh().Position.Y, taxi.getMesh().Position.Z);
-
                 t++; //t es un contador de frames
                 /* 
                  * I.A. del Pasajero
@@ -69,8 +67,6 @@ namespace AlumnoEjemplos.MiGrupo
                 {
 
                     float distanciaAlTaxi = Utils.getDistance(_mesh.Position.X, _mesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
-
-                    //  GuiController.Instance.UserVars.setValue("DistTaxi", distanciaAlTaxi);
 
                     if (distanciaAlTaxi < DISTANCIA && !taxi.llevaPasajero())
                     {
@@ -127,8 +123,6 @@ namespace AlumnoEjemplos.MiGrupo
                     {
 
                         float distanciaDest = Utils.getDistance(_mesh.Position.X, _mesh.Position.Z, this.destino.X, this.destino.Z);//la distancia del pasajero(dentro del taxi) al destino
-
-                        //  GuiController.Instance.UserVars.setValue("distDest", distanciaDest);
 
                         if (distanciaDest < 200 && this.viajando && (taxi.getVelocity() < 5 && taxi.getVelocity() > -5))
                         {//EL PASAJERO DEBE BAJARSE DEL TAXI ->se habilita el mesh del pasajero  

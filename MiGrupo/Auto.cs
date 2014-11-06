@@ -91,6 +91,7 @@ namespace AlumnoEjemplos.MiGrupo
         {
             _llevaPasajero = true;
             _objetivo = destino;
+            Flecha.getInstance().show();
         }
 
         public void bajaPasajero()
@@ -100,6 +101,7 @@ namespace AlumnoEjemplos.MiGrupo
             {
                 _objetivo = _pasajeros[_nroPasaj++];
             }
+            Flecha.getInstance().hide();
         }
         #region movimiento
 
