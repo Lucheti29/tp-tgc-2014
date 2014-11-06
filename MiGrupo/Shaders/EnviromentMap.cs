@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using TgcViewer;
+using TgcViewer.Utils;
 using TgcViewer.Utils.Shaders;
 using TgcViewer.Utils.TgcSceneLoader;
 
@@ -15,6 +16,7 @@ namespace AlumnoEjemplos.MiGrupo
     public class EnviromentMap
     {
       /* aca iria toda la logica del env map*/
+        Microsoft.DirectX.Direct3D.Device device = GuiController.Instance.D3dDevice;
         Microsoft.DirectX.Direct3D.Effect _effect;
         private float kc, kx;
 
@@ -43,7 +45,6 @@ namespace AlumnoEjemplos.MiGrupo
             if ((bool)GuiController.Instance.Modifiers.getValue("cubicMap"))
             {
                 //--------------------inicio del hardcodeo del enviroment map 
-                Microsoft.DirectX.Direct3D.Device device = GuiController.Instance.D3dDevice;
                 Control panel3d = GuiController.Instance.Panel3d;
                 float aspectRatio = (float)panel3d.Width / (float)panel3d.Height;
 
@@ -54,8 +55,8 @@ namespace AlumnoEjemplos.MiGrupo
                 _effect.SetValue("kc", (float)GuiController.Instance.Modifiers["Refraccion"]);
                 _effect.SetValue("usar_fresnel", (bool)GuiController.Instance.Modifiers["Fresnel"]);
 
-                // --------------------------------------------------------------------
                 device.EndScene();
+                // --------------------------------------------------------------------
                 CubeTexture g_pCubeMap = new CubeTexture(device, 256, 1, Usage.RenderTarget, Format.A16B16G16R16F, Pool.Default);
                 Surface pOldRT = device.GetRenderTarget(0);
                 // ojo: es fundamental que el fov sea de 90 grados.
@@ -145,8 +146,15 @@ namespace AlumnoEjemplos.MiGrupo
 
                 _effect.SetValue("g_txCubeMap", g_pCubeMap);
                 Render.renderScene(elapsedTime, false);
+
+                device.EndScene();
+
                 g_pCubeMap.Dispose();
                 //----fin del hardcodeo del envMap
+
+                //Mostrar FPS
+                device.BeginScene();
+                GuiController.Instance.Text3d.drawText("FPS: " + HighResolutionTimer.Instance.FramesPerSecond, 0, 0, Color.Yellow);
             }
             else
             {
