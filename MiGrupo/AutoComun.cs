@@ -21,7 +21,7 @@ namespace AlumnoEjemplos.MiGrupo
         private Vector3 _ptoRecorrido;
         private int i = 0;
         private float _velocidad = 100f;
-       
+
 
         private float rotacion = 0;
         private List<Vector3> _recorrido;
@@ -38,7 +38,7 @@ namespace AlumnoEjemplos.MiGrupo
             TgcScene scene = loader.loadSceneFromFile(archXML);
 
             this._mesh = scene.Meshes[0];
-            
+
 
         }
         public void calculate(float elapsedTime)
@@ -52,7 +52,7 @@ namespace AlumnoEjemplos.MiGrupo
                 //this.setPosition(_lastPosition);
                 _mesh.Position = _lastPosition;
             }
-            
+
         }
 
         private void createObb(Vector3 pos)
@@ -61,13 +61,13 @@ namespace AlumnoEjemplos.MiGrupo
             obb = TgcObb.computeFromAABB(this._mesh.BoundingBox);
 
         }
-        public void checkCollision( )
+        public void checkCollision()
         { //el objeto con el q puede colisionar el AutoComun es el taxi
             _collisionFound = false;
-         
+
             if (TgcCollisionUtils.testObbObb(this.obb, Auto.getInstance().orientedBB()))
-            {   
-                _collisionFound = true; 
+            {
+                _collisionFound = true;
             }
 
         }
@@ -120,7 +120,7 @@ namespace AlumnoEjemplos.MiGrupo
                     rotacion = -FastMath.PI_HALF - angulo;
                     float antirotar = _mesh.Rotation.Y;
                     _mesh.rotateY(rotacion - antirotar);
-                    //obb.rotate(new Vector3(0, rotacion - antirotar, 0));
+                    obb.rotate(new Vector3(0, rotacion - antirotar, 0));
                     _mesh.move(movementVector);
                     obb.move(movementVector);
 
@@ -137,16 +137,16 @@ namespace AlumnoEjemplos.MiGrupo
             }
         }
 
-    
+
 
         public void render()
         {
             _mesh.render();
-            obb.updateValues();
+            //  obb.updateValues();
             //Ver si hay que mostrar el obb
             if ((bool)GuiController.Instance.Modifiers.getValue("showBoundingBox"))
             {
-               
+
                 obb.render();
             }
         }
