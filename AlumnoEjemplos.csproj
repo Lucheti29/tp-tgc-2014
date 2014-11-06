@@ -108,7 +108,7 @@
     <Compile Include="MiGrupo\Enums\InputType.cs" />
     <Compile Include="MiGrupo\Shaders\EnviromentMap.cs" />
     <Compile Include="MiGrupo\Flecha.cs" />
-    <Compile Include="MiGrupo\GameControl.cs" />
+    <Compile Include="MiGrupo\EntitiesControl.cs" />
     <Compile Include="MiGrupo\Pasajero.cs" />
     <Compile Include="MiGrupo\Peaton.cs" />
     <Compile Include="MiGrupo\Persona.cs" />
