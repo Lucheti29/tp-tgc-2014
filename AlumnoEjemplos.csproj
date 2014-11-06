@@ -90,6 +90,7 @@
     <Compile Include="MiGrupo\Auto.cs" />
     <Compile Include="MiGrupo\AutoComun.cs" />
     <Compile Include="MiGrupo\Camara.cs" />
+    <Compile Include="MiGrupo\Skybox.cs" />
     <Compile Include="MiGrupo\ParticulasChoque.cs" />
     <Compile Include="MiGrupo\Optimizacion\Quadtree.cs" />
     <Compile Include="MiGrupo\Optimizacion\QuadtreeBuilder.cs" />

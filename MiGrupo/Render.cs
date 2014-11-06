@@ -70,6 +70,8 @@ namespace AlumnoEjemplos.MiGrupo
                 }
             }
 
+            Skybox.render();
+
             if (!cubemap)
             {
                 // dibujo el mesh
@@ -84,6 +86,7 @@ namespace AlumnoEjemplos.MiGrupo
         /// </summary>
         public static void envRender()
         {
+            Skybox.render();
             _quadtree2.render(GuiController.Instance.Frustum, false);
         }
     }
