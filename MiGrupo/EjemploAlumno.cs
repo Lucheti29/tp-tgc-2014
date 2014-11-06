@@ -77,7 +77,7 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.Modifiers.addFloat("offsetForward", -400, 400, -300);
             GuiController.Instance.Modifiers.addVertex3f("displacement", new Vector3(0, 0, 0), new Vector3(100, 200, 500), new Vector3(0, 100, 300));
 
-            GameControl.getInstance().inicializar();
+            EntitiesControl.getInstance().inicializar();
 
             GuiController.Instance.UserVars.addVar("velocidad");
             
@@ -101,7 +101,7 @@ namespace AlumnoEjemplos.MiGrupo
             //Calculos de movimiento previos
             Teclado.handlear();
             Flecha.getInstance().calculate(elapsedTime);
-            GameControl.getInstance().calculate(elapsedTime);
+            EntitiesControl.getInstance().calculate(elapsedTime);
             if (Auto.getInstance().checkCollision())
             {
                 choque = new ParticulasChoque(Auto.getInstance().getMesh().Position + new Vector3(0, 15, 0));
@@ -136,7 +136,7 @@ namespace AlumnoEjemplos.MiGrupo
         {
             Auto.getInstance().getMesh().dispose();
             ciudadScene.disposeAll();
-            GameControl.getInstance().disposeAll();
+            EntitiesControl.getInstance().disposeAll();
             Flecha.getInstance().dispose();
             envMap.dispose();
             Skybox.dispose();

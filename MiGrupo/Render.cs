@@ -57,7 +57,7 @@ namespace AlumnoEjemplos.MiGrupo
             //ciudadScene.renderAll();
 
             //Render
-            GameControl.getInstance().renderAll();
+            EntitiesControl.getInstance().renderAll();
             Flecha.getInstance().render();
             _quadtree1.render(GuiController.Instance.Frustum, false);
 

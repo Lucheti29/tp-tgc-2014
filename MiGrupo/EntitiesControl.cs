@@ -8,7 +8,7 @@ using TgcViewer.Utils.TgcGeometry;
 
 namespace AlumnoEjemplos.MiGrupo
 {
-    public class GameControl
+    public class EntitiesControl
     {
         /// <summary>
         /// GameControl: se encarga de instanciar
@@ -16,7 +16,7 @@ namespace AlumnoEjemplos.MiGrupo
         /// (autos, pasajeros, peatones)
         /// </summary>
 
-        private static GameControl _instance;
+        private static EntitiesControl _instance;
 
         private List<Pasajero> _listaPas = new List<Pasajero>();
         private List<AutoComun> _listaAutoComun = new List<AutoComun>();
@@ -70,7 +70,7 @@ namespace AlumnoEjemplos.MiGrupo
 
         public void calculate(float elapsedTime)
         {
-            Cronometro.getInstance().controlarTiempo(elapsedTime, GameControl.getInstance().getListaPasajeros().TrueForAll(llego));
+            Cronometro.getInstance().controlarTiempo(elapsedTime, EntitiesControl.getInstance().getListaPasajeros().TrueForAll(llego));
 
             foreach (AutoComun auto in _listaAutoComun)
             {
@@ -128,11 +128,11 @@ namespace AlumnoEjemplos.MiGrupo
             return pas.llego == true;
         }
 
-        public static GameControl getInstance()
+        public static EntitiesControl getInstance()
         {
             if (_instance == null)
             {
-                _instance = new GameControl();
+                _instance = new EntitiesControl();
             }
 
             return _instance;
