@@ -22,7 +22,7 @@ namespace AlumnoEjemplos.MiGrupo
         private int t;
         private static float DISTANCIA = 200f;
         private float rotacion = 0;
-        
+
         private bool bajo = false;
         public Vector3 destino { get; set; }
         public bool llego { set; get; }
@@ -48,7 +48,7 @@ namespace AlumnoEjemplos.MiGrupo
         }
 
 
-       
+
 
         public override void move(float elapsedTime)
         {
@@ -68,16 +68,16 @@ namespace AlumnoEjemplos.MiGrupo
                 if (t < 140)
                 {
 
-                    float distanciaAlTaxi = Utils.getDistance(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
+                    float distanciaAlTaxi = Utils.getDistance(_mesh.Position.X, _mesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
 
-                    GuiController.Instance.UserVars.setValue("DistTaxi", distanciaAlTaxi);
+                    //  GuiController.Instance.UserVars.setValue("DistTaxi", distanciaAlTaxi);
 
                     if (distanciaAlTaxi < DISTANCIA && !taxi.llevaPasajero())
                     {
                         if (distanciaAlTaxi >= 70)
                         {//EL TAXI ESTA CERCA -> el pasaj intenta subirse
-                            float angulo = Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
-                            movementVector = Utils.movementVector( VELOCIDAD * elapsedTime, angulo);
+                            float angulo = Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
+                            movementVector = Utils.movementVector(VELOCIDAD * elapsedTime, angulo);
                             rotacion = -FastMath.PI_HALF - angulo;
                             this.caminar();
                         }
@@ -85,14 +85,18 @@ namespace AlumnoEjemplos.MiGrupo
                         {
                             if (taxi.getVelocity() < 5 && taxi.getVelocity() > -5)
                             {
-                                //EL PASAJERO SE SUBIO AL TAXI-> se deshabilita el renderizado del pasajeroMesh
-                                this.parar();
-                                pasajeroMesh.Enabled = false;
-                                this.marcaDestino.Enabled = true;
-                                pasajeroMesh.Position = taxi.getMesh().Position;
-                                this.viajando = true;
-                                taxi.subePasajero(this.destino);
-                                GuiController.Instance.UserVars.setValue("posDest", this.destino);
+
+                                if (_collisionFound)
+                                { //EL PASAJERO SE SUBIO AL TAXI-> se deshabilita el renderizado del pasajeroMesh
+                                    this.parar();
+                                    _mesh.Enabled = false;
+
+                                    this.marcaDestino.Enabled = true;
+                                    _mesh.Position = taxi.getMesh().Position;
+                                    this.viajando = true;
+                                    taxi.subePasajero(this.destino);
+
+                                }
                             }
                         }
                     }
@@ -112,7 +116,7 @@ namespace AlumnoEjemplos.MiGrupo
                 {//EL PASAJERO ESTA VIAJANDO EN EL TAXI-> la posicion del pasajero es la del taxi
                     if (this.viajando)
                     {
-                        pasajeroMesh.Position = taxi.getMesh().Position;
+                        _mesh.Position = taxi.getMesh().Position;
 
                     }
 
@@ -122,14 +126,15 @@ namespace AlumnoEjemplos.MiGrupo
                     if (t < 140)
                     {
 
-                        float distanciaDest = Utils.getDistance(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, this.destino.X, this.destino.Z);//la distancia del pasajero(dentro del taxi) al destino
+                        float distanciaDest = Utils.getDistance(_mesh.Position.X, _mesh.Position.Z, this.destino.X, this.destino.Z);//la distancia del pasajero(dentro del taxi) al destino
 
-                        GuiController.Instance.UserVars.setValue("distDest", distanciaDest);
+                        //  GuiController.Instance.UserVars.setValue("distDest", distanciaDest);
 
                         if (distanciaDest < 200 && this.viajando && (taxi.getVelocity() < 5 && taxi.getVelocity() > -5))
                         {//EL PASAJERO DEBE BAJARSE DEL TAXI ->se habilita el mesh del pasajero  
-                            pasajeroMesh.Enabled = true;
-                            this.posicionar(taxi.getPosicion().X + 10, taxi.getPosicion().Z + 10);
+
+
+                            this._mesh.Position = new Vector3(taxi.getPosicion().X, 5, taxi.getPosicion().Z);
                             this.viajando = false;
                             this.bajo = true;
                             Cronometro.getInstance().incrementar(10);
@@ -138,16 +143,20 @@ namespace AlumnoEjemplos.MiGrupo
                         }
                         if (!this.viajando)
                         {// el pasajero se bajo del taxi ahora camina hacia el destino
+                            if (!_collisionFound)
+                            {
+                                _mesh.Enabled = true;
+                            }
                             if (distanciaDest > 10)
                             {
-                                float angulo = Utils.calculateAngle(pasajeroMesh.Position.X, pasajeroMesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
+
+                                float angulo = Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, destino.X, destino.Z);
                                 movementVector = Utils.movementVector(VELOCIDAD * elapsedTime, angulo);
                                 rotacion = -FastMath.PI_HALF - angulo;
                                 this.caminar();
                             }
                             else
                             {
-
                                 this.llego = true;
                                 this.parar();
                                 marcaDestino.Enabled = false;
@@ -159,28 +168,42 @@ namespace AlumnoEjemplos.MiGrupo
                     }
                     else
                         t = 0;
-
                 }
-
             }
-            float antirotar = pasajeroMesh.Rotation.Y;
-            pasajeroMesh.rotateY(rotacion - antirotar);
-            pasajeroMesh.move(movementVector);
+            float antirotar = _mesh.Rotation.Y;
+            _mesh.rotateY(rotacion - antirotar);
+            _mesh.move(movementVector);
+
         }
 
- 
+
 
         public override void render()
         {
-            pasajeroMesh.animateAndRender();
+            _mesh.updateAnimation();
+            /* Vector3 lastpos = new Vector3();
+             _mesh.getPosition(lastpos);
+             if (_collisionFound)
+             {
+                 this.posicionar(lastpos);
+             }*/
+            _mesh.render();
+
+            if ((bool)GuiController.Instance.Modifiers.getValue("showBoundingBox"))
+            {
+
+                _mesh.BoundingBox.render();
+            }
             marcaDestino.render();
         }
 
         public override void dispose()
         {
-            pasajeroMesh.dispose();
+            _mesh.dispose();
+
             marcaDestino.dispose();
         }
     }
 }
+
 

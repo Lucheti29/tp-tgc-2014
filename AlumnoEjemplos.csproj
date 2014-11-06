@@ -90,7 +90,6 @@
     <Compile Include="MiGrupo\Auto.cs" />
     <Compile Include="MiGrupo\AutoComun.cs" />
     <Compile Include="MiGrupo\Camara.cs" />
-    <Compile Include="MiGrupo\Skybox.cs" />
     <Compile Include="MiGrupo\ParticulasChoque.cs" />
     <Compile Include="MiGrupo\Optimizacion\Quadtree.cs" />
     <Compile Include="MiGrupo\Optimizacion\QuadtreeBuilder.cs" />
@@ -113,6 +112,7 @@
     <Compile Include="MiGrupo\Pasajero.cs" />
     <Compile Include="MiGrupo\Peaton.cs" />
     <Compile Include="MiGrupo\Persona.cs" />
+    <Compile Include="MiGrupo\Skybox.cs" />
     <Compile Include="MiGrupo\Sonidos.cs" />
     <Compile Include="MiGrupo\Teclado.cs" />
     <Compile Include="MiGrupo\Utils.cs" />
@@ -146,6 +146,7 @@
     <None Include="AlumnoMedia\LOS_BARTO\ciudad\ciudad.max" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AlumnoMedia\LOS_BARTO\blood1.png" />
     <Content Include="AlumnoMedia\LOS_BARTO\ciudad\ciudad-TgcScene.xml" />
     <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Door Rusty.jpg" />
     <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Floor.jpg" />

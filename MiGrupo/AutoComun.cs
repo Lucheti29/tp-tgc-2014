@@ -49,7 +49,8 @@ namespace AlumnoEjemplos.MiGrupo
             this.move(elapsedTime);
             if (_collisionFound)
             {
-                this.setPosition(_lastPosition);
+                //this.setPosition(_lastPosition);
+                _mesh.Position = _lastPosition;
             }
             
         }
@@ -107,29 +108,32 @@ namespace AlumnoEjemplos.MiGrupo
             _recorrido = recorrido;
             _ptoRecorrido = recorrido[0];
         }
-     
+
         public void move(float elapsedtime)
         {
-            if (Utils.getDistance(_ptoRecorrido.X, _ptoRecorrido.Z, this.getPosition().X,this.getPosition().Z) > 1)
+            if (!_collisionFound)
             {
-                float angulo = Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, _ptoRecorrido.X, _ptoRecorrido.Z);
-                Vector3 movementVector = Utils.movementVector(_velocidad * elapsedtime, angulo);
-                rotacion = -FastMath.PI_HALF - angulo;
-                float antirotar = _mesh.Rotation.Y;
-                _mesh.rotateY(rotacion - antirotar);
-                //obb.rotate(new Vector3(0, rotacion - antirotar, 0));
-                _mesh.move(movementVector);
-                obb.move(movementVector);
-             
-            }
-            else
-            {
-                i++;
-                if (i >= _recorrido.Count)
+                if (Utils.getDistance(_ptoRecorrido.X, _ptoRecorrido.Z, this.getPosition().X, this.getPosition().Z) > 1)
                 {
-                    i = 0;
+                    float angulo = Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, _ptoRecorrido.X, _ptoRecorrido.Z);
+                    Vector3 movementVector = Utils.movementVector(_velocidad * elapsedtime, angulo);
+                    rotacion = -FastMath.PI_HALF - angulo;
+                    float antirotar = _mesh.Rotation.Y;
+                    _mesh.rotateY(rotacion - antirotar);
+                    //obb.rotate(new Vector3(0, rotacion - antirotar, 0));
+                    _mesh.move(movementVector);
+                    obb.move(movementVector);
+
                 }
-                _ptoRecorrido = _recorrido[i];
+                else
+                {
+                    i++;
+                    if (i >= _recorrido.Count)
+                    {
+                        i = 0;
+                    }
+                    _ptoRecorrido = _recorrido[i];
+                }
             }
         }
 
@@ -144,7 +148,6 @@ namespace AlumnoEjemplos.MiGrupo
             {
                
                 obb.render();
-               // _mesh.BoundingBox.render();
             }
         }
     }

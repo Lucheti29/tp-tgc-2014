@@ -78,7 +78,7 @@ namespace AlumnoEjemplos.MiGrupo
             {
                 if (Utils.getDistance(auto.getPosition().X, auto.getPosition().Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
-                    auto.checkCollision();
+                   
                     auto.calculate(elapsedTime);
                 }
             }
@@ -87,6 +87,7 @@ namespace AlumnoEjemplos.MiGrupo
             {
                 if (Utils.getDistance(peaton.posicion.X, peaton.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
+                    
                     peaton.move(elapsedTime);
                 }
             }
@@ -98,6 +99,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                 if (Utils.getDistance(pas.posicion.X, pas.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
+                    
                     pas.move(elapsedTime);
                 }
             }
@@ -119,6 +121,7 @@ namespace AlumnoEjemplos.MiGrupo
             {
                 if (Utils.getDistance(peaton.posicion.X, peaton.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
+                    peaton.checkCollision();
                     peaton.render();
                 }
             }
@@ -127,6 +130,7 @@ namespace AlumnoEjemplos.MiGrupo
             {
                 if (Utils.getDistance(pas.posicion.X, pas.posicion.Z, Auto.getInstance().getPosicion().X, Auto.getInstance().getPosicion().Z) < VIEW_DISTANCE)
                 {
+                    pas.checkCollision();
                     pas.render();
                 }
             }

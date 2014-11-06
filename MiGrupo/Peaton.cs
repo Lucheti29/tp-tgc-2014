@@ -36,27 +36,35 @@ namespace AlumnoEjemplos.MiGrupo
         }
         public override void move(float elapsedTime)
         {
-            if (Utils.getDistance(_ptoRecorrido.X, _ptoRecorrido.Z, this.getMesh().Position.X, this.getMesh().Position.Z) > 1)
+            if (!_collisionFound)
             {
+                if (Utils.getDistance(_ptoRecorrido.X, _ptoRecorrido.Z, this.getMesh().Position.X, this.getMesh().Position.Z) > 1)
+                {
 
-                float angulo =Utils.calculateAngle(this.getMesh().Position.X, this.getMesh().Position.Z, _ptoRecorrido.X, _ptoRecorrido.Z);
-               Vector3 movementVector = Utils.movementVector(VELOCIDAD * elapsedTime, angulo);
-                rotacion = -FastMath.PI_HALF - angulo;
-                float antirotar = this.getMesh().Rotation.Y;
-                this.getMesh().rotateY(rotacion - antirotar);
-                this.caminar();
-                this.getMesh().move(movementVector);
-               // obb.move(movementVector);   
+                    float angulo = Utils.calculateAngle(this.getMesh().Position.X, this.getMesh().Position.Z, _ptoRecorrido.X, _ptoRecorrido.Z);
+                    Vector3 movementVector = Utils.movementVector(VELOCIDAD * elapsedTime, angulo);
+                    rotacion = -FastMath.PI_HALF - angulo;
+                    float antirotar = this.getMesh().Rotation.Y;
+                    this.getMesh().rotateY(rotacion - antirotar);
+
+                    this.getMesh().move(movementVector);
+
+                    this.caminar();
+                }
+                else
+                {
+                    i++;
+                    if (i >= _recorrido.Count)
+                    {
+                        i = 0;
+
+                    }
+                    _ptoRecorrido = _recorrido[i];
+                }
             }
             else
             {
-                i++;
-                if (i >= _recorrido.Count)
-                {
-                    i = 0;
-                    
-                }
-                _ptoRecorrido = _recorrido[i];
+                this.parar();
             }
 
         }

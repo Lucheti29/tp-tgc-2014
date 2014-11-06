@@ -19,7 +19,7 @@ namespace AlumnoEjemplos.MiGrupo
         {
             GuiController.Instance.ThirdPersonCamera.Enable = true;
             GuiController.Instance.ThirdPersonCamera.rotateY(Geometry.DegreeToRadian(180f));
-            GuiController.Instance.ThirdPersonCamera.setCamera(posicion, 100, -300);
+            GuiController.Instance.ThirdPersonCamera.setCamera(posicion, 150, -300);
 
             _obstaculos = new List<TgcMesh>();
         }
@@ -46,10 +46,7 @@ namespace AlumnoEjemplos.MiGrupo
             TgcThirdPersonCamera camera = GuiController.Instance.ThirdPersonCamera;
             camera.OffsetHeight = (float)GuiController.Instance.Modifiers["offsetHeight"];
             camera.OffsetForward = (float)GuiController.Instance.Modifiers["offsetForward"];
-            //   Vector3 displacement = (Vector3)GuiController.Instance.Modifiers["displacement"]; no necesitamos volver a centrarlo
-            // camera.TargetDisplacement = new Vector3(displacement.X, displacement.Y, displacement.Z);
-
-
+            
             //Pedirle a la camara cual va a ser su proxima posicion
             Vector3 segmentA;
             Vector3 segmentB;
