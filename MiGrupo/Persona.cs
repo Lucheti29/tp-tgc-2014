@@ -104,7 +104,7 @@ namespace AlumnoEjemplos.MiGrupo
            //creo la la caja para marcar el destino
            Vector3 size = new Vector3(30, 0, 30);
            TgcBox sangre = TgcBox.fromSize(_mesh.Position, size);
-           sangre.setTexture(TgcTexture.createTexture(GuiController.Instance.D3dDevice, GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTOS\\blood1.png"));
+           sangre.setTexture(TgcTexture.createTexture(GuiController.Instance.D3dDevice, GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTO\\blood1.png"));
        }
         */
         public virtual void move(float elapsedTime) { }

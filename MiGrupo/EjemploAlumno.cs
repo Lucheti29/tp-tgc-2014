@@ -43,7 +43,7 @@ namespace AlumnoEjemplos.MiGrupo
 
         public override string getDescription()
         {
-            return "CrazyTaxi - Un taxi que debe llevar pasajeros de un punto de la ciudad a otro en un tiempo establecido al menos 5 veces.";
+            return "CrazyTaxi - Un taxi que debe llevar pasajeros de un punto de la ciudad a otro en un tiempo establecido al menos 5 veces. Teclas W/A/S/D/Espacio";
         }
 
         public override void init()
