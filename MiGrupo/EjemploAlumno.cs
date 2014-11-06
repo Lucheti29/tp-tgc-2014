@@ -75,15 +75,16 @@ namespace AlumnoEjemplos.MiGrupo
             //Modifiers para modificar propiedades de la camara. pueden servir para ajustar el env map
             GuiController.Instance.Modifiers.addFloat("offsetHeight", 0, 300, 160);
             GuiController.Instance.Modifiers.addFloat("offsetForward", -400, 400, -300);
-            GuiController.Instance.Modifiers.addVertex3f("displacement", new Vector3(0, 0, 0), new Vector3(100, 200, 500), new Vector3(0, 100, 300));
+            
 
             EntitiesControl.getInstance().inicializar();
 
             GuiController.Instance.UserVars.addVar("velocidad");
-            
+            GuiController.Instance.UserVars.addVar("PosTaxi",Auto.getInstance().getPosicion());
+
             //Modifier para habilitar o no el renderizado del BoundingBox del personaje
             GuiController.Instance.Modifiers.addBoolean("showBoundingBox", "Bouding Box", false);
-
+            GuiController.Instance.Modifiers.addBoolean("Musica", "Musica", false);
             //Crear Grid Regular
             Render.createGrid(ciudadScene, false);
 
@@ -95,9 +96,11 @@ namespace AlumnoEjemplos.MiGrupo
 
         public override void render(float elapsedTime)
         {
-            //Sonido ambiente
-            GuiController.Instance.Mp3Player.FileName = GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTO\\citty_ambiance.mp3";
 
+            if ((bool)GuiController.Instance.Modifiers.getValue("Musica"))
+            {
+                Sonido.getInstance().playAmbiente();
+            }
             //Calculos de movimiento previos
             Teclado.handlear();
             Flecha.getInstance().calculate(elapsedTime);
@@ -109,19 +112,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             Auto.getInstance().calculate(elapsedTime);
 
-            /*TgcMp3Player player = GuiController.Instance.Mp3Player;
-            TgcMp3Player.States currentState = player.getStatus();
-            if (currentState == TgcMp3Player.States.Open)
-            {
-                //Reproducir MP3
-                player.play(true);
-            }
-            if (currentState == TgcMp3Player.States.Stopped)
-            {
-                //Parar y reproducir MP3
-                player.closeFile();
-                player.play(true);
-            }*/
+            GuiController.Instance.UserVars.setValue("PosTaxi", Auto.getInstance().getPosicion());
 
             //El Shader llama al render
             envMap.calculate(elapsedTime);

@@ -49,6 +49,7 @@ namespace AlumnoEjemplos.MiGrupo
                         //Gano
                         _activated = false;
                         Sprites.getInstance().setTextureWinOrLose(true);
+                        Sonido.getInstance().play(GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTO\\sonidos\\yahoo.wav", false);
                     }
                 }
                 else
@@ -56,6 +57,7 @@ namespace AlumnoEjemplos.MiGrupo
                     //Perdio
                     _activated = false;
                     Sprites.getInstance().setTextureWinOrLose(false);
+                    Sonido.getInstance().play(GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTO\\sonidos\\lose.wav", false);
                 }
             }
         }

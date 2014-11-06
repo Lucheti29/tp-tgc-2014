@@ -29,6 +29,7 @@ namespace AlumnoEjemplos.MiGrupo
         private bool viajando { set; get; }
         //---para el metodo moverPasajero
         TgcBox marcaDestino;
+        private bool llamoAltaxi;
         //constructor
         public Pasajero(string mesh, string textura)
             : base(mesh, textura)
@@ -36,6 +37,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             this.viajando = false;
             this.llego = false;
+            this.llamoAltaxi = false;
         }
 
         public void cargarDestino(Vector3 destino)
@@ -72,6 +74,11 @@ namespace AlumnoEjemplos.MiGrupo
                     {
                         if (distanciaAlTaxi >= 70)
                         {//EL TAXI ESTA CERCA -> el pasaj intenta subirse
+                            if (!llamoAltaxi)
+                            {
+                                Sonido.getInstance().play(GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTO\\sonidos\\taxi.wav", false);
+                                llamoAltaxi = true;
+                            }
                             float angulo = Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, taxi.getMesh().Position.X, taxi.getMesh().Position.Z);
                             movementVector = Utils.movementVector(VELOCIDAD * elapsedTime, angulo);
                             rotacion = -FastMath.PI_HALF - angulo;
@@ -99,6 +106,7 @@ namespace AlumnoEjemplos.MiGrupo
                     else
                     {
                         this.parar();
+                        llamoAltaxi = false;
                     }
 
                 }
@@ -143,7 +151,7 @@ namespace AlumnoEjemplos.MiGrupo
                             }
                             if (distanciaDest > 10)
                             {
-
+                              
                                 float angulo = Utils.calculateAngle(_mesh.Position.X, _mesh.Position.Z, destino.X, destino.Z);
                                 movementVector = Utils.movementVector(VELOCIDAD * elapsedTime, angulo);
                                 rotacion = -FastMath.PI_HALF - angulo;

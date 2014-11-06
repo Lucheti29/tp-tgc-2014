@@ -21,7 +21,7 @@ namespace AlumnoEjemplos.MiGrupo
         protected string[] animationList;
         //---propiedades
         protected string animacionActual { get; set; }
-        protected static float VELOCIDAD = 15.0f;
+        protected static float VELOCIDAD = 100.0f;
 
         protected bool _collisionFound;
 

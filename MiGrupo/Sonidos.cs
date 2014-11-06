@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TgcViewer;
 using TgcViewer.Utils.Sound;
 
 namespace AlumnoEjemplos.MiGrupo
@@ -11,6 +12,7 @@ namespace AlumnoEjemplos.MiGrupo
         static Sonido _instance = new Sonido();
         string currentFile;
         TgcStaticSound sound;
+        TgcMp3Player player = GuiController.Instance.Mp3Player;
         public void inicializar()
         {
             
@@ -18,7 +20,7 @@ namespace AlumnoEjemplos.MiGrupo
         /// <summary>
         /// Cargar un nuevo WAV si hubo una variacion
         /// </summary>
-        public void loadSound(string filePath)
+        public void loadSoundWAV(string filePath)
         {
             if (currentFile == null || currentFile != filePath)
             {
@@ -39,11 +41,28 @@ namespace AlumnoEjemplos.MiGrupo
             }
         }
 
+
         internal void play(string file, bool loop)
         {
-            loadSound(file);
+            loadSoundWAV(file);
             sound.play(loop);
         }
+        public void playerMp3()
+        {
+            TgcMp3Player.States currentState = player.getStatus();
+            if (currentState == TgcMp3Player.States.Open)
+            {
+                //Reproducir MP3
+                player.play(true);
+            }
+            if (currentState == TgcMp3Player.States.Stopped)
+            {
+                //Parar y reproducir MP3
+                player.closeFile();
+                player.play(true);
+            }
+        }
+
         // --------------- Métodos estáticos ---------------
         public static Sonido getInstance()
         {
@@ -60,6 +79,12 @@ namespace AlumnoEjemplos.MiGrupo
         }
         // --------------- Fin Métodos estáticos ---------------
 
-       
+
+
+        internal void playAmbiente()
+        {
+            GuiController.Instance.Mp3Player.FileName = GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTO\\citty_ambiance.mp3";
+            playerMp3();
+        }
     }
 }

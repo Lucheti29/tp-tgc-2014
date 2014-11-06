@@ -164,6 +164,10 @@
     <Content Include="AlumnoMedia\LOS_BARTO\ciudad\Textures\Yellow Painted.jpg" />
     <Content Include="AlumnoMedia\LOS_BARTO\sonidos\auto-choquePequeño.wav" />
     <Content Include="AlumnoMedia\LOS_BARTO\sonidos\auto-encendido.wav" />
+    <Content Include="AlumnoMedia\LOS_BARTO\sonidos\bocina.wav" />
+    <Content Include="AlumnoMedia\LOS_BARTO\sonidos\lose.wav" />
+    <Content Include="AlumnoMedia\LOS_BARTO\sonidos\taxi.wav" />
+    <Content Include="AlumnoMedia\LOS_BARTO\sonidos\yahoo.wav" />
     <Content Include="AlumnoMedia\LOS_BARTO\taxi\taxi-TgcScene.xml" />
     <Content Include="AlumnoMedia\LOS_BARTO\taxi\Textures\12682EE3.jpg" />
   </ItemGroup>

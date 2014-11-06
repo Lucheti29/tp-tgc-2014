@@ -207,6 +207,10 @@ namespace AlumnoEjemplos.MiGrupo
                 }*/
                 _velocidad.setAmount(120f * -1, elapsedTime);
             }
+            if(Teclado.getInput(InputType.BOCINA))
+            {
+                Sonido.getInstance().play(GuiController.Instance.AlumnoEjemplosMediaDir + "LOS_BARTO\\sonidos\\bocina.wav",false);
+            }
         }
 
         public void render()

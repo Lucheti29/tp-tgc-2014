@@ -11,6 +11,7 @@ namespace AlumnoEjemplos.MiGrupo.Enums
         LEFT,
         UP,
         DOWN,
-        SPACE
+        SPACE,
+        BOCINA
     }
 }

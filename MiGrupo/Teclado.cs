@@ -25,7 +25,7 @@ namespace AlumnoEjemplos.MiGrupo
         private static bool _up;
         private static bool _down;
         private static bool _space;
-
+        private static bool _playbocina;
         public static void handlear()
         {
             //Inputs
@@ -34,6 +34,7 @@ namespace AlumnoEjemplos.MiGrupo
             _up = input.keyDown(Key.Up) || input.keyDown(Key.W);
             _down = input.keyDown(Key.Down) || input.keyDown(Key.S);
             _space = input.keyDown(Key.Space);
+            _playbocina = input.keyDown(Key.B);
         }
 
         public static bool getInput(InputType input)
@@ -56,6 +57,9 @@ namespace AlumnoEjemplos.MiGrupo
                     break;
                 case InputType.SPACE:
                     result = _space;
+                    break;
+                case InputType.BOCINA:
+                    result = _playbocina;
                     break;
                 default:
                     result = false;
